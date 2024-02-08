@@ -13,7 +13,7 @@
                                         <div class="heading_s1">
                                             <h3 class="mb-30">Login</h3>
                                         </div>
-                                        <form method="post" action="{% url 'user_login'%}">
+                                        <form method="post" action="">
                                             {% csrf_token %}
                                             <div class="form-group">
                                                 <input type="email" required="required" name="email" placeholder="Your Email">
@@ -31,14 +31,14 @@
                                                 <a class="text-muted" href="#">Forgot password?</a>
                                             </div>
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" href="{% url 'user_index'%}" name="login">Log in</button>
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" href="{% url 'index'%}" name="login">Log in</button>
                                             </div>
                                         </form>
                                         <div class="divider-text-center mt-15 mb-15">
                                             <span> or</span>
                                         </div>
                 
-                                        <div class="text-muted text-center">Already have an account? <a href="{% url 'sign_up'%}">Sign up now</a></div>
+                                        <div class="text-muted text-center">Already have an account? <a href="">Sign up now</a></div>
                                         {% if messages %}
                                             <div class="alert alert-danger">
                                                 {% for message in messages %}

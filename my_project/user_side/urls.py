@@ -4,7 +4,7 @@ from user_side import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("/user_login", views.user_login, name="user_login"),
+    path('user_login/', views.user_login, name='user_login"'),
 
 
 ]
