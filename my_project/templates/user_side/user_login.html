@@ -38,7 +38,7 @@
                                             <span> or</span>
                                         </div>
                 
-                                        <div class="text-muted text-center">Already have an account? <a href="">Sign up now</a></div>
+                                        <div class="text-muted text-center">Already have an account? <a href="{% url 'user_signup'%}">Sign up now</a></div>
                                         {% if messages %}
                                             <div class="alert alert-danger">
                                                 {% for message in messages %}
@@ -55,7 +55,7 @@
                                         <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
                                             <div class="carousel-inner">
                                               <div class="carousel-item active">
-                                                <img class="d-block w-100" src="{% static 'assets/imgs/slider/login2.jpeg'%}" alt="First slide">
+                                                <img class="d-block w-100" src="{% static 'assets/imgs/slider/login2.jpg'%}" alt="First slide">
                                             </div>
                                     </div>
                               </div>
