@@ -30,7 +30,7 @@
                                                 <input type="text" required="required" name="first_name" pattern="[a-zA-Z]+" placeholder="First name" title="Enter your first name with only letters.">
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" required="required" name="last_name" pattern="[a-zA-Z]+" placeholder="Last name" title="Enter your first name with only letters.">
+                                                <input type="text" required="required" name="last_name" pattern="[a-zA-Z]+" placeholder="Last name" title="Enter your last name with only letters.">
                                             </div>
                                             <div class="form-group">
                                                 <input type="text" required="required" name="username" pattern="[a-zA-Z0-9_]+" placeholder="Username" title="Enter a username with letters, numbers, and underscores.">
@@ -57,7 +57,7 @@
                                                 <a href="page-privacy-policy.html"><i class="fi-rs-book-alt mr-5 text-muted"></i>Lean more</a>
                                             </div>  {% endcomment %}
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login" href=""                                                                                                           >Submit &amp; Register</button>
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login" href="{% url 'enter_otp' %}"                                                                                                           >Submit &amp; Register</button>
                                             </div> 
                                         </form>
                                         {% if messages %}
