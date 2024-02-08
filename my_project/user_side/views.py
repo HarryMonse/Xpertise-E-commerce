@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from datetime import datetime, timedelta
+from django.contrib.auth import login,authenticate
 
 from django.contrib import messages
 from django.utils import timezone
@@ -87,6 +88,51 @@ def enter_otp(request):
         if current_time > expiration_time:
             messages.error(request, 'OTP has expired. Please request a new one.')
             return render(request, 'user_side/otp.html')
+        
 
+        if entered_otp == stored_otp:
+            new_user=User(
+                username=request.session['signup_details']['username'],
+                email=request.session['signup_details']['email'],
+                first_name=request.session['signup_details']['first_name'],
+                last_name=request.session['signup_details']['last_name'],
+                phone=request.session['signup_details']['phone'],
+                password=request.session['signup_details']['password']
+            )
+            new_user.save()
+            login(request, new_user)
+
+            request.session.pop('signup_otp',None)
+            request.session.pop('otp_timestamp', None)
+            request.session.pop('signup_details',None)
+            return redirect('index')
+        else:
+            messages.error(request,'Invalid OTP. Please try again.')
+
+    expiration_time = datetime.fromisoformat(request.session.get('otp_timestamp')) + timedelta(minutes=1)
+    remaining_time = max(timedelta(0), expiration_time - timezone.now())
+    remaining_minutes, remaining_seconds = divmod(remaining_time.seconds, 60)
 
     return render(request, 'user_side/otp.html',{'remaining_minutes': remaining_minutes, 'remaining_seconds': remaining_seconds})
+
+
+
+def resend_otp(request):
+    if 'signup_details' in request.session:
+        otp, timestamp = generate_otp()
+
+        request.session['signup_otp'] = otp
+        request.session['otp_timestamp'] = timestamp
+
+        send_mail(
+            'Resent OTP verification',
+            f'Welcome to Xpertise. Your new OTP for signup is: {otp}',
+            'xpertise.hm@gmail.com',
+            [request.session['signup_details']['email']],
+            fail_silently=True
+        )
+        messages.info(request, 'New OTP sent. Please check your email.')
+        return redirect('enter_otp')
+    else:
+        messages.error(request, 'No signup session found.')
+        return redirect('user_signup')
