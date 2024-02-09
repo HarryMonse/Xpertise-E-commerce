@@ -136,3 +136,9 @@ def resend_otp(request):
     else:
         messages.error(request, 'No signup session found.')
         return redirect('user_signup')
+    
+
+
+
+def services(request):
+    return render(request, "user_side/services.html")

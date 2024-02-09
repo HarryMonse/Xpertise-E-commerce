@@ -8,6 +8,9 @@ urlpatterns = [
     path('user_signup/', views.user_signup, name='user_signup'),
     path('enter_otp/',views.enter_otp,name='enter_otp'),
     path('resend_otp/',views.resend_otp,name='resend_otp'),
+    path('services/', views.services, name='services'),
+
+
 
 
 
