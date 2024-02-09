@@ -17,7 +17,7 @@
             
             <div class="hero-slider-1 dot-style-1 dot-style-1-position-1 ">
                 
-                {% for banner in banners %}
+                {% comment %} {% for banner in banners %}
                 <div class="single-hero-slider single-animation-wrap">
                     <div class="container">
                         <div class="row align-items-center slider-animated-1">
@@ -37,48 +37,49 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                {% comment %} <div class="single-hero-slider single-animation-wrap">
+                </div> {% endcomment %}
+                 <div class="single-hero-slider single-animation-wrap">
                     <div class="container">
                         <div class="row align-items-center slider-animated-1">
                             <div class="col-lg-5 col-md-6">
                                 <div class="hero-slider-content-2">
-                                    <h4 class="animated">Hot promotions</h4>
-                                    <h2 class="animated fw-900">Fashion Trending</h2>
-                                    <h1 class="animated fw-900 text-7">Great Collection</h1>
+                                    <h4 class="animated">Need it done?</h4>
+                                    <h2 class="animated fw-900">We're here.</h2>
+                                    <h1 class="animated fw-900 text-7">Xpertise</h1>
+                                    <p class="animated">Expert Services, Delivered at Ease.</p>
                                     
-                                    <a class="animated btn btn-brush btn-brush-2" href="{% url 'shop'%}"> Discover Now </a>
+                                    <a class="animated btn btn-brush btn-brush-2" href=""> Discover Now </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
                                 <div class="single-slider-img single-slider-img-1">
-                                    <img class="animated slider-1-2" src="{% static 'assets/imgs/slider/img2.jpg'%}" alt="">
+                                    <img class="animated slider-1-2" src="{% static 'assets/imgs/slider/img200.jpg'%}" alt="">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> {% endcomment %}
-                {% comment %} <div class="single-hero-slider single-animation-wrap">
+                </div> 
+                 <div class="single-hero-slider single-animation-wrap">
                     <div class="container">
                         <div class="row align-items-center slider-animated-1">
                             <div class="col-lg-5 col-md-6">
                                 <div class="hero-slider-content-2">
-                                    <h4 class="animated">Upcoming Offer</h4>
-                                    <h2 class="animated fw-900">Big Deals From</h2>
-                                    <h1 class="animated fw-900 text-8">Manufacturer</h1>
-                                    <p class="animated">Women's watches,unisex watches, men's watches...</p>
-                                    <a class="animated btn btn-brush btn-brush-1" href="{% url 'shop'%}"> Shop Now </a>
+                                    <h4 class="animated">You're in the right place.</h4>
+                                    <h2 class="animated fw-900">Welcome to </h2>
+                                    <h1 class="animated fw-900 text-8">Xpertise</h1>
+                                    <p class="animated">Your trusted partner for premium doorstep services.</p>
+                                    <a class="animated btn btn-brush btn-brush-1" href=""> Discover Now </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
                                 <div class="single-slider-img single-slider-img-1">
-                                    <img class="animated slider-1-3" src="{% static 'assets/imgs/slider/img3.jpg'%}" alt="">
+                                    <img class="animated slider-1-3" src="{% static 'assets/imgs/slider/img300.jpg'%}" alt="">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> {% endcomment %}
-                {% endfor %}
+                </div> 
+                {% comment %} {% endfor %} {% endcomment %}
             </div>
             <div class="slider-arrow hero-slider-1-arrow"></div>
         </section>
@@ -94,7 +95,7 @@
                 <div class="tab-header">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
+                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Explore!!</button>
                         </li>
                         {% comment %} <li class="nav-item" role="presentation">
                             <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
@@ -103,7 +104,7 @@
                             <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
                         </li> {% endcomment %}
                     </ul>
-                    {% comment %} <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a> {% endcomment %}
+                     <a href="user_login" class="view-more d-none d-md-flex">Login<i class="fi-rs-angle-double-small-right"></i></a> 
                 </div> 
                 <!--End nav-tabs-->
                 <div class="tab-content wow fadeIn animated" id="myTabContent">
@@ -198,15 +199,15 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 deal-co">
-                        <div class="deal wow fadeIn animated mb-md-4 mb-sm-4 mb-lg-0" style="background-image: url('{% static 'assets/imgs/banner/banner1.jpg'%}');">
+                        <div class="deal wow fadeIn animated mb-md-4 mb-sm-4 mb-lg-0" style="background-image: url('{% static 'assets/imgs/banner/banner200.jpg'%}');">
                              <div class="deal-top">
                                 <h2 class="text-brand"></h2>
-                                <h5>welcome to the Xpertise</h5>
+                                <h5></h5>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 deal-co">
-                        <div class="deal wow fadeIn animated" style="background-image: url('{% static 'assets/imgs/banner/banner2.jpg'%}');">
+                        <div class="deal wow fadeIn animated" style="background-image: url('{% static 'assets/imgs/banner/banner400.jpg'%}');">
                         </div>
                     </div>
                 </div>
@@ -231,39 +232,39 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <div class="banner-bg wow fadeIn animated" style="background-image: url('{% static 'assets/imgs/banner/banner-8.jpg'%}')">
+                        <div class="banner-bg wow fadeIn animated" style="background-image: url('{% static 'assets/imgs/banner/banner-80.jpg'%}')">
                             <div class="banner-content">
                                 <h4 class="text-grey-4 mb-15">ABOUT Xpertise</h4>
                                 <h6 class="fw-600">
-                                    Welcome to Xpertise, your premier destination for exquisite timepieces! At Xpertise, we are more than just a watch brand; we are curators of timeless elegance and craftsmanship. Our commitment is to offer you not just a timekeeping device, but a piece of art that reflects your unique style, makes a bold statement of sophistication, and becomes a companion in every significant moment of your life.
+                                    Welcome to Xpertise, your premier destination for doorstep services! At Xpertise, we're more than just a service provider; we're your trusted partner in simplifying your life and enhancing your experience. From home maintenance to beauty treatments and professional consultations, our mission is to deliver expert solutions directly to your doorstep, ensuring unparalleled convenience and quality.
         
                                     <br><br>
         
                                     <strong>Our Philosophy:</strong>
                                     <br>
-                                    At Xpertise, we believe in the artistry of watchmaking. Each timepiece is meticulously crafted with precision and passion, embodying the rich heritage of horology. Our philosophy revolves around creating watches that go beyond telling time – they tell stories, mark milestones, and become an integral part of your journey.
+                                    At Xpertise, we believe in the power of expertise and convenience. Each service we offer is meticulously curated to meet your unique needs and surpass your expectations. Our dedicated team of professionals is trained to deliver nothing but the best, ensuring that every service experience is of the highest standard.
         
                                     <br><br>
         
-                                    <strong>Quality and Craftsmanship:</strong>
+                                    <strong>Quality and Convenience:</strong>
                                     <br>
-                                    Our watches are a testament to uncompromising quality and craftsmanship. From the finest materials to intricate details, we ensure that every watch bearing the Xpertise name is a masterpiece. It's not just an accessory; it's an investment in enduring style and quality.
+                                    Excellence is at the heart of everything we do. From selecting top-tier professionals to providing flexible scheduling options, we prioritize quality and convenience in every aspect of our service delivery. With Xpertise, you can trust that your needs will be met with precision, efficiency, and utmost care.
         
                                     <br><br>
         
-                                    <strong>Your Style, Your Statement:</strong>
+                                    <strong>Your Convenience, Our Priority:</strong>
                                     <br>
-                                    Xpertise understands that a watch is a reflection of your personality. That's why we offer a diverse range of designs, from classic to contemporary, ensuring that you find the perfect timepiece that resonates with your individuality.
+                                    Life can be busy, but with Xpertise, accessing premium services has never been easier. Our seamless booking process and flexible scheduling options allow you to enjoy expert solutions at a time and place that works best for you. Experience hassle-free living with Xpertise at your doorstep.
         
                                     <br><br>
         
                                     <strong>Join the Xpertise Experience:</strong>
                                     <br>
-                                    Explore our collection and embark on a journey of timeless elegance. Join the Xpertise experience, where every tick of the clock is a reminder of life's precious moments.
+                                    Explore our wide range of services and discover the convenience of expert solutions brought directly to you. Thank you for choosing Xpertise – where expertise meets convenience, and your satisfaction is our top priority.
         
                                     <br><br>
         
-                                    Thank you for choosing Xpertise – where time becomes an art, and every moment is celebrated.
+                                    Xpertise – Expert Service, Delivered at Ease.
         
                                 </h6>
                             </div>

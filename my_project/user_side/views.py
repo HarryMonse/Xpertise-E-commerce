@@ -23,15 +23,15 @@ def user_login(request):
 
 
 def generate_otp():
-    otp = str(random.randomint(100000,999999))
+    otp = str(random.randint(100000,999999))
     timestamp = str(timezone.now())
     return otp, timestamp
 
 
 
 def user_signup(request):
-    if request.user.is_authenticated:
-        return redirect('index')
+    
+
     if request.method == 'POST':
         username=request.POST.get('username')
         first_name=request.POST.get('first_name')
