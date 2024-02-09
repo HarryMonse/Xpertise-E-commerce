@@ -42,10 +42,10 @@ def user_signup(request):
         cpassword=request.POST.get('cpassword')
 
         if User.objects.filter(username=username).exists():
-            messages.error(request,'Username is already existing. Please choose a different username.')
+            messages.error(request,'Username is already existing. Please choose a different Username.')
             return render(request, 'user_side/user_signup.html')
         elif User.objects.filter(email=email).exists():
-            messages.error(request, 'Email is already existing. Please choose a different email.')
+            messages.error(request, 'Email is already existing. Please choose a different Email.')
             return render(request, 'user_side/user_signup.html')
         elif cpassword != password:
             messages.error(request, 'Mismatch in password')
