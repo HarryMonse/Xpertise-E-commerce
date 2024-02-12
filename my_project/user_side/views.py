@@ -60,7 +60,7 @@ def user_signup(request):
             f'Welcome to Xpertise. Your OTP is : {otp}',
             'xpertise.hm@gmail.com',
             [email],
-            fail_silently=True
+            fail_silently=False
         )
 
         request.session['signup_details']={
