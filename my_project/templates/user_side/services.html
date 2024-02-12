@@ -78,7 +78,7 @@
                             <div class="sort-by-cover mr-10">
                                 <div class="sort-by-product-wrap">
                                     <div class="sort-by">
-                                        <span><i class="fi-rs-apps"></i>Brand :</span>
+                                        <span><i class="fi-rs-apps"></i>Type :</span>
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
                                         <span>{{ selected_brand }}<i class="fi-rs-angle-small-down"></i></span>
@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="sort-by-dropdown">
                                     <ul>
-                                        <li><a href="{% url 'services' %}">All Brands</a></li>
+                                        <li><a href="{% url 'services' %}">All Types</a></li>
                                         {% for brand_item in brands %}
                                             <li {% if brand_item.id == selected_brand.id %}class="active"{% endif %}>
                                                 <a href="{% url 'services' %}?brand_id={{ brand_item.id }}">{{ brand_item.brand_name }}</a>

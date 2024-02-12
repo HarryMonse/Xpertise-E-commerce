@@ -13,7 +13,7 @@
                                         <div class="heading_s1">
                                             <h3 class="mb-30">Login</h3>
                                         </div>
-                                        <form method="post" action="">
+                                        <form method="post" action="{% url 'user_login'%}">
                                             {% csrf_token %}
                                             <div class="form-group">
                                                 <input type="email" required="required" name="email" placeholder="Your Email">

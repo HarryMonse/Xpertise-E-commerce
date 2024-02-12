@@ -3,6 +3,8 @@ from user_side import views
 
 
 urlpatterns = [
+    path('user_login/',views.signin,name='user_login'),
+    path('user_logout/',views.user_logout,name='user_logout'),
     path("", views.index, name="index"),
     path('user_login/', views.user_login, name='user_login'),
     path('user_signup/', views.user_signup, name='user_signup'),

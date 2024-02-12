@@ -48,19 +48,19 @@
                                 <li>
 
                              
-                                    {% comment %} {% if user.is_authenticated %}
+                                     {% if user.is_authenticated %}
                                         <i class="fi-rs-user"></i>
                                         <a href="#" class="language-dropdown-active">
                                             {{ user.username }} <i class="fi-rs-angle-small-down"></i>
                                         </a>
                                         <ul class="language-dropdown">
                                             <li><a href="">My Account</a></li>
-                                            <li><a href="">Logout</a></li>
+                                            <li><a href="{% url 'user_logout' %}">Logout</a></li>
                                         </ul>
-                                    {% else %} {% endcomment %}
+                                    {% else %} 
                                         <i class="fi-rs-user"></i>
                                         <a href="/user_login">Log In / Sign Up</a>
-                                    {% comment %} {% endif %} {% endcomment %}
+                                     {% endif %} 
                                 </li>
                                 
                                 {% comment %} <li><i class="fi-rs-user"></i><a href={% url 'user_login'%}>Log In / Sign Up</a></li> {% endcomment %}

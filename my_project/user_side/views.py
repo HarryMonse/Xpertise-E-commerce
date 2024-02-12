@@ -5,6 +5,9 @@ from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from datetime import datetime, timedelta
 from django.contrib.auth import login,authenticate
+from django.views.decorators.cache import never_cache, cache_control
+from django.contrib.auth import logout,login
+
 
 from django.contrib import messages
 from django.utils import timezone
@@ -30,7 +33,8 @@ def generate_otp():
 
 
 def user_signup(request):
-    
+    if request.user.is_authenticated:
+        return redirect('user_index')
 
     if request.method == 'POST':
         username=request.POST.get('username')
@@ -137,6 +141,40 @@ def resend_otp(request):
         messages.error(request, 'No signup session found.')
         return redirect('user_signup')
     
+
+@cache_control(max_age=0, no_cache=True, must_revalidate=True, no_store=True)
+@never_cache
+def user_logout(request):
+    logout(request)
+    return redirect('user_login')
+    
+
+
+@cache_control(max_age=0, no_cache=True, must_revalidate=True, no_store=True)
+@never_cache  
+def signin(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        print(email)
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+
+        print(user)
+        if user is not None and user.check_password(password):
+            if user.is_active:
+                login(request,user)
+                return redirect('index')
+            else:
+                messages.error(request, 'Your account is not active')
+        else:
+            messages.error(request, 'Invalid username and password')   
+    return render(request, 'user_side/user_login.html')
+
 
 
 
