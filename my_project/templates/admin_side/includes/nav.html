@@ -4,8 +4,8 @@
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
-            <a href="index.html" class="brand-wrap">
-                <img src="{% static 'assets1/imgs/theme/lo1.png' %}" class="logo" alt="CRONICO Dashboard">
+            <a href="{% url 'index' %}" class="brand-wrap">
+                <img src="{% static 'assets/imgs/theme/my_logo.png' %}" class="logo" alt="Xpertise Dashboard">
             </a>
             <div>
                 <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
@@ -19,13 +19,13 @@
                     </a>
                 </li>
                 <li class="menu-item has-submenu">
-                    <a class="menu-link" href="{% url 'admin_category' %}"> <i class="icon material-icons md-store"></i>
+                    <a class="menu-link" href=""> <i class="icon material-icons md-store"></i>
                         <span class="text">Category</span>
                     </a>
                      <div class="submenu">
-                        <a href="{% url 'admin_category' %}">Category list</a>
-                        <a href="{% url 'admin_brand' %}">Brand list</a>
-                        <a href="{% url 'admin_color' %}">Color </a>
+                        <a href="">Category list</a>
+                        <a href="">Brand list</a>
+                        <a href="">Color </a>
                         
                     </div> 
                 </li>
@@ -34,8 +34,8 @@
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
-                        <a href="{% url 'admin_product'%}">Product List</a>
-                        <a href="{% url 'admin_varient'%}">varient List</a>
+                        <a href="">Product List</a>
+                        <a href="">varient List</a>
                         
                     </div>
                 </li>
@@ -44,7 +44,7 @@
                         <span class="text">Customer</span>
                     </a>
                     <div class="submenu">
-                        <a href="{% url 'customers'%}">Customer llist</a>
+                        <a href="">Customer llist</a>
                         
                     </div>
                 </li>
@@ -54,7 +54,7 @@
                         <span class="text">Order</span>
                     </a>
                     <div class="submenu">
-                        <a href="{% url 'order' %}">Order</a>
+                        <a href="">Order</a>
                     
                         
                     </div>
@@ -64,9 +64,9 @@
                         <span class="text">Offer & Coupon</span>
                     </a>
                     <div class="submenu">
-                        <a href="{% url 'product-offers' %}">Product Offer</a>
-                        <a href="{% url 'category-offers'  %}">Category Offers</a>
-                        <a href="{% url 'admin_coupon'  %}">Coupon</a>
+                        <a href="">Product Offer</a>
+                        <a href="">Category Offers</a>
+                        <a href="">Coupon</a>
                     
                         
                     </div>
@@ -76,7 +76,7 @@
                         <span class="text">Banner</span>
                     </a>
                     <div class="submenu">
-                        <a href="{% url 'admin_banner'%}">banner</a>
+                        <a href="">banner</a>
                         
                     </div>
                 </li>
@@ -86,7 +86,7 @@
                         <span class="text">Account</span>
                     </a>
                     <div class="submenu">
-                        <a href="{% url 'admin_logout'%}">Logout</a>
+                        <a href="">Logout</a>
                     
                         
                     </div>
@@ -129,11 +129,11 @@
                         </div>
                     </li>
                     <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'assets/imgs/people/avatar2.jpg' %}" alt="User"></a>
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'assets/imgs/people/profile-pic.png' %}" alt="User"></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                             
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="{% url 'admin_logout'%}"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                            <a class="dropdown-item text-danger" href=""><i class="material-icons md-exit_to_app"></i>Logout</a>
                         </div>
                     </li>
                 </ul>
