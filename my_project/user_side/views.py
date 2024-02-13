@@ -172,7 +172,7 @@ def signin(request):
             else:
                 messages.error(request, 'Your account is not active')
         else:
-            messages.error(request, 'Invalid username and password')   
+            messages.error(request, 'Invalid Username or Password')   
     return render(request, 'user_side/user_login.html')
 
 
