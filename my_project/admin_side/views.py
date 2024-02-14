@@ -43,7 +43,7 @@ def admin_index(request):
 
 
 
-# @login_required(login_url='admin_login')
+@login_required(login_url='admin_login')
 def admin_service(request):
     # item = Service.objects.filter(is_deleted=False)
     # context = {
@@ -54,7 +54,7 @@ def admin_service(request):
 
 
 
-# @login_required(login_url='admin_login')
+@login_required(login_url='admin_login')
 def customers(request):
     user = User.objects.all()
     context = {
@@ -63,7 +63,7 @@ def customers(request):
     return render(request, 'admin_side/customers.html',context)
 
 
-# @login_required(login_url='admin_login')
+@login_required(login_url='admin_login')
 def block_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
 
