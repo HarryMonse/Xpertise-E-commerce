@@ -30,7 +30,8 @@ def admin_login(request):
 
 def admin_logout(request):
     logout(request)
-    return render(request,'admin_side/admin_login.html')
+    messages.success(request, 'Successfully logged out.')
+    return redirect(admin_login)
 
 
 
