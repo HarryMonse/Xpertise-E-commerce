@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 
 
 
+
 # Create your views here.
 
 def admin_login(request):
@@ -37,6 +38,18 @@ def admin_logout(request):
 def admin_index(request):
     
     return render(request, 'admin_side/admin_index.html')
+
+
+
+
+# @login_required(login_url='admin_login')
+def admin_service(request):
+    # item = Service.objects.filter(is_deleted=False)
+    # context = {
+    #     "item":item
+    # }
+    return render(request,'admin_side/service.html')
+
 
 
 

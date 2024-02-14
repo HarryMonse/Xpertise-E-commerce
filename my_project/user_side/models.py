@@ -67,3 +67,17 @@ class User(AbstractBaseUser,PermissionsMixin):
         return self.is_admin
     def has_module_perms(self,app_lebel):
         return True
+    
+
+
+
+    class Service(models.Model):
+        service_name = models.CharField(max_length=255)
+        description = models.TextField(null=True)
+        is_available=models.BooleanField(default=True)
+        
+        featured = models.BooleanField(default=False)
+        specifications = models.TextField(null =True, blank =True)
+        is_deleted = models.BooleanField(default=False)
+
+    
