@@ -4,7 +4,7 @@
 <section class="content-main">
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Brand</h2>
+            <h2 class="content-title card-title">Type</h2>
            
         </div>
        
@@ -17,7 +17,7 @@
                         {% csrf_token %}
                         <div class="mb-4">
                             <label for="product_name" class="form-label">Name</label>
-                            <input type="text" placeholder="Type here" required="required" name='name' class="form-control" id="product_name" />
+                            <input type="text" placeholder="Enter here" required="required" name='name' class="form-control" id="product_name" />
                         </div>
                         {% if messages %}
                         <ul class="messages">
@@ -28,7 +28,7 @@
                       {% endif %}
                         
                         <div class="d-grid">
-                            <button class="btn btn-primary">Add brand</button>
+                            <button class="btn btn-primary">Add Type</button>
                         </div>
                     </form>
 
