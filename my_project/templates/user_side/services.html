@@ -109,7 +109,7 @@
                                         {% comment %} <a href="{% url 'product_details' category_id=product.category.id product_id=product.id %}"> {% endcomment %}
                                             
                                             
-                                            <a href="{% url 'product_details' category_id=product.category.id product_id=product.id %}"> 
+                                            <a href=""> 
                                             {% if product.productattribute_set.first.image %}
                                                 <img class="default-img" src="{{ product.productattribute_set.first.image.url }}" alt="" style="width: 100%; height: auto;">
                                             {% else %}
@@ -124,7 +124,7 @@
                                     <div class="product-action-1">
                                         
                                        
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="{% url 'add_wishlist' product.id%}">
+                                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="">
                                             <i class="fi-rs-heart"></i>
                                         </a>
                                         
@@ -156,7 +156,7 @@
                                     <div class="product-category">
                                         <a href="shop-grid-right.html">{{ product.category }}</a>
                                     </div>
-                                    <h2><a href="{% url 'products_by_category' category_id=product.category.id %}">{{ product.product_name }}</a></h2>
+                                    <h2><a href="">{{ product.product_name }}</a></h2>
                                     <div>
                                         {% comment %} <span>
                                             <span>90%</span>

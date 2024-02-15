@@ -1,6 +1,6 @@
 import random
 import datetime
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from datetime import datetime, timedelta
@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.utils import timezone
 
 
-from .models import User
+from .models import *
 
 # Create your views here.
 
@@ -178,5 +178,73 @@ def signin(request):
 
 
 
-def services(request):
-    return render(request, "user_side/services.html")
+def services(request, category_id=None,brand_id=None):
+    all_categories = category.objects.filter(is_deleted=False,is_blocked=False)
+    selected_category = None
+    selected_brand = None
+    products = None
+    product_count = None
+    brands = Brand.objects.filter(is_active=True)
+    # try:
+    #     discount_offer = ProductOffer.objects.get(active=True)
+    # except ProductOffer.DoesNotExist:
+    #     discount_offer = None
+        
+    # try:
+        
+    #     discounted_offer = CategoryOffer.objects.filter(active=True)
+    # except ProductOffer.DoesNotExist:
+    #     discounted_offer = None
+    # if discounted_offer:
+    #     for dis in discounted_offer:
+    #         products_with_discount = Product.objects.filter(category=dis.category, is_available=True)
+    #         current_date = timezone.now()
+    #         if current_date > dis.end_date:
+    #             dis.active = False
+    #             dis.save()
+                
+    if 'category_id' in request.GET:
+        category_id = request.GET['category_id']
+        selected_category = get_object_or_404(category, id=category_id)
+        products = Product.objects.filter(
+            category=selected_category,
+            is_available=True,
+            is_deleted=False,
+            brand__is_active=True,
+            category__is_deleted=False,
+            category__is_blocked=False
+        )
+        product_count = products.count()
+
+    elif 'brand_id' in request.GET:
+        brand_id = request.GET['brand_id']
+        selected_brand = get_object_or_404(Brand, id=brand_id)
+        products = Product.objects.filter(
+            brand=selected_brand,
+            is_available=True,
+            is_deleted=False,
+            brand__is_active=True,
+            category__is_deleted=False,
+            category__is_blocked=False
+        )
+        product_count = products.count()
+
+    else:
+        products = Product.objects.filter(is_available=True, is_deleted=False, brand__is_active=True ,category__is_deleted=False,category__is_blocked=False)
+        product_count = products.count()
+
+   
+    context = {
+        'products': products,
+        'product_count': product_count,
+        'all_categories': all_categories,
+        'selected_category': selected_category,
+        # 'discount_offer':discount_offer,
+        # "discounted_offer":discounted_offer,
+        'selected_brand': selected_brand,
+        'brands': brands,
+        
+        
+    }
+
+    return render(request, 'user_side/services.html', context)

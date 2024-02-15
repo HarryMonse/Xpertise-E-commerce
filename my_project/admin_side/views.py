@@ -5,6 +5,8 @@ from user_side.models import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from user_side.forms import *
+from django.db import IntegrityError
+
 
 
 
@@ -47,11 +49,11 @@ def admin_index(request):
 
 @login_required(login_url='admin_login')
 def admin_service(request):
-    # item = Service.objects.filter(is_deleted=False)
-    # context = {
-    #     "item":item
-    # }
-    return render(request,'admin_side/service.html')
+    item = Product.objects.filter(is_deleted=False)
+    context = {
+        "item":item
+    }
+    return render(request,'admin_side/service.html',context)
 
 
 
@@ -66,7 +68,7 @@ def admin_service_add(request):
             images=request.FILES.getlist('images')
             for img in images:
                 ProductImages.objects.create(product=product,images=img)
-            return redirect('admin_product')
+            return redirect('admin_service')
     else:
         form = ProductForm()    
 
@@ -106,3 +108,56 @@ def block_user(request, user_id):
         messages.warning(request, 'You cannot block/unblock the Superadmin.')
 
     return redirect('customers')
+
+
+
+@login_required(login_url='admin_login')
+def admin_category(request):
+    data=category.objects.filter(is_deleted=False)
+    context={
+        'data':data
+    }
+    return render(request, 'admin_side/category.html', context)
+
+
+@login_required(login_url='admin_login')
+def admin_category_insert(request):
+    if request.method == 'POST':
+        category_name = request.POST.get('name')
+
+        try:
+            new_cat = category(category_name=category_name)
+            new_cat.save()
+            return redirect('admin_category')
+
+        except IntegrityError as e:
+            messages.error(request, f"Category '{category_name}' already exists.")
+            return redirect('admin_category')
+
+    return render(request, 'admin_side/category.html')
+
+
+
+
+@login_required(login_url='admin_login')
+def admin_type(request):
+    data=Brand.objects.all()
+    context={
+        'data':data
+    }
+    return render(request, 'admin_side/type.html', context)
+
+
+@login_required(login_url='admin_login')
+def admin_type_insert(request):
+    if request.method == 'POST':
+        brand_name = request.POST.get('name')
+        try:
+            new_brand = Brand(brand_name=brand_name)
+            new_brand.save()
+            messages.success(request, f"Brand '{brand_name}' added successfully.")
+        except IntegrityError:
+            messages.error(request, f"Brand '{brand_name}' already exists.")
+        return redirect('admin_type')
+    
+    return render(request, 'admin_side/type.html')

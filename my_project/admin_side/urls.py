@@ -10,6 +10,14 @@ urlpatterns = [
     path('admin_service_add/',views.admin_service_add,name='admin_service_add'),  
     path('customers/',views.customers,name='customers'),
     path('block_user/<int:user_id>/', views.block_user, name='block_user'),
+    path('admin_category/',views.admin_category,name='admin_category'),
+    path('admin_category_insert/',views.admin_category_insert,name='admin_category_insert'),
+    path('admin_type/',views.admin_type,name='admin_type'), 
+    path('admin_type_insert/',views.admin_type_insert,name='admin_type_insert'),
+
+
+
+
 
 
 ]

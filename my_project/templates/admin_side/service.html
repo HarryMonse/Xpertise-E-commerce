@@ -93,10 +93,10 @@
                         {% endif %}
                         </td> {% endcomment %}
                         <td class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                            <a href="{% url 'admin_product_edit' obj.id %}" class="btn btn-sm font-sm rounded btn-brand">
+                            <a href="" class="btn btn-sm font-sm rounded btn-brand">
                                 <i class="material-icons md-edit"></i> Edit
                             </a>
-                            <form method="post" action="{% url 'admin_product_delete' obj.id %}" id="deleteForm-{{ obj.id }}">
+                            <form method="post" action="" id="deleteForm-{{ obj.id }}">
                                 {% csrf_token %}
                                 <input type="hidden" name="is_deleted" value="on">
                                 <button type="button" class="btn btn-sm font-sm btn-light rounded" onclick="confirmDelete({{ obj.id }})">
