@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login,logout
 from user_side.models import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from user_side.forms import *
+
 
 
 
@@ -50,6 +52,34 @@ def admin_service(request):
     #     "item":item
     # }
     return render(request,'admin_side/service.html')
+
+
+
+
+@login_required(login_url='admin_login')
+def admin_service_add(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST,request.FILES)
+        if form.is_valid():
+            product=form.save(commit=False)
+            product.save()
+            images=request.FILES.getlist('images')
+            for img in images:
+                ProductImages.objects.create(product=product,images=img)
+            return redirect('admin_product')
+    else:
+        form = ProductForm()    
+
+    brands = Brand.objects.all()
+    categories = category.objects.all()
+
+    context = {
+        'brands': brands,
+        'categories': categories,
+        'form' : form,
+    }
+    return render(request,'admin_side/service_add.html',context)
+
 
 
 
