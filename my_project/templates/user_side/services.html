@@ -109,7 +109,7 @@
                                         {% comment %} <a href="{% url 'product_details' category_id=product.category.id product_id=product.id %}"> {% endcomment %}
                                             
                                             
-                                            <a href=""> 
+                                            <a href="{% url 'service_details' category_id=product.category.id product_id=product.id %}"> 
                                             {% if product.productattribute_set.first.image %}
                                                 <img class="default-img" src="{{ product.productattribute_set.first.image.url }}" alt="" style="width: 100%; height: auto;">
                                             {% else %}
@@ -154,7 +154,7 @@
                                 </div>
                                 <div class="product-content-wrap">
                                     <div class="product-category">
-                                        <a href="shop-grid-right.html">{{ product.category }}</a>
+                                        <a href="">{{ product.category }}</a>
                                     </div>
                                     <h2><a href="">{{ product.product_name }}</a></h2>
                                     <div>

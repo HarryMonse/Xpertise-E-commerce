@@ -11,6 +11,8 @@ urlpatterns = [
     path('enter_otp/',views.enter_otp,name='enter_otp'),
     path('resend_otp/',views.resend_otp,name='resend_otp'),
     path('services/', views.services, name='services'),
+    path('service/<int:category_id>/<int:product_id>', views.service_details, name='service_details'),
+
 
 
 

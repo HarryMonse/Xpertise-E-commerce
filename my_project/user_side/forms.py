@@ -29,3 +29,16 @@ class ProductForm(forms.ModelForm):
         fields=['product_name','description','is_available','specifications','brand','category','featured','is_deleted']
 
 
+class ProductImagesForm(forms.ModelForm):
+
+    delete_image = forms.BooleanField(required=False, initial=False,widget=forms.HiddenInput)
+
+    class Meta:
+        model = ProductImages
+        fields = ['images']
+
+    def __init__(self, *args, **kwargs):
+        super(ProductImagesForm, self).__init__(*args, **kwargs)
+        self.fields['images'].required = False
+
+

@@ -6,6 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from user_side.forms import *
 from django.db import IntegrityError
+from django.http import HttpResponse, HttpResponseRedirect
+from django.forms.models import inlineformset_factory
+
+
 
 
 
@@ -83,6 +87,54 @@ def admin_service_add(request):
     return render(request,'admin_side/service_add.html',context)
 
 
+@login_required(login_url='admin_login')
+def admin_service_edit(request, id):
+    product = get_object_or_404(Product, id=id)
+    brands = Brand.objects.all()
+    categories = category.objects.all()
+
+    ImageFormSet = inlineformset_factory(Product, ProductImages, form=ProductImagesForm, extra=1, can_delete=True)
+
+    if request.method == 'POST':
+        product_form = ProductForm(request.POST, instance=product)
+        formset = ImageFormSet(request.POST, request.FILES, instance=product)
+
+        if product_form.is_valid() and formset.is_valid():
+            product_form.save()
+            formset.save()
+
+            for form in formset.deleted_forms:
+                instance = form.instance
+                if instance.id:
+                    instance.delete()
+
+            return redirect('admin_service')
+
+    else:
+        product_form = ProductForm(instance=product)
+        formset = ImageFormSet(instance=product)
+
+    context = {
+        'product': product,
+        'brands': brands,
+        'categories': categories,
+        'product_form': product_form,
+        'formset': formset,
+    }
+
+    return render(request, 'admin_side/service_edit.html', context)
+
+def admin_service_delete(request, id):
+    product = get_object_or_404(Product, id=id)
+
+    if request.method == 'POST':
+        product.delete()
+        return redirect('admin_service')
+
+    context = {'product': product}
+    return render(request, 'admin_side/service_delete.html', context)
+
+
 
 
 
@@ -138,6 +190,35 @@ def admin_category_insert(request):
 
 
 
+@login_required(login_url='admin_login')
+def admin_category_edit(request,id):
+    if request.method == 'POST':
+        category_name = request.POST.get('name')
+        edit=category.objects.get(id=id)
+        edit.category_name = category_name
+        edit.save()
+        return redirect('admin_category')
+    obj = category.objects.get(id=id)
+    context = {
+        "obj":obj
+    }
+    return render(request,'admin_side/category_edit.html', context)
+
+@login_required(login_url='admin_login')
+def admin_delete_category(request, id):
+    category_to_delete = get_object_or_404(category, id=id)
+    category_to_delete.is_deleted = True
+    category_to_delete.save()
+    return redirect('admin_category')
+
+@login_required(login_url='admin_login')
+def block_unblock_category(request, id):
+    category_to_block = get_object_or_404(category, id=id)
+    category_to_block.is_blocked = not category_to_block.is_blocked
+    category_to_block.save()
+    return redirect('admin_category')
+
+
 
 @login_required(login_url='admin_login')
 def admin_type(request):
@@ -161,3 +242,35 @@ def admin_type_insert(request):
         return redirect('admin_type')
     
     return render(request, 'admin_side/type.html')
+
+@login_required(login_url='admin_login')
+def admin_type_edit(request,id):
+    if request.method == 'POST':
+        brand_name = request.POST.get('name')
+        edit=Brand.objects.get(id=id)
+        edit.brand_name = brand_name
+        edit.save()
+        return redirect('admin_type')
+    obj = Brand.objects.get(id=id)
+    context = {
+        "obj":obj
+    }
+    return render(request,'admin_side/type_edit.html', context)
+
+
+@login_required(login_url='admin_login')
+def type_available(request, brand_id):
+    if not request.user.is_authenticated:
+        return HttpResponse("Unauthorized", status=401)
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    
+    brand = get_object_or_404(Brand, id=brand_id)
+    
+    if brand.is_active:
+        brand.is_active=False
+       
+    else:
+        brand.is_active=True
+    brand.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

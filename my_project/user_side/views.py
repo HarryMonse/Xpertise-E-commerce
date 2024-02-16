@@ -185,23 +185,10 @@ def services(request, category_id=None,brand_id=None):
     products = None
     product_count = None
     brands = Brand.objects.filter(is_active=True)
-    # try:
-    #     discount_offer = ProductOffer.objects.get(active=True)
-    # except ProductOffer.DoesNotExist:
-    #     discount_offer = None
-        
-    # try:
-        
-    #     discounted_offer = CategoryOffer.objects.filter(active=True)
-    # except ProductOffer.DoesNotExist:
-    #     discounted_offer = None
-    # if discounted_offer:
-    #     for dis in discounted_offer:
-    #         products_with_discount = Product.objects.filter(category=dis.category, is_available=True)
-    #         current_date = timezone.now()
-    #         if current_date > dis.end_date:
-    #             dis.active = False
-    #             dis.save()
+    
+
+
+
                 
     if 'category_id' in request.GET:
         category_id = request.GET['category_id']
@@ -248,3 +235,37 @@ def services(request, category_id=None,brand_id=None):
     }
 
     return render(request, 'user_side/services.html', context)
+
+
+
+
+def service_details(request, product_id, category_id):
+    user=request.user
+    product = Product.objects.get(id=product_id)
+    images = ProductImages.objects.filter(product=product)
+    related_product=Product.objects.filter(category=product.category).exclude(id=product_id)[:4]
+    colors = ProductAttribute.objects.filter(product=product).distinct()
+
+
+    if request.method=="POST":
+        if user.is_authenticated:
+            print("request entered ")
+            colour=request.POST.get('colorselect')
+            qty=request.POST.get('quantity')
+            product_colour=Color.objects.get(color_name=colour)
+            products=ProductAttribute.objects.get(product=product,color=product_colour)
+           
+            print("Related Products:", related_product)
+        else:
+            return redirect('user_login')
+
+    
+    context={
+        'product': product,
+        'related_product': related_product,
+        'colors' :colors,
+        'images':images,
+    }
+    
+
+    return render(request, 'user_side/service_details.html', context)
