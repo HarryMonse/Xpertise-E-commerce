@@ -114,14 +114,14 @@
                                     <div class="short-desc mb-30">
                                         <p>{{ product.description }}</p>
                                     </div>
-                                    {% comment %} <div class="attr-detail attr-color mb-15">   
+                                     <div class="attr-detail attr-color mb-15">   
                                         <div id="color-buttons">
                                             <div class="attr-detail attr-color mb-15">
-                                                <strong class="mr-10">Delivery</strong>
+                                                <strong class="mr-10"></strong>
                                                 <ul class="list-filter color-filter">
                                                     <form method="post">
                                                         {% csrf_token %}
-                                                        <label for="colorSelect">Choose Delivery:</label> {% endcomment %}
+                                                        <strong class="mr-10"> <label for="colorSelect">Choose Provider Type:</label> </strong>
                                                         {% comment %} <select id="colorselect" name="colorselect">
                                                             {% for color in colors %}
                                                                 {% if color.color__color_code is not none %}
@@ -130,7 +130,7 @@
                                                             {% endfor %}
                                                         </select> {% endcomment %}
 
-                                                        {% comment %} <select id="colorselect" name="colorselect">
+                                                         <select id="colorselect" name="colorselect">
                                                             {% for color in colors %}
                                                                 <option 
                                                                     data-price="{{ color.price }}" 
@@ -143,7 +143,7 @@
                                                             {% endfor %}
                                                         </select>
                                                 </ul>
-                                            </div>                                           {% endcomment %}
+                                            </div>                                          
 
                                             {% comment %} <input type="text"  id="product-color"> {% endcomment %}
                                          {% comment %} <div class="primary-color float-left">

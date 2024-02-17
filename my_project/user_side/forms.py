@@ -1,5 +1,7 @@
 from django import forms
 from .models import *
+from django.core.exceptions import ValidationError
+
 
 
 class CategoryForm(forms.ModelForm):
@@ -42,3 +44,38 @@ class ProductImagesForm(forms.ModelForm):
         self.fields['images'].required = False
 
 
+class ProductAttributeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            if isinstance(field, forms.BooleanField):
+                field.widget = forms.CheckboxInput(attrs={'class': 'form-check-input'})
+
+    class Meta:
+        model = ProductAttribute
+        fields = ['product', 'color', 'price','old_price', 'stock', 'image', 'is_deleted', 'is_available']
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            try:
+                # Attempt to validate the image extension
+                image_extension = image.name.split('.')[-1].lower()
+                valid_extensions = ['jpg', 'jpeg', 'png']
+                if image_extension not in valid_extensions:
+                    raise ValidationError("Only JPG, JPEG, and PNG files are allowed.")
+            except AttributeError:
+                # Handle the case where 'image' does not have a 'name' attribute
+                raise ValidationError("Invalid image file.")
+        return image
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if price < 0:
+            raise forms.ValidationError('Price cannot be negative.')
+        return price
+    def clean_stock(self):
+        stock = self.cleaned_data.get('stock')
+        if stock < 0:
+            raise forms.ValidationError('Stock cannot be negative.')
+        return stock

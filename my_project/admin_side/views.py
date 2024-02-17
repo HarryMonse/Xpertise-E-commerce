@@ -274,3 +274,68 @@ def type_available(request, brand_id):
         brand.is_active=True
     brand.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required(login_url='admin_login')
+def admin_varient(request):
+    cat=category.objects.all()
+    item = ProductAttribute.objects.filter(is_deleted=False)
+    context = {
+        "item":item,
+        "cat":cat
+    }
+    return render(request,'admin_side/varient.html', context)
+
+
+@login_required(login_url='admin_login')
+def admin_varient_add(request):
+    if request.method == 'POST':
+        form = ProductAttributeForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.save()
+            return redirect('admin_varient')
+    else:
+        form = ProductAttributeForm()    
+
+    brands = Brand.objects.all()
+    categories = category.objects.all()
+
+    context = {
+        'brands': brands,
+        'categories': categories,
+        'form' : form,
+    }
+    return render(request, 'admin_side/varient_add.html', context)
+
+
+
+@login_required(login_url='admin_login')
+def admin_provider_type(request):
+    data=Color.objects.all()
+    context={
+        'data':data
+    }
+    return render(request, 'admin_side/provider_type.html', context)
+
+@login_required(login_url='admin_login')
+def admin_provider_type_insert(request):
+    if request.method == 'POST':
+        color_name = request.POST.get('name').strip()  
+        color_code = request.POST.get('code').strip()  
+        
+        try:
+    
+            existing_color = Color.objects.filter(color_name__iexact=color_name).first()
+            if existing_color:
+                messages.error(request, f"Provider type '{color_name}' already exists.")
+            else:
+                new_color = Color(color_name=color_name, color_code=color_code)
+                new_color.save()
+                messages.success(request, f"Provider type '{color_name}' added successfully.")
+        except IntegrityError:
+            messages.error(request, f"An error occurred while adding the provider type.")
+
+        return redirect('admin_provider_type')
+
+    return render(request, 'admin_side/provider_type.html')

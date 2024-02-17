@@ -21,6 +21,15 @@ urlpatterns = [
     path('admin_category_edit/<int:id>',views.admin_category_edit,name='admin_category_edit'),
     path('admin_delete_category/<int:id>/', views.admin_delete_category, name='admin_delete_category'),
     path('block_unblock_category/<int:id>/', views.block_unblock_category, name='block_unblock_category'),
+    path('admin_varient/',views.admin_varient,name='admin_varient'),  
+    path('admin_varient_add/',views.admin_varient_add,name='admin_varient_add'), 
+
+    path('admin_provider_type/',views.admin_provider_type,name='admin_provider_type'), 
+    path('admin_provider_type_insert/',views.admin_provider_type_insert,name='admin_provider_type_insert'),
+
+
+
+
 
 
 
