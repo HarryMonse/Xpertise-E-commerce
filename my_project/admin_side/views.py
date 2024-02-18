@@ -309,6 +309,40 @@ def admin_varient_add(request):
     return render(request, 'admin_side/varient_add.html', context)
 
 
+@login_required(login_url='admin_login')
+def admin_varient_edit(request, id):
+    product = get_object_or_404(ProductAttribute, id=id)
+
+    if request.method == 'POST':
+        product_form = ProductAttributeForm(request.POST, request.FILES, instance=product)
+        if product_form.is_valid():
+            product_form.save()
+            return redirect('admin_varient')
+
+    else:
+        product_form = ProductAttributeForm(instance=product)
+
+    context = {
+        'product_form': product_form,
+        'product': product,
+    }
+
+    return render(request, 'admin_side/varient_edit.html', context)
+
+
+def admin_varient_delete(request, id):
+    product = get_object_or_404(ProductAttribute, id=id)
+
+    if request.method == 'POST':
+        product.delete()
+        return redirect('admin_varient')
+
+    context = {'product': product}
+    return render(request, 'admin_side/service_delete.html', context)
+
+
+
+
 
 @login_required(login_url='admin_login')
 def admin_provider_type(request):
@@ -339,3 +373,19 @@ def admin_provider_type_insert(request):
         return redirect('admin_provider_type')
 
     return render(request, 'admin_side/provider_type.html')
+
+@login_required(login_url='admin_login')
+def admin_provider_type_edit(request,id):
+    if request.method == 'POST':
+        color_name = request.POST.get('name')
+        color_code = request.POST.get('code')
+        edit=Color.objects.get(id=id)
+        edit.color_name = color_name
+        edit.color_code = color_code
+        edit.save()
+        return redirect('admin_provider_type')
+    obj = Color.objects.get(id=id)
+    context = {
+        "obj":obj
+    }
+    return render(request,'admin_side/provider_type_edit.html', context)

@@ -23,14 +23,14 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>image</th>
-                        <th>Product Name</th>
-                        <th>Is available</th>
+                        <th>Image</th>
+                        <th>Service Name</th>
+                        <th>Availability</th>
                         
-                        <th>price</th>
-                        <th>old price</th>
-                        <th>varient</th>
-                        <th>stock</th>
+                        <th>Rate</th>
+                        <th>Old Rate</th>
+                        <th>Varient</th>
+                        <th>Available</th>
 
                         <th class="text-end"> Action </th>
                     </tr>
@@ -81,10 +81,10 @@
                             
                             </td>
                         <td class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                            <a href="" class="btn btn-sm font-sm rounded btn-brand">
+                            <a href="{% url 'admin_varient_edit' obj.id %}" class="btn btn-sm font-sm rounded btn-brand">
                                 <i class="material-icons md-edit"></i> Edit
                             </a>
-                            <form method="post" action="" class="delete-form">
+                            <form method="post" action="{% url 'admin_varient_delete' obj.id %}" class="delete-form">
                                 {% csrf_token %}
                                 <input type="hidden" name="is_deleted" value="on">
                                 <button type="button" class="btn btn-sm font-sm btn-light rounded delete-btn">
