@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':'xpertise',
+        'NAME':'xpertise1',
         'USER': 'myuser',
         'PASSWORD':'xpertise',
         'HOST':'localhost',
@@ -89,7 +89,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL='user_side.User'
+AUTH_USER_MODEL='user_side.CustomUser'
 
 
 # Password validation

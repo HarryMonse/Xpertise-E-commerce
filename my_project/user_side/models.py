@@ -6,7 +6,7 @@ from django.utils import timezone
 
 # Create your models here.
 
-class UserManager(BaseUserManager):
+class CustomUserManager(BaseUserManager):
     def create_user(self,first_name,last_name,username,email,password=None):
         if not email:
             raise ValueError('User must an email address')
@@ -38,7 +38,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class User(AbstractBaseUser,PermissionsMixin):
+class CustomUser(AbstractBaseUser,PermissionsMixin):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=100,unique=True)
@@ -57,7 +57,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name','last_name']
-    objects=UserManager()
+    objects=CustomUserManager()
 
     groups=models.ManyToManyField(Group,blank=True,related_name='home_user_groups')
     user_permissions=models.ManyToManyField(Permission,blank=True,related_name='home_user_permissions')
@@ -152,3 +152,17 @@ class ProductAttribute(models.Model):
     def image_tag(self):
         return mark_safe('<img src="%s" width="50" height="50" />' % self.image.url)
     
+
+
+
+
+
+
+
+
+class demo_model(models.Model):
+    brand_name = models.CharField(max_length=255,unique=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self) :
+        return self.brand_name

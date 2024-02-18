@@ -140,7 +140,7 @@ def admin_service_delete(request, id):
 
 @login_required(login_url='admin_login')
 def customers(request):
-    user = User.objects.all()
+    user = CustomUser.objects.all()
     context = {
         'user':user
     }
@@ -149,7 +149,7 @@ def customers(request):
 
 @login_required(login_url='admin_login')
 def block_user(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(CustomUser, id=user_id)
 
     if not user.is_admin:
         user.is_active = not user.is_active

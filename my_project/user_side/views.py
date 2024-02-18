@@ -45,10 +45,10 @@ def user_signup(request):
         password=request.POST.get('password')
         cpassword=request.POST.get('cpassword')
 
-        if User.objects.filter(username=username).exists():
+        if CustomUser.objects.filter(username=username).exists():
             messages.error(request,'Username is already existing. Please choose a different Username.')
             return render(request, 'user_side/user_signup.html')
-        elif User.objects.filter(email=email).exists():
+        elif CustomUser.objects.filter(email=email).exists():
             messages.error(request, 'Email is already existing. Please choose a different Email.')
             return render(request, 'user_side/user_signup.html')
         elif cpassword != password:
@@ -95,7 +95,7 @@ def enter_otp(request):
         
 
         if entered_otp == stored_otp:
-            new_user=User(
+            new_user=CustomUser(
                 username=request.session['signup_details']['username'],
                 email=request.session['signup_details']['email'],
                 first_name=request.session['signup_details']['first_name'],
@@ -160,8 +160,8 @@ def signin(request):
         password = request.POST.get('password')
         print(email)
         try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
             user = None
 
         print(user)

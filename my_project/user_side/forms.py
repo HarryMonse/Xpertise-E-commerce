@@ -7,7 +7,7 @@ from django.forms import modelformset_factory
 
 class SignUpForm(UserCreationForm):
     class Meta:
-        model= User
+        model= CustomUser
         fields=['username','first_name','last_name','email','phone','password']
 
 class AddToCartForm(forms.Form):
