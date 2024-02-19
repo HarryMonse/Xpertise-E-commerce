@@ -38,10 +38,10 @@
                             <input type="number" placeholder="Type here" name="stock" value="{{ product.stock }}" class="form-control" id="stock" />
                         </div>
                         <div class="mb-4">
-                            <label for="brand" class="form-label">Brand</label>
-                            <select name="brand" class="form-control" id="product_brand">
-                                {% for brand in brands %}
-                                    <option value="{{ brand.id }}" {% if product.brand.id == brand.id %} selected {% endif %}>{{ brand.brand_name }}</option>
+                            <label for="type" class="form-label">Type</label>
+                            <select name="type" class="form-control" id="product_type">
+                                {% for type in types %}
+                                    <option value="{{ type.id }}" {% if product.type.id == type.id %} selected {% endif %}>{{ type.type_name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -164,10 +164,10 @@
                                 
                             </div>
                             <div class="mb-4">
-                                    <label for="brand" class="form-label">Type</label>
-                                    <select name="brand" class="form-control" id="brand">
-                                        {% for brand in brands %}
-                                            <option value="{{ brand.id }}" {% if product_form.instance.brand.id == brand.id %} selected {% endif %}>{{ brand.brand_name }}</option>
+                                    <label for="type" class="form-label">Type</label>
+                                    <select name="type" class="form-control" id="type">
+                                        {% for type in types %}
+                                            <option value="{{ type.id }}" {% if product_form.instance.type.id == type.id %} selected {% endif %}>{{ type.type_name }}</option>
                                         {% endfor %}
                                     </select>
 

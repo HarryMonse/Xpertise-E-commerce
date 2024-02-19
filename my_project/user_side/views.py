@@ -178,13 +178,13 @@ def signin(request):
 
 
 
-def services(request, category_id=None,brand_id=None):
+def services(request, category_id=None,type_id=None):
     all_categories = category.objects.filter(is_deleted=False,is_blocked=False)
     selected_category = None
-    selected_brand = None
+    selected_type = None
     products = None
     product_count = None
-    brands = Brand.objects.filter(is_active=True)
+    types = Type.objects.filter(is_active=True)
     
 
 
@@ -197,27 +197,27 @@ def services(request, category_id=None,brand_id=None):
             category=selected_category,
             is_available=True,
             is_deleted=False,
-            brand__is_active=True,
+            type__is_active=True,
             category__is_deleted=False,
             category__is_blocked=False
         )
         product_count = products.count()
 
-    elif 'brand_id' in request.GET:
-        brand_id = request.GET['brand_id']
-        selected_brand = get_object_or_404(Brand, id=brand_id)
+    elif 'type_id' in request.GET:
+        type_id = request.GET['type_id']
+        selected_type = get_object_or_404(Type, id=type_id)
         products = Product.objects.filter(
-            brand=selected_brand,
+            type=selected_type,
             is_available=True,
             is_deleted=False,
-            brand__is_active=True,
+            type__is_active=True,
             category__is_deleted=False,
             category__is_blocked=False
         )
         product_count = products.count()
 
     else:
-        products = Product.objects.filter(is_available=True, is_deleted=False, brand__is_active=True ,category__is_deleted=False,category__is_blocked=False)
+        products = Product.objects.filter(is_available=True, is_deleted=False, type__is_active=True ,category__is_deleted=False,category__is_blocked=False)
         product_count = products.count()
 
    
@@ -228,8 +228,8 @@ def services(request, category_id=None,brand_id=None):
         'selected_category': selected_category,
         # 'discount_offer':discount_offer,
         # "discounted_offer":discounted_offer,
-        'selected_brand': selected_brand,
-        'brands': brands,
+        'selected_type': selected_type,
+        'types': types,
         
         
     }
@@ -244,16 +244,16 @@ def service_details(request, product_id, category_id):
     product = Product.objects.get(id=product_id)
     images = ProductImages.objects.filter(product=product)
     related_product=Product.objects.filter(category=product.category).exclude(id=product_id)[:4]
-    colors = ProductAttribute.objects.filter(product=product).distinct()
+    provider_types = ProductAttribute.objects.filter(product=product).distinct()
 
 
     if request.method=="POST":
         if user.is_authenticated:
             print("request entered ")
-            colour=request.POST.get('colorselect')
+            colour=request.POST.get('provider_typeselect')
             qty=request.POST.get('quantity')
-            product_colour=Color.objects.get(color_name=colour)
-            products=ProductAttribute.objects.get(product=product,color=product_colour)
+            product_colour=ProviderType.objects.get(provider_type_name=colour)
+            products=ProductAttribute.objects.get(product=product,provider_type=product_colour)
            
             print("Related Products:", related_product)
         else:
@@ -263,7 +263,7 @@ def service_details(request, product_id, category_id):
     context={
         'product': product,
         'related_product': related_product,
-        'colors' :colors,
+        'provider_types' :provider_types,
         'images':images,
     }
     

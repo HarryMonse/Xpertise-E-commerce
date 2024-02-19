@@ -6,7 +6,7 @@
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
-                <a href="index.html" rel="nofollow">Home</a>
+                <a href="" >Home</a>
                 <span></span> {{product.category}}
                 <span></span> {{product.product_name}}
             </div>
@@ -45,8 +45,8 @@
                                 <div class="detail-info">
                                     <h2 class="title-detail">{{ product.product_name  }}</h2>
                                     <div class="product-detail-rating">
-                                        <div class="pro-details-brand">
-                                            <span> Type: <a href="shop-grid-right.html">{{ product.brand }}</a></span>
+                                        <div class="pro-details-type">
+                                            <span> Type: <a href="shop-grid-right.html">{{ product.type }}</a></span>
                                         </div>
                                     </div>
                                     <div class="clearfix product-price-cover">
@@ -121,8 +121,8 @@
                                                 <ul class="list-filter color-filter">
                                                     <form method="post">
                                                         {% csrf_token %}
-                                                        <strong class="mr-10"> <label for="colorSelect">Choose Provider Type:</label> </strong>
-                                                        {% comment %} <select id="colorselect" name="colorselect">
+                                                        <strong class="mr-10"> <label for="provider_typeSelect">Choose Provider Type:</label> </strong>
+                                                        {% comment %} <select id="provider_typeselect" name="provider_typeselect">
                                                             {% for color in colors %}
                                                                 {% if color.color__color_code is not none %}
                                                                     <option data-price="{{ color.price }}" data-old-price="{{ color.old_price }}"  data-image="{{ color.image.url }}" value="{{ color.color__color_name }}" style="background-color: {{ color.color__color_code }}">{{ color.color__color_name }}</option>
@@ -130,15 +130,15 @@
                                                             {% endfor %}
                                                         </select> {% endcomment %}
 
-                                                         <select id="colorselect" name="colorselect">
-                                                            {% for color in colors %}
+                                                         <select id="provider_typeselect" name="provider_typeselect">
+                                                            {% for provider_type in provider_types %}
                                                                 <option 
-                                                                    data-price="{{ color.price }}" 
-                                                                    data-old-price="{{ color.old_price }}"  
-                                                                    data-image="{{ color.image.url }}" 
-                                                                    value="{{ color.color.color_name }}" 
-                                                                    style="background-color: {{ color.color.color_code }}">
-                                                                    {{ color.color.color_name }}
+                                                                    data-price="{{ provider_type.price }}" 
+                                                                    data-old-price="{{ provider_type.old_price }}"  
+                                                                    data-image="{{ provider_type.image.url }}" 
+                                                                    value="{{ provider_type.provider_type.provider_type_name }}" 
+                                                                    style="background-color: {{ provider_type.provider_type.provider_type_code }}">
+                                                                    {{ provider_type.provider_type.provider_type_name }}
                                                                 </option>
                                                             {% endfor %}
                                                         </select>
@@ -235,8 +235,8 @@
                                             
 
                                             // Update the displayed color
-                                            document.getElementById('product-color').value = selectedColor;
-                                            $("#product-color1").val(selectedColor);
+                                            document.getElementById('product-provider_type').value = selectedColor;
+                                            $("#product-provider_type1").val(selectedColor);
 
                                             // Update the main product image
                                             document.getElementById('mainProductImage').src = imageSrc;
@@ -251,13 +251,13 @@
                                         };
 
                                         // Add event listener for the change event on the color select
-                                        document.getElementById('colorselect').addEventListener('change', function () {
+                                        document.getElementById('provider_typeselect').addEventListener('change', function () {
                                             changePriceFromSelect(this);
                                         });
 
                                         // Trigger the changePriceFromSelect function on page load to set initial values
                                         document.addEventListener('DOMContentLoaded', function () {
-                                            const selectElement = document.getElementById('colorselect');
+                                            const selectElement = document.getElementById('provider_typeselect');
                                             changePriceFromSelect(selectElement);
                                         });
 
@@ -424,7 +424,7 @@
 
             var itemId = $(this).data("item-id");
             var quantity = $("#productQty").val(); // Get the quantity value
-            var productColor = $("#product-color1").val();
+            var productColor = $("#product-provider_type1").val();
 
             $.ajax({
                 type: 'POST',
@@ -432,7 +432,7 @@
                 data: {
                     item_id: itemId,
                     quantity: quantity,
-                    product_color: productColor, 
+                    product_provider_type: productColor, 
                     csrfmiddlewaretoken: "{{ csrf_token }}"
                 },
                 dataType: 'json',

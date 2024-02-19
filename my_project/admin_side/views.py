@@ -76,11 +76,11 @@ def admin_service_add(request):
     else:
         form = ProductForm()    
 
-    brands = Brand.objects.all()
+    types = Type.objects.all()
     categories = category.objects.all()
 
     context = {
-        'brands': brands,
+        'types': types,
         'categories': categories,
         'form' : form,
     }
@@ -90,7 +90,7 @@ def admin_service_add(request):
 @login_required(login_url='admin_login')
 def admin_service_edit(request, id):
     product = get_object_or_404(Product, id=id)
-    brands = Brand.objects.all()
+    types = Type.objects.all()
     categories = category.objects.all()
 
     ImageFormSet = inlineformset_factory(Product, ProductImages, form=ProductImagesForm, extra=1, can_delete=True)
@@ -116,7 +116,7 @@ def admin_service_edit(request, id):
 
     context = {
         'product': product,
-        'brands': brands,
+        'types': types,
         'categories': categories,
         'product_form': product_form,
         'formset': formset,
@@ -222,7 +222,7 @@ def block_unblock_category(request, id):
 
 @login_required(login_url='admin_login')
 def admin_type(request):
-    data=Brand.objects.all()
+    data=Type.objects.all()
     context={
         'data':data
     }
@@ -232,13 +232,13 @@ def admin_type(request):
 @login_required(login_url='admin_login')
 def admin_type_insert(request):
     if request.method == 'POST':
-        brand_name = request.POST.get('name')
+        type_name = request.POST.get('name')
         try:
-            new_brand = Brand(brand_name=brand_name)
-            new_brand.save()
-            messages.success(request, f"Brand '{brand_name}' added successfully.")
+            new_type = Type(type_name=type_name)
+            new_type.save()
+            messages.success(request, f"Type '{type_name}' added successfully.")
         except IntegrityError:
-            messages.error(request, f"Brand '{brand_name}' already exists.")
+            messages.error(request, f"Type '{type_name}' already exists.")
         return redirect('admin_type')
     
     return render(request, 'admin_side/type.html')
@@ -246,12 +246,12 @@ def admin_type_insert(request):
 @login_required(login_url='admin_login')
 def admin_type_edit(request,id):
     if request.method == 'POST':
-        brand_name = request.POST.get('name')
-        edit=Brand.objects.get(id=id)
-        edit.brand_name = brand_name
+        type_name = request.POST.get('name')
+        edit=Type.objects.get(id=id)
+        edit.type_name = type_name
         edit.save()
         return redirect('admin_type')
-    obj = Brand.objects.get(id=id)
+    obj = Type.objects.get(id=id)
     context = {
         "obj":obj
     }
@@ -259,20 +259,20 @@ def admin_type_edit(request,id):
 
 
 @login_required(login_url='admin_login')
-def type_available(request, brand_id):
+def type_available(request, type_id):
     if not request.user.is_authenticated:
         return HttpResponse("Unauthorized", status=401)
     if not request.user.is_superadmin:
         return redirect('admin_login')
     
-    brand = get_object_or_404(Brand, id=brand_id)
+    type = get_object_or_404(Type, id=type_id)
     
-    if brand.is_active:
-        brand.is_active=False
+    if type.is_active:
+        type.is_active=False
        
     else:
-        brand.is_active=True
-    brand.save()
+        type.is_active=True
+    type.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
@@ -298,11 +298,11 @@ def admin_varient_add(request):
     else:
         form = ProductAttributeForm()    
 
-    brands = Brand.objects.all()
+    types = Type.objects.all()
     categories = category.objects.all()
 
     context = {
-        'brands': brands,
+        'types': types,
         'categories': categories,
         'form' : form,
     }
@@ -346,7 +346,7 @@ def admin_varient_delete(request, id):
 
 @login_required(login_url='admin_login')
 def admin_provider_type(request):
-    data=Color.objects.all()
+    data=ProviderType.objects.all()
     context={
         'data':data
     }
@@ -355,18 +355,18 @@ def admin_provider_type(request):
 @login_required(login_url='admin_login')
 def admin_provider_type_insert(request):
     if request.method == 'POST':
-        color_name = request.POST.get('name').strip()  
-        color_code = request.POST.get('code').strip()  
+        provider_type_name = request.POST.get('name').strip()  
+        provider_type_code = request.POST.get('code').strip()  
         
         try:
     
-            existing_color = Color.objects.filter(color_name__iexact=color_name).first()
-            if existing_color:
-                messages.error(request, f"Provider type '{color_name}' already exists.")
+            existing_provider_type = ProviderType.objects.filter(provider_type_name__iexact=provider_type_name).first()
+            if existing_provider_type:
+                messages.error(request, f"Provider type '{provider_type_name}' already exists.")
             else:
-                new_color = Color(color_name=color_name, color_code=color_code)
-                new_color.save()
-                messages.success(request, f"Provider type '{color_name}' added successfully.")
+                new_provider_type = ProviderType(provider_type_name=provider_type_name, provider_type_code=provider_type_code)
+                new_provider_type.save()
+                messages.success(request, f"Provider type '{provider_type_name}' added successfully.")
         except IntegrityError:
             messages.error(request, f"An error occurred while adding the provider type.")
 
@@ -377,14 +377,14 @@ def admin_provider_type_insert(request):
 @login_required(login_url='admin_login')
 def admin_provider_type_edit(request,id):
     if request.method == 'POST':
-        color_name = request.POST.get('name')
-        color_code = request.POST.get('code')
-        edit=Color.objects.get(id=id)
-        edit.color_name = color_name
-        edit.color_code = color_code
+        provider_type_name = request.POST.get('name')
+        provider_type_code = request.POST.get('code')
+        edit=ProviderType.objects.get(id=id)
+        edit.provider_type_name = provider_type_name
+        edit.provider_type_code = provider_type_code
         edit.save()
         return redirect('admin_provider_type')
-    obj = Color.objects.get(id=id)
+    obj = ProviderType.objects.get(id=id)
     context = {
         "obj":obj
     }

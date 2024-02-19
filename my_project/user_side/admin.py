@@ -6,15 +6,15 @@ class ProductImagesAdmin(admin.TabularInline):
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display=['category_name']
-class BrandAdmin(admin.ModelAdmin):
-    list_display=['brand_name']
+class TypeAdmin(admin.ModelAdmin):
+    list_display=['type_name']
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImagesAdmin]
     list_display=['product_name','category','is_available']
 class ColorAdmin(admin.ModelAdmin):
-    list_display=['color_name','color_code']
+    list_display=['provider_type_name','provider_type_code']
 class ProductAttributeAdmin(admin.ModelAdmin):
-    list_display=['id','product','price','old_price','color','stock','image_tag']
+    list_display=['id','product','price','old_price','provider_type','stock','image_tag']
 
 
 # Register your models here.
@@ -22,7 +22,7 @@ class ProductAttributeAdmin(admin.ModelAdmin):
 admin.site.register(CustomUser  )
 admin.site.register(category,CategoryAdmin)
 admin.site.register(Product,ProductAdmin)
-admin.site.register(Brand,BrandAdmin)
-admin.site.register(Color)
+admin.site.register(Type,TypeAdmin)
+admin.site.register(ProviderType)
 admin.site.register(ProductAttribute,ProductAttributeAdmin)
 

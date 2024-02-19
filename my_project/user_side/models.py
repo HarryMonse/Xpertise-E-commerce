@@ -76,29 +76,29 @@ class category(models.Model):
     def __str__(self) :
         return self.category_name
     
-class Brand(models.Model):
-    brand_name = models.CharField(max_length=255,unique=True)
+class Type(models.Model):
+    type_name = models.CharField(max_length=255,unique=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self) :
-        return self.brand_name
+        return self.type_name
     
-class Color(models.Model):
-    color_name = models.CharField(max_length=100)
-    color_code = models.CharField(max_length=100)
+class ProviderType(models.Model):
+    provider_type_name = models.CharField(max_length=100)
+    provider_type_code = models.CharField(max_length=100)
 
-    def color_bg(self):
-        return mark_safe('<div style="width:50px; height:50px; background-color=%s"></div>' % (self.color_code))
+    def provider_type_bg(self):
+        return mark_safe('<div style="width:50px; height:50px; background-provider_type=%s"></div>' % (self.provider_type_code))
 
     def __str__(self):
-        return self.color_name
+        return self.provider_type_name
 
 
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
     description = models.TextField(null=True)
     is_available=models.BooleanField(default=True)
-    brand = models.ForeignKey('Brand', on_delete=models.CASCADE)
+    type = models.ForeignKey('Type', on_delete=models.CASCADE, default=1)
     category = models.ForeignKey('category', on_delete=models.CASCADE)
     featured = models.BooleanField(default=False)
     specifications = models.TextField(null =True, blank =True)
@@ -135,7 +135,7 @@ class ProductImages(models.Model):
 
 class ProductAttribute(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    provider_type = models.ForeignKey(ProviderType, on_delete=models.CASCADE, default=1)
     price = models.PositiveIntegerField()
     stock = models.IntegerField(default=0)
     old_price = models.PositiveIntegerField(default=0)
@@ -148,7 +148,7 @@ class ProductAttribute(models.Model):
                     default=timezone.now  # Example default value using timezone.now
                     )
     def __str__(self):
-        return f"{self.product} - {self.color} - ${self.price}"
+        return f"{self.product} - {self.provider_type} - ${self.price}"
     def image_tag(self):
         return mark_safe('<img src="%s" width="50" height="50" />' % self.image.url)
     
@@ -159,10 +159,3 @@ class ProductAttribute(models.Model):
 
 
 
-
-class demo_model(models.Model):
-    brand_name = models.CharField(max_length=255,unique=True)
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self) :
-        return self.brand_name

@@ -68,7 +68,7 @@
                                             </div>
                                         </td>
                                         <td>{{ obj.id }}</td>
-                                        <td><b>{{ obj.brand_name }}</b></td>
+                                        <td><b>{{ obj.type_name }}</b></td>
                                         <td class="text-end">
                                             <a href="{% url 'admin_type_edit' obj.id%}" class="btn btn-sm btn-warning rounded font-sm mt-15">Edit</a>
                                         </td>
@@ -83,7 +83,7 @@
                                                 <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
                                                 <div class="dropdown-menu"> 
                                                     <a class="dropdown-item" href="{% url 'type_available' obj.id %}">{% if not obj.is_active %}Mark Available {% else %}Mark Unavailable{% endif %}</a>
-                                                    {% comment %} <a class="dropdown-item text-danger" href="{% url 'product_details:delete_brand' brand.id %}">Delete</a> {% endcomment %}
+                                                    {% comment %} <a class="dropdown-item text-danger" href="{% url 'product_details:delete_type' type.id %}">Delete</a> {% endcomment %}
                                                 </div>
                                             </div> <!-- dropdown //end -->
                                         </td>

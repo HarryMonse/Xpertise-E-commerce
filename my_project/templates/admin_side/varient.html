@@ -39,7 +39,7 @@
                     {% for obj in item %}
                     <tr>
                         <td >
-                            {% comment %} <a href="#" class="btn btn-sm btn-brand rounded font-sm mt-15">block</a> {% endcomment %}
+                            {% comment %} <a href="#" class="btn btn-sm btn-type rounded font-sm mt-15">block</a> {% endcomment %}
                             {% if obj.image %}
                                         <img src="{{ obj.image.url }}" class="img-sm img-thumbnail" alt="Item">
                                     {% else %}
@@ -72,7 +72,7 @@
                         </td>
                         <td >
                             
-                            <span>{{obj.color}}</span>               
+                            <span>{{obj.provider_type}}</span>               
                             
                             </td>
                         <td >
@@ -229,7 +229,7 @@
                         <span>{{obj.stock}}</span>
                     </div>
                     <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                        <a href="{% url 'admin_varient_edit' obj.id %}" class="btn btn-sm font-sm rounded btn-brand">
+                        <a href="{% url 'admin_varient_edit' obj.id %}" class="btn btn-sm font-sm rounded btn-type">
                             <i class="material-icons md-edit"></i> Edit
                         </a>
                         <form method="post" action="{% url 'admin_varient_delete' obj.id %}">

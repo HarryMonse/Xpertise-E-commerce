@@ -17,14 +17,14 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = category
         fields=['category_name']
-class BrandFrom(forms.ModelForm):
+class TypeFrom(forms.ModelForm):
     class Meta:
-        model=Brand
-        fields=['brand_name']
-class ColorForm(forms.ModelForm):
+        model=Type
+        fields=['type_name']
+class ProviderTypeForm(forms.ModelForm):
     class Meta:
-        model=Color
-        fields=['color_name','color_code']
+        model=ProviderType
+        fields=['provider_type_name','provider_type_code']
 class ProductForm(forms.ModelForm):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,7 +37,7 @@ class ProductForm(forms.ModelForm):
                 field.widget = forms.CheckboxInput(attrs={'class': 'form-check-input'})
     class Meta:
         model=Product
-        fields=['product_name','description','is_available','specifications','brand','category','featured','is_deleted']
+        fields=['product_name','description','is_available','specifications','type','category','featured','is_deleted']
    
 class ProductImagesForm(forms.ModelForm):
 
@@ -64,7 +64,7 @@ class ProductAttributeForm(forms.ModelForm):
 
     class Meta:
         model = ProductAttribute
-        fields = ['product', 'color', 'price','old_price', 'stock', 'image', 'is_deleted', 'is_available']
+        fields = ['product', 'provider_type', 'price','old_price', 'stock', 'image', 'is_deleted', 'is_available']
 
     def clean_image(self):
         image = self.cleaned_data.get('image')

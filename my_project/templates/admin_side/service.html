@@ -58,7 +58,7 @@
                     {% for obj in item %}
                     <tr>
                         <td >
-                            {% comment %} <a href="#" class="btn btn-sm btn-brand rounded font-sm mt-15">block</a> {% endcomment %}
+                            {% comment %} <a href="#" class="btn btn-sm btn-type rounded font-sm mt-15">block</a> {% endcomment %}
                             {% if obj.productattribute_set.first.image %}
                             <img src="{{ obj.productattribute_set.first.image.url }}" class="img-sm img-thumbnail" alt="Item">
                             {% else %}
@@ -83,7 +83,7 @@
                             <span>{{obj.category}}</span>
                         </td>
                         <td >
-                            <span>{{obj.brand}}</span>
+                            <span>{{obj.type}}</span>
                         </td>
                         {% comment %} <td >
                             {% if obj.productattribute_set.first.price %}
