@@ -77,7 +77,7 @@
                             </td>
                         <td >
                             
-                            <span>{{obj.stock}}</span>               
+                            <span>{{obj.availability}}</span>               
                             
                             </td>
                         <td class="col-lg-2 col-sm-2 col-4 col-action text-end">
@@ -226,7 +226,7 @@
                         <span class="badge rounded-pill alert-success">{{obj.is_available}}</span>
                     </div>
                     <div class="col-lg-1 col-sm-2 col-4 col-date">
-                        <span>{{obj.stock}}</span>
+                        <span>{{obj.availability}}</span>
                     </div>
                     <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
                         <a href="{% url 'admin_varient_edit' obj.id %}" class="btn btn-sm font-sm rounded btn-type">

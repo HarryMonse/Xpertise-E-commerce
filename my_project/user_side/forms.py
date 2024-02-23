@@ -64,7 +64,7 @@ class ServiceAttributeForm(forms.ModelForm):
 
     class Meta:
         model = ServiceAttribute
-        fields = ['service', 'provider_type', 'price','old_price', 'stock', 'image', 'is_deleted', 'is_available']
+        fields = ['service', 'provider_type', 'price','old_price', 'availability', 'image', 'is_deleted', 'is_available']
 
     def clean_image(self):
         image = self.cleaned_data.get('image')
@@ -84,11 +84,11 @@ class ServiceAttributeForm(forms.ModelForm):
         if price < 0:
             raise forms.ValidationError('Price cannot be negative.')
         return price
-    def clean_stock(self):
-        stock = self.cleaned_data.get('stock')
-        if stock < 0:
-            raise forms.ValidationError('Stock cannot be negative.')
-        return stock
+    def clean_availability(self):
+        availability = self.cleaned_data.get('availability')
+        if availability < 0:
+            raise forms.ValidationError('Availability cannot be negative.')
+        return availability
     
 
 

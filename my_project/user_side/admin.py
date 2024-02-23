@@ -14,7 +14,7 @@ class ServiceAdmin(admin.ModelAdmin):
 class ColorAdmin(admin.ModelAdmin):
     list_display=['provider_type_name','provider_type_code']
 class ServiceAttributeAdmin(admin.ModelAdmin):
-    list_display=['id','service','price','old_price','provider_type','stock','image_tag']
+    list_display=['id','service','price','old_price','provider_type','availability','image_tag']
 
 
 # Register your models here.

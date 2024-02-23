@@ -137,7 +137,7 @@ class ServiceAttribute(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     provider_type = models.ForeignKey(ProviderType, on_delete=models.CASCADE, default=1)
     price = models.PositiveIntegerField()
-    stock = models.IntegerField(default=0)
+    availability = models.IntegerField(default=0)
     old_price = models.PositiveIntegerField(default=0)
     is_available=models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)
