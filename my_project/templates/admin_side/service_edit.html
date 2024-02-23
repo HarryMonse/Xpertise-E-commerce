@@ -4,7 +4,7 @@
 {% comment %} <section class="content-main">
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Update Product</h2>
+            <h2 class="content-title card-title">Update Service</h2>
         </div>
         <div>
             <input type="text" placeholder="Search Categories" class="form-control bg-white">
@@ -12,54 +12,54 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <form method='post' action='{% url "admin_product_edit" product.id %}' enctype="multipart/form-data">
+            <form method='post' action='{% url "admin_service_edit" service.id %}' enctype="multipart/form-data">
                 {% csrf_token %}
-                 {{ product_form.as_p }}
+                 {{ service_form.as_p }}
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="mb-4">
-                            <label for="product_name" class="form-label">Name</label>
-                            <input type="text" placeholder="Type here" name='name' value="{{ product.product_name }}" class="form-control" id="product_name" />
+                            <label for="service_name" class="form-label">Name</label>
+                            <input type="text" placeholder="Type here" name='name' value="{{ service.service_name }}" class="form-control" id="service_name" />
                         </div>
                         <div class="mb-4">
                             <label for="description" class="form-label">Description</label>
-                            <textarea placeholder="Type here" name="description" class="form-control" id="description">{{ product.description }}</textarea>
+                            <textarea placeholder="Type here" name="description" class="form-control" id="description">{{ service.description }}</textarea>
                         </div>
                         <div class="mb-4">
                             <label for="price" class="form-label">Price</label>
-                            <input type="number" placeholder="Type here" name='price' value="{{ product.price }}" class="form-control" id="price" />
+                            <input type="number" placeholder="Type here" name='price' value="{{ service.price }}" class="form-control" id="price" />
                         </div>
                         <div class="mb-4">
                             <label for="description" class="form-label">Offer Price</label>
-                            <input placeholder="Type here" name="offer_price" class="form-control" id="offer_price" value="{{ product.offer_price }}"/>
+                            <input placeholder="Type here" name="offer_price" class="form-control" id="offer_price" value="{{ service.offer_price }}"/>
                         </div>
                         <div class="mb-4">
                             <label for="stock" class="form-label">Stock</label>
-                            <input type="number" placeholder="Type here" name="stock" value="{{ product.stock }}" class="form-control" id="stock" />
+                            <input type="number" placeholder="Type here" name="stock" value="{{ service.stock }}" class="form-control" id="stock" />
                         </div>
                         <div class="mb-4">
                             <label for="type" class="form-label">Type</label>
-                            <select name="type" class="form-control" id="product_type">
+                            <select name="type" class="form-control" id="service_type">
                                 {% for type in types %}
-                                    <option value="{{ type.id }}" {% if product.type.id == type.id %} selected {% endif %}>{{ type.type_name }}</option>
+                                    <option value="{{ type.id }}" {% if service.type.id == type.id %} selected {% endif %}>{{ type.type_name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="mb-4">
                             <label for="category" class="form-label">Category</label>
-                            <select name="category" class="form-control" id="product_category">
+                            <select name="category" class="form-control" id="service_category">
                                 {% for category in categories %}
-                                    <option value="{{ category.id }}" {% if product.category.id == category.id %} selected {% endif %}>{{ category.category_name }}</option>
+                                    <option value="{{ category.id }}" {% if service.category.id == category.id %} selected {% endif %}>{{ category.category_name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="mb-4">
                             <label for="is_available" class="form-check-label">Available</label>
-                            <input type="text" placeholder="Type here" name='is_available' value="{{ product.is_available }}" class="form-control" id="is_available" />
+                            <input type="text" placeholder="Type here" name='is_available' value="{{ service.is_available }}" class="form-control" id="is_available" />
                         </div>
                         <div class="mb-4">
                             <label for="is_deleted" class="form-check-label">Deleted</label>
-                            <input type="text" placeholder="Type here" name='is_deleted' value="{{ product.is_deleted }}" class="form-control" id="is_deleted" />
+                            <input type="text" placeholder="Type here" name='is_deleted' value="{{ service.is_deleted }}" class="form-control" id="is_deleted" />
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -68,10 +68,10 @@
                                 <h4>Main Image</h4>
                             </div>
                             <div class="card-body">
-                                {{ product_form.image.label_tag }}
-                                {{ product_form.image }}
-                                {% if product.image %}
-                                    <img src="{{ product.image.url }}" alt="Main Image Preview" style="max-width: 200px; max-height: 200px;">
+                                {{ service_form.image.label_tag }}
+                                {{ service_form.image }}
+                                {% if service.image %}
+                                    <img src="{{ service.image.url }}" alt="Main Image Preview" style="max-width: 200px; max-height: 200px;">
                                     <input type="checkbox" name="delete_main_image" value="1"> Delete Main Image
                                 {% endif %}
                             </div>
@@ -83,9 +83,9 @@
                             </div>
                             
                             <div class="mb-4" id="additional-images-container">
-                                {{ product_form.images.label_tag }}
-                                {{ product_form.images }}
-                                {% for img in product.product_image.all %}
+                                {{ service_form.images.label_tag }}
+                                {{ service_form.images }}
+                                {% for img in service.service_image.all %}
                                     <div class="image-container">
                                         <img src="{{ img.images.url }}" alt="Additional Image Preview" style="max-width: 200px; max-height: 200px;">
                                         <input class="form-control mt-2" name='image_{{ img.id }}' type="file">
@@ -98,7 +98,7 @@
                     </div>
     
                 <div class="d-grid">
-                    <button class="btn btn-primary">Update Product</button>
+                    <button class="btn btn-primary">Update Service</button>
                 </div>
             </form>
 
@@ -148,26 +148,26 @@
     </div>
     <div class="card">
         <div class="card-body">
-                    <form method='post' action='{% url "admin_service_edit" product.id %}' enctype="multipart/form-data">
+                    <form method='post' action='{% url "admin_service_edit" service.id %}' enctype="multipart/form-data">
                         {% csrf_token %}
-                        {% comment %} {{ product_form.as_p }} {% endcomment %}
+                        {% comment %} {{ service_form.as_p }} {% endcomment %}
 
                      <div class="row">
                         <div class="col-lg-5">
                             <div class="mb-4">
-                                <label for="product_name" class="form-label">Name</label>
-                                <input type="text" name="product_name" value="{{ product_form.instance.product_name }}" class="form-control" id="product_name">   
+                                <label for="service_name" class="form-label">Name</label>
+                                <input type="text" name="service_name" value="{{ service_form.instance.service_name }}" class="form-control" id="service_name">   
                             </div>
                             <div class="mb-4">
                                 <label for="descriptione" class="form-label">Description</label>
-                                <input type="text" name="description" value="{{ product_form.instance.description }}" class="form-control" id="description">   
+                                <input type="text" name="description" value="{{ service_form.instance.description }}" class="form-control" id="description">   
                                 
                             </div>
                             <div class="mb-4">
                                     <label for="type" class="form-label">Type</label>
                                     <select name="type" class="form-control" id="type">
                                         {% for type in types %}
-                                            <option value="{{ type.id }}" {% if product_form.instance.type.id == type.id %} selected {% endif %}>{{ type.type_name }}</option>
+                                            <option value="{{ type.id }}" {% if service_form.instance.type.id == type.id %} selected {% endif %}>{{ type.type_name }}</option>
                                         {% endfor %}
                                     </select>
 
@@ -176,17 +176,17 @@
                                 <label for="category" class="form-label">Category</label>
                                 <select name="category" class="form-control" id="category">
                                     {% for category in categories %}
-                                        <option value="{{ category.id }}" {% if product_form.instance.category.id == category.id %} selected {% endif %}>{{ category.category_name }}</option>
+                                        <option value="{{ category.id }}" {% if service_form.instance.category.id == category.id %} selected {% endif %}>{{ category.category_name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                             <div class="mb-4">
                                 <label for="is_available" class="form-label">Available</label>
-                                <input type="text" name="is_available" value="{{ product_form.instance.is_available }}" class="form-control" id="is_available">   
+                                <input type="text" name="is_available" value="{{ service_form.instance.is_available }}" class="form-control" id="is_available">   
                             </div>
                             <div class="mb-4">
                                 <label for="is_deleted" class="form-label">is_deleted</label>
-                                <input type="text" name="is_deleted" value="{{ product_form.instance.is_deleted }}" class="form-control" id="is_deleted">   
+                                <input type="text" name="is_deleted" value="{{ service_form.instance.is_deleted }}" class="form-control" id="is_deleted">   
 
                             </div>
                         </div>
@@ -202,7 +202,7 @@
                                     {% for form in formset %}
                                         {{ form.as_table }}
                                         <!-- Display Existing Images -->
-                                        {% for img in form.instance.product_image.all %}
+                                        {% for img in form.instance.service_image.all %}
                                             <div class="card mb-2">
                                                 <div class="card-body">
                                                     <img src="{{ img.images.url }}" alt="Existing Image" style="max-width: 200px; max-height: 200px;">

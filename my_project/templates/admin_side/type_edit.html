@@ -19,8 +19,8 @@
                     <form method='post' action='{% url "admin_type_edit" obj.id %}'>
                         {% csrf_token %}
                         <div class="mb-4">
-                            <label for="product_name" class="form-label">Name</label>
-                            <input type="text" placeholder="Type here" name='name' value={{obj.type_name}} class="form-control" id="product_name" />
+                            <label for="service_name" class="form-label">Name</label>
+                            <input type="text" placeholder="Type here" name='name' value={{obj.type_name}} class="form-control" id="service_name" />
                         </div>
 
                        
@@ -33,10 +33,10 @@
                     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                     <script>
                         $(document).ready(function () {
-                            $('#product_name').on('input', function () {
+                            $('#service_name').on('input', function () {
                                 var name = $(this).val();
                                 var slug = name.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '');
-                                $('#product_slug').val(slug);
+                                $('#service_slug').val(slug);
                             });
                         });
                     </script>

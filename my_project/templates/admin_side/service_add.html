@@ -44,10 +44,10 @@
                     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                     <script>
                         $(document).ready(function () {
-                            $('#product_name').on('input', function () {
+                            $('#service_name').on('input', function () {
                                 var name = $(this).val();
                                 var slug = name.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '');
-                                $('#product_slug').val(slug);
+                                $('#service_slug').val(slug);
                             });
                         });
                         function addImageInput() {

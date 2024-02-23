@@ -13,9 +13,9 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <form method="post" action="{% url 'admin_varient_edit' product.id %}" enctype="multipart/form-data">
+            <form method="post" action="{% url 'admin_varient_edit' service.id %}" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ product_form.as_p }}
+                {{ service_form.as_p }}
                 <button type="submit" class="btn btn-primary">Update Service</button>
             </form>
                     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

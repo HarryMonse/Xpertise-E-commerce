@@ -182,8 +182,8 @@ def services(request, category_id=None,type_id=None):
     all_categories = category.objects.filter(is_deleted=False,is_blocked=False)
     selected_category = None
     selected_type = None
-    products = None
-    product_count = None
+    services = None
+    service_count = None
     types = Type.objects.filter(is_active=True)
     
 
@@ -193,7 +193,7 @@ def services(request, category_id=None,type_id=None):
     if 'category_id' in request.GET:
         category_id = request.GET['category_id']
         selected_category = get_object_or_404(category, id=category_id)
-        products = Product.objects.filter(
+        services = Service.objects.filter(
             category=selected_category,
             is_available=True,
             is_deleted=False,
@@ -201,12 +201,12 @@ def services(request, category_id=None,type_id=None):
             category__is_deleted=False,
             category__is_blocked=False
         )
-        product_count = products.count()
+        service_count = services.count()
 
     elif 'type_id' in request.GET:
         type_id = request.GET['type_id']
         selected_type = get_object_or_404(Type, id=type_id)
-        products = Product.objects.filter(
+        services = Service.objects.filter(
             type=selected_type,
             is_available=True,
             is_deleted=False,
@@ -214,16 +214,16 @@ def services(request, category_id=None,type_id=None):
             category__is_deleted=False,
             category__is_blocked=False
         )
-        product_count = products.count()
+        service_count = services.count()
 
     else:
-        products = Product.objects.filter(is_available=True, is_deleted=False, type__is_active=True ,category__is_deleted=False,category__is_blocked=False)
-        product_count = products.count()
+        services = Service.objects.filter(is_available=True, is_deleted=False, type__is_active=True ,category__is_deleted=False,category__is_blocked=False)
+        service_count = services.count()
 
    
     context = {
-        'products': products,
-        'product_count': product_count,
+        'services': services,
+        'service_count': service_count,
         'all_categories': all_categories,
         'selected_category': selected_category,
         # 'discount_offer':discount_offer,
@@ -239,12 +239,12 @@ def services(request, category_id=None,type_id=None):
 
 
 
-def service_details(request, product_id, category_id):
+def service_details(request, service_id, category_id):
     user=request.user
-    product = Product.objects.get(id=product_id)
-    images = ProductImages.objects.filter(product=product)
-    related_product=Product.objects.filter(category=product.category).exclude(id=product_id)[:4]
-    provider_types = ProductAttribute.objects.filter(product=product).distinct()
+    service = Service.objects.get(id=service_id)
+    images = ServiceImages.objects.filter(service=service)
+    related_service=Service.objects.filter(category=service.category).exclude(id=service_id)[:4]
+    provider_types = ServiceAttribute.objects.filter(service=service).distinct()
 
 
     if request.method=="POST":
@@ -252,17 +252,17 @@ def service_details(request, product_id, category_id):
             print("request entered ")
             colour=request.POST.get('provider_typeselect')
             qty=request.POST.get('quantity')
-            product_colour=ProviderType.objects.get(provider_type_name=colour)
-            products=ProductAttribute.objects.get(product=product,provider_type=product_colour)
+            service_colour=ProviderType.objects.get(provider_type_name=colour)
+            services=ServiceAttribute.objects.get(service=service,provider_type=service_colour)
            
-            print("Related Products:", related_product)
+            print("Related Services:", related_service)
         else:
             return redirect('user_login')
 
     
     context={
-        'product': product,
-        'related_product': related_product,
+        'service': service,
+        'related_service': related_service,
         'provider_types' :provider_types,
         'images':images,
     }

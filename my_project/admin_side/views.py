@@ -53,7 +53,7 @@ def admin_index(request):
 
 @login_required(login_url='admin_login')
 def admin_service(request):
-    item = Product.objects.filter(is_deleted=False)
+    item = Service.objects.filter(is_deleted=False)
     context = {
         "item":item
     }
@@ -65,16 +65,16 @@ def admin_service(request):
 @login_required(login_url='admin_login')
 def admin_service_add(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST,request.FILES)
+        form = ServiceForm(request.POST,request.FILES)
         if form.is_valid():
-            product=form.save(commit=False)
-            product.save()
+            service=form.save(commit=False)
+            service.save()
             images=request.FILES.getlist('images')
             for img in images:
-                ProductImages.objects.create(product=product,images=img)
+                ServiceImages.objects.create(service=service,images=img)
             return redirect('admin_service')
     else:
-        form = ProductForm()    
+        form = ServiceForm()    
 
     types = Type.objects.all()
     categories = category.objects.all()
@@ -89,18 +89,18 @@ def admin_service_add(request):
 
 @login_required(login_url='admin_login')
 def admin_service_edit(request, id):
-    product = get_object_or_404(Product, id=id)
+    service = get_object_or_404(Service, id=id)
     types = Type.objects.all()
     categories = category.objects.all()
 
-    ImageFormSet = inlineformset_factory(Product, ProductImages, form=ProductImagesForm, extra=1, can_delete=True)
+    ImageFormSet = inlineformset_factory(Service, ServiceImages, form=ServiceImagesForm, extra=1, can_delete=True)
 
     if request.method == 'POST':
-        product_form = ProductForm(request.POST, instance=product)
-        formset = ImageFormSet(request.POST, request.FILES, instance=product)
+        service_form = ServiceForm(request.POST, instance=service)
+        formset = ImageFormSet(request.POST, request.FILES, instance=service)
 
-        if product_form.is_valid() and formset.is_valid():
-            product_form.save()
+        if service_form.is_valid() and formset.is_valid():
+            service_form.save()
             formset.save()
 
             for form in formset.deleted_forms:
@@ -111,27 +111,27 @@ def admin_service_edit(request, id):
             return redirect('admin_service')
 
     else:
-        product_form = ProductForm(instance=product)
-        formset = ImageFormSet(instance=product)
+        service_form = ServiceForm(instance=service)
+        formset = ImageFormSet(instance=service)
 
     context = {
-        'product': product,
+        'service': service,
         'types': types,
         'categories': categories,
-        'product_form': product_form,
+        'service_form': service_form,
         'formset': formset,
     }
 
     return render(request, 'admin_side/service_edit.html', context)
 
 def admin_service_delete(request, id):
-    product = get_object_or_404(Product, id=id)
+    service = get_object_or_404(Service, id=id)
 
     if request.method == 'POST':
-        product.delete()
+        service.delete()
         return redirect('admin_service')
 
-    context = {'product': product}
+    context = {'service': service}
     return render(request, 'admin_side/service_delete.html', context)
 
 
@@ -279,7 +279,7 @@ def type_available(request, type_id):
 @login_required(login_url='admin_login')
 def admin_varient(request):
     cat=category.objects.all()
-    item = ProductAttribute.objects.filter(is_deleted=False)
+    item = ServiceAttribute.objects.filter(is_deleted=False)
     context = {
         "item":item,
         "cat":cat
@@ -290,13 +290,13 @@ def admin_varient(request):
 @login_required(login_url='admin_login')
 def admin_varient_add(request):
     if request.method == 'POST':
-        form = ProductAttributeForm(request.POST, request.FILES)
+        form = ServiceAttributeForm(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save(commit=False)
-            product.save()
+            service = form.save(commit=False)
+            service.save()
             return redirect('admin_varient')
     else:
-        form = ProductAttributeForm()    
+        form = ServiceAttributeForm()    
 
     types = Type.objects.all()
     categories = category.objects.all()
@@ -311,33 +311,33 @@ def admin_varient_add(request):
 
 @login_required(login_url='admin_login')
 def admin_varient_edit(request, id):
-    product = get_object_or_404(ProductAttribute, id=id)
+    service = get_object_or_404(ServiceAttribute, id=id)
 
     if request.method == 'POST':
-        product_form = ProductAttributeForm(request.POST, request.FILES, instance=product)
-        if product_form.is_valid():
-            product_form.save()
+        service_form = ServiceAttributeForm(request.POST, request.FILES, instance=service)
+        if service_form.is_valid():
+            service_form.save()
             return redirect('admin_varient')
 
     else:
-        product_form = ProductAttributeForm(instance=product)
+        service_form = ServiceAttributeForm(instance=service)
 
     context = {
-        'product_form': product_form,
-        'product': product,
+        'service_form': service_form,
+        'service': service,
     }
 
     return render(request, 'admin_side/varient_edit.html', context)
 
 
 def admin_varient_delete(request, id):
-    product = get_object_or_404(ProductAttribute, id=id)
+    service = get_object_or_404(ServiceAttribute, id=id)
 
     if request.method == 'POST':
-        product.delete()
+        service.delete()
         return redirect('admin_varient')
 
-    context = {'product': product}
+    context = {'service': service}
     return render(request, 'admin_side/service_delete.html', context)
 
 

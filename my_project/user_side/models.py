@@ -94,8 +94,8 @@ class ProviderType(models.Model):
         return self.provider_type_name
 
 
-class Product(models.Model):
-    product_name = models.CharField(max_length=255)
+class Service(models.Model):
+    service_name = models.CharField(max_length=255)
     description = models.TextField(null=True)
     is_available=models.BooleanField(default=True)
     type = models.ForeignKey('Type', on_delete=models.CASCADE, default=1)
@@ -105,7 +105,7 @@ class Product(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name_plural = "Products"
+        verbose_name_plural = "Services"
 
     def soft_delete(self):
         self.is_deleted = True
@@ -116,39 +116,39 @@ class Product(models.Model):
         self.save()
 
     def __str__(self):
-        return self.product_name
+        return self.service_name
     
     def get_percentage(self):
         new_price = (self.price /self.old_price) * 100
         return new_price
 
-class ProductImages(models.Model):
-    product = models.ForeignKey(Product ,related_name='product_image',on_delete=models.SET_NULL, null = True)
-    images = models.ImageField(upload_to='photo/product_images3',
+class ServiceImages(models.Model):
+    service = models.ForeignKey(Service ,related_name='service_image',on_delete=models.SET_NULL, null = True)
+    images = models.ImageField(upload_to='photo/service_images3',
         validators=[
             FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'], message="Only JPG, JPEG, and PNG files are allowed.")
                     ])
     date = models.DateTimeField(auto_now_add= True)
     
     class Meta:
-        verbose_name_plural = "Product Images"
+        verbose_name_plural = "Service Images"
 
-class ProductAttribute(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+class ServiceAttribute(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
     provider_type = models.ForeignKey(ProviderType, on_delete=models.CASCADE, default=1)
     price = models.PositiveIntegerField()
     stock = models.IntegerField(default=0)
     old_price = models.PositiveIntegerField(default=0)
     is_available=models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='photo/product_images',
+    image = models.ImageField(upload_to='photo/service_images',
         validators=[
             FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'], message="Only JPG, JPEG, and PNG files are allowed.")
                     ],
                     default=timezone.now  # Example default value using timezone.now
                     )
     def __str__(self):
-        return f"{self.product} - {self.provider_type} - ${self.price}"
+        return f"{self.service} - {self.provider_type} - ${self.price}"
     def image_tag(self):
         return mark_safe('<img src="%s" width="50" height="50" />' % self.image.url)
     

@@ -25,7 +25,7 @@ class ProviderTypeForm(forms.ModelForm):
     class Meta:
         model=ProviderType
         fields=['provider_type_name','provider_type_code']
-class ProductForm(forms.ModelForm):
+class ServiceForm(forms.ModelForm):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         # for i, fields in self.fields.items():
@@ -36,25 +36,25 @@ class ProductForm(forms.ModelForm):
             if isinstance(field, forms.BooleanField):
                 field.widget = forms.CheckboxInput(attrs={'class': 'form-check-input'})
     class Meta:
-        model=Product
-        fields=['product_name','description','is_available','specifications','type','category','featured','is_deleted']
+        model=Service
+        fields=['service_name','description','is_available','specifications','type','category','featured','is_deleted']
    
-class ProductImagesForm(forms.ModelForm):
+class ServiceImagesForm(forms.ModelForm):
 
     delete_image = forms.BooleanField(required=False, initial=False,widget=forms.HiddenInput)
 
     class Meta:
-        model = ProductImages
+        model = ServiceImages
         fields = ['images']
 
     def __init__(self, *args, **kwargs):
-        super(ProductImagesForm, self).__init__(*args, **kwargs)
+        super(ServiceImagesForm, self).__init__(*args, **kwargs)
         self.fields['images'].required = False
 
 
 
 
-class ProductAttributeForm(forms.ModelForm):
+class ServiceAttributeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
@@ -63,8 +63,8 @@ class ProductAttributeForm(forms.ModelForm):
                 field.widget = forms.CheckboxInput(attrs={'class': 'form-check-input'})
 
     class Meta:
-        model = ProductAttribute
-        fields = ['product', 'provider_type', 'price','old_price', 'stock', 'image', 'is_deleted', 'is_available']
+        model = ServiceAttribute
+        fields = ['service', 'provider_type', 'price','old_price', 'stock', 'image', 'is_deleted', 'is_available']
 
     def clean_image(self):
         image = self.cleaned_data.get('image')

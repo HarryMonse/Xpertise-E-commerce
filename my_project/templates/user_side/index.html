@@ -110,19 +110,19 @@
                 <div class="tab-content wow fadeIn animated" id="myTabContent">
                     <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
                         <div class="row product-grid-4">
-                            {% for product in products %}
+                            {% for service in services %}
                             <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                                 <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
-                                            <a href="{% url 'product_details' category_id=product.category.id product_id=product.id  %}">
-                                                <img class="default-img" src="{{ product.productattribute_set.first.image.url }}" alt="product image">
-                                                {% comment %} <img class="hover-img" src="{{ product.product_image1.url }}" alt=""> {% endcomment %}
+                                            <a href="{% url 'service_details' category_id=service.category.id service_id=service.id  %}">
+                                                <img class="default-img" src="{{ service.serviceattribute_set.first.image.url }}" alt="service image">
+                                                {% comment %} <img class="hover-img" src="{{ service.service_image1.url }}" alt=""> {% endcomment %}
                                             </a>
                                         
                                         </div>
                                         <div class="product-action-1">
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="{% url 'add_wishlist' product.id %}"><i class="fi-rs-heart"></i></a> 
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="{% url 'add_wishlist' service.id %}"><i class="fi-rs-heart"></i></a> 
                                         </div> 
                                         {% if discount_offer is not None and discount_offer.active %}
                                         <div class="product-badges product-badges-position product-badges-mrg">
@@ -130,7 +130,7 @@
                                         </div>
                                         {% elif discounted_offer %}
                                         {% for dis in discounted_offer %}
-                                            {% if dis.active and dis.category == product.category %}
+                                            {% if dis.active and dis.category == service.category %}
                                             <div class="product-badges product-badges-position product-badges-mrg">
                                                 <span class="hot">-{{ dis.discount_percentage|floatformat:0 }}%</span>
                                             </div>
@@ -148,9 +148,9 @@
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <a href="shop-grid-right.html">{{ product.category }}</a>
+                                            <a href="shop-grid-right.html">{{ service.category }}</a>
                                         </div>
-                                        <h2><a href="{% url 'products_by_category' category_id=product.category.id %}">{{ product.product_name }}</a></h2>
+                                        <h2><a href="{% url 'services_by_category' category_id=service.category.id %}">{{ service.service_name }}</a></h2>
                                         <div >
                                             {% comment %} <span>
                                                 <span>90%</span>
@@ -158,19 +158,19 @@
                                         </div>
                                         {% if discount_offer is not None and discount_offer.active %}
                                                 <div class="product-price">
-                                                    <span class="current-product-price-{{product.id}}">₹{{product.productattribute_set.first.price}}</span>
-                                                    <span class="old-price">₹{{product.productattribute_set.first.old_price}}</span>
+                                                    <span class="current-product-price-{{service.id}}">₹{{service.serviceattribute_set.first.price}}</span>
+                                                    <span class="old-price">₹{{service.serviceattribute_set.first.old_price}}</span>
                                                 </div>
                                             {% elif discounted_offer %}
                                                 {% for dis in discounted_offer %}
-                                                    {% if dis.active and dis.category == product.category %}
+                                                    {% if dis.active and dis.category == service.category %}
                                                         <div class="product-price">
-                                                            <span>₹ <span class="current-product-price-{{product.id}}">{{product.productattribute_set.first.price}}</span></span>
-                                                            ₹<span class="old-price">{{product.productattribute_set.first.old_price}}</span>
+                                                            <span>₹ <span class="current-product-price-{{service.id}}">{{service.serviceattribute_set.first.price}}</span></span>
+                                                            ₹<span class="old-price">{{service.serviceattribute_set.first.old_price}}</span>
                                                         </div>
                                                         {% else %}
                                                         <div class="product-price">
-                                                            <span>₹ <span class="current-product-price-{{product.id}}">{{product.productattribute_set.first.price}}</span></span>
+                                                            <span>₹ <span class="current-product-price-{{service.id}}">{{service.serviceattribute_set.first.price}}</span></span>
                                                             
                                                         </div>
                                                     {% endif %}
@@ -178,13 +178,13 @@
                                             {% else %}
                                                 <div>
                                                     <span style="font-size: large;">
-                                                        ₹<span class="current-product-price-{{product.id}} text-success" style="font-weight: bold;">{{product.productattribute_set.first.price}}</span>
+                                                        ₹<span class="current-product-price-{{service.id}} text-success" style="font-weight: bold;">{{service.serviceattribute_set.first.price}}</span>
                                                     </span>
                                                 </div>
                                             {% endif %}
                                         {% comment %} <div class="product-price">
-                                            <span class="product-price1">₹{{ product.productattribute_set.first.price}}</span>
-                                            <span class="old-price">{{product.offer_price}}</span>
+                                            <span class="product-price1">₹{{ service.serviceattribute_set.first.price}}</span>
+                                            <span class="old-price">{{service.offer_price}}</span>
                                         </div> {% endcomment %}
                                     </div>
                                 </div>

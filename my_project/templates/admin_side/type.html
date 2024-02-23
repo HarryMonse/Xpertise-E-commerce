@@ -16,8 +16,8 @@
                     <form method='post' action='{% url "admin_type_insert" %}'>
                         {% csrf_token %}
                         <div class="mb-4">
-                            <label for="product_name" class="form-label">Name</label>
-                            <input type="text" placeholder="Enter here" required="required" name='name' class="form-control" id="product_name" />
+                            <label for="service_name" class="form-label">Name</label>
+                            <input type="text" placeholder="Enter here" required="required" name='name' class="form-control" id="service_name" />
                         </div>
                         {% if messages %}
                         <ul class="messages">
@@ -35,10 +35,10 @@
                     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                     <script>
                         $(document).ready(function () {
-                            $('#product_name').on('input', function () {
+                            $('#service_name').on('input', function () {
                                 var name = $(this).val();
                                 var slug = name.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '');
-                                $('#product_slug').val(slug);
+                                $('#service_slug').val(slug);
                             });
                         });
                     </script>
@@ -83,7 +83,7 @@
                                                 <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
                                                 <div class="dropdown-menu"> 
                                                     <a class="dropdown-item" href="{% url 'type_available' obj.id %}">{% if not obj.is_active %}Mark Available {% else %}Mark Unavailable{% endif %}</a>
-                                                    {% comment %} <a class="dropdown-item text-danger" href="{% url 'product_details:delete_type' type.id %}">Delete</a> {% endcomment %}
+                                                    {% comment %} <a class="dropdown-item text-danger" href="{% url 'service_details:delete_type' type.id %}">Delete</a> {% endcomment %}
                                                 </div>
                                             </div> <!-- dropdown //end -->
                                         </td>

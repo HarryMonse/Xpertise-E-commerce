@@ -59,8 +59,8 @@
                     <tr>
                         <td >
                             {% comment %} <a href="#" class="btn btn-sm btn-type rounded font-sm mt-15">block</a> {% endcomment %}
-                            {% if obj.productattribute_set.first.image %}
-                            <img src="{{ obj.productattribute_set.first.image.url }}" class="img-sm img-thumbnail" alt="Item">
+                            {% if obj.serviceattribute_set.first.image %}
+                            <img src="{{ obj.serviceattribute_set.first.image.url }}" class="img-sm img-thumbnail" alt="Item">
                             {% else %}
                                 <p>No image available</p>
                             {% endif %}
@@ -71,7 +71,7 @@
                                     {% comment %} <img src="{% static 'assets1/imgs/people/im.png' %}" class="img-sm img-avatar" alt="Userpic"> {% endcomment %}
                                 </div>
                                 <div class="info pl-3">
-                                    <h6 class="mb-0 title">{{obj.product_name}}</h6>
+                                    <h6 class="mb-0 title">{{obj.service_name}}</h6>
                                     
                                 </div>
                             </a>
@@ -86,8 +86,8 @@
                             <span>{{obj.type}}</span>
                         </td>
                         {% comment %} <td >
-                            {% if obj.productattribute_set.first.price %}
-                        <span>₹{{ obj.productattribute_set.first.price }}</span>               
+                            {% if obj.serviceattribute_set.first.price %}
+                        <span>₹{{ obj.serviceattribute_set.first.price }}</span>               
                         {% else %}
                         <p>No Price available</p>
                         {% endif %}
@@ -116,7 +116,7 @@
     </div> <!-- card end// -->
     
     <script>
-        function confirmDelete(productId) {
+        function confirmDelete(serviceId) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'You won\'t be able to revert this!',
@@ -128,7 +128,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // If user clicks 'Yes', submit the form
-                    document.getElementById('deleteForm-' + productId).submit();
+                    document.getElementById('deleteForm-' + serviceId).submit();
                 }
             });
         }

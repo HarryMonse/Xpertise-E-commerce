@@ -62,7 +62,7 @@
                                         {% comment %} {% for category_item in all_categories %}
                                             <li {% if category_item == selected_category %}class="active"{% endif %}>
                                             
-                                                <a href="{% url 'products_by_category' category_id=category_item.id %}">{{ category_item.category_name }}</a>
+                                                <a href="{% url 'services_by_category' category_id=category_item.id %}">{{ category_item.category_name }}</a>
 
                                             </li>
                                         {% endfor %} {% endcomment %}
@@ -100,24 +100,24 @@
                         </div>
                     </div>
                     <div class="row product-grid-3" id="filtered-product">
-                        {% for product in products %}
+                        {% for service in services %}
                         <div class="col-lg-3 col-md-4">
                             <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom " style="height: 300px; overflow: hidden;">
                                        
-                                        {% comment %} <a href="{% url 'product_details' category_id=product.category.id product_id=product.id %}"> {% endcomment %}
+                                        {% comment %} <a href="{% url 'service_details' category_id=service.category.id service_id=service.id %}"> {% endcomment %}
                                             
                                             
-                                            <a href="{% url 'service_details' category_id=product.category.id product_id=product.id %}"> 
-                                            {% if product.productattribute_set.first.image %}
-                                                <img class="default-img" src="{{ product.productattribute_set.first.image.url }}" alt="" style="width: 100%; height: auto;">
+                                            <a href="{% url 'service_details' category_id=service.category.id service_id=service.id %}"> 
+                                            {% if service.serviceattribute_set.first.image %}
+                                                <img class="default-img" src="{{ service.serviceattribute_set.first.image.url }}" alt="" style="width: 100%; height: auto;">
                                             {% else %}
                                                 <!-- Handle the case where the image is missing or not set -->
                                                 <p>No Image Available</p>
                                             {% endif %}
-                                            {% comment %} <img class="default-img" src="{{ product.image.url }}" alt="" style="width: 100%; height: auto;">
-                                            {% comment %} <img class="hover-img" src="{{ product.product_image1.url }}" alt=""> {% endcomment %} 
+                                            {% comment %} <img class="default-img" src="{{ service.image.url }}" alt="" style="width: 100%; height: auto;">
+                                            {% comment %} <img class="hover-img" src="{{ service.service_image1.url }}" alt=""> {% endcomment %} 
                                         </a>
                                         
                                     </div>
@@ -135,7 +135,7 @@
                                     </div>
                                     {% elif discounted_offer %}
                                     {% for dis in discounted_offer %}
-                                        {% if dis.active and dis.category == product.category %}
+                                        {% if dis.active and dis.category == service.category %}
                                         <div class="product-badges product-badges-position product-badges-mrg">
                                             <span class="hot">-{{ dis.discount_percentage|floatformat:0 }}%</span>
                                         </div>
@@ -154,9 +154,9 @@
                                 </div>
                                 <div class="product-content-wrap">
                                     <div class="product-category">
-                                        <a href="">{{ product.category }}</a>
+                                        <a href="">{{ service.category }}</a>
                                     </div>
-                                    <h2><a href="">{{ product.product_name }}</a></h2>
+                                    <h2><a href="">{{ service.service_name }}</a></h2>
                                     <div>
                                         {% comment %} <span>
                                             <span>90%</span>
@@ -164,19 +164,19 @@
                                     </div>
                                     {% if discount_offer is not None and discount_offer.active %}
                                                 <div class="product-price">
-                                                    <span class="current-product-price-{{product.id}}">₹{{product.productattribute_set.first.price}}</span>
-                                                    <span class="old-price">₹{{product.productattribute_set.first.old_price}}</span>
+                                                    <span class="current-product-price-{{service.id}}">₹{{service.serviceattribute_set.first.price}}</span>
+                                                    <span class="old-price">₹{{service.serviceattribute_set.first.old_price}}</span>
                                                 </div>
                                             {% elif discounted_offer %}
                                                 {% for dis in discounted_offer %}
-                                                    {% if dis.active and dis.category == product.category %}
+                                                    {% if dis.active and dis.category == service.category %}
                                                         <div class="product-price">
-                                                            <span>₹ <span class="current-product-price-{{product.id}}">{{product.productattribute_set.first.price}}</span></span>
-                                                            ₹<span class="old-price">{{product.productattribute_set.first.old_price}}</span>
+                                                            <span>₹ <span class="current-product-price-{{service.id}}">{{service.serviceattribute_set.first.price}}</span></span>
+                                                            ₹<span class="old-price">{{service.serviceattribute_set.first.old_price}}</span>
                                                         </div>
                                                         {% else %}
                                                         <div class="product-price">
-                                                            <span>₹ <span class="current-product-price-{{product.id}}">{{product.productattribute_set.first.price}}</span></span>
+                                                            <span>₹ <span class="current-product-price-{{service.id}}">{{service.serviceattribute_set.first.price}}</span></span>
                                                             
                                                         </div>
                                                     {% endif %}
@@ -184,12 +184,12 @@
                                             {% else %}
                                                 <div>
                                                     <span style="font-size: large;">
-                                                        ₹<span class="current-product-price-{{product.id}} text-success" style="font-weight: bold;">{{product.productattribute_set.first.price}}</span>
+                                                        ₹<span class="current-product-price-{{service.id}} text-success" style="font-weight: bold;">{{service.serviceattribute_set.first.price}}</span>
                                                     </span>
                                                 </div>
                                             {% endif %}
                                     {% comment %} <div class="product-price">
-                                        <span class="product-price1">₹{{ product.productattribute_set.first.price}}</span>
+                                        <span class="product-price1">₹{{ service.serviceattribute_set.first.price}}</span>
                                         
                                     </div>
                                     <div class="product-action-1 show">
@@ -223,16 +223,16 @@
          
           console.log("Filter Object is: ",filter_object);
           $.ajax({
-            url: '/filter-product',
+            url: '/filter-service',
             data: filter_object,
             dataType: 'json',
             beforeSend: function(){
-              console.log("Trying to filter product...");
+              console.log("Trying to filter service...");
             },
             success: function(response){
               console.log(response);
               console.log("Data filtred successfully...")
-              $("#filtered-product").html(response.data)
+              $("#filtered-service").html(response.data)
             }
           })
         })
