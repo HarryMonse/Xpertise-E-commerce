@@ -269,3 +269,6 @@ def service_details(request, service_id, category_id):
     
 
     return render(request, 'user_side/service_details.html', context)
+
+
+
