@@ -13,7 +13,8 @@ urlpatterns = [
     path('services/', views.services, name='services'),
     path('service/<int:category_id>/<int:service_id>', views.service_details, name='service_details'),
 
-    
+    path('user_account/', views.user_account, name='user_account'),
+
 
 
 

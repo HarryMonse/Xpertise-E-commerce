@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from django.contrib.auth import login,authenticate
 from django.views.decorators.cache import never_cache, cache_control
 from django.contrib.auth import logout,login
+from django.contrib.auth.decorators import login_required
+
 
 
 from django.contrib import messages
@@ -272,3 +274,33 @@ def service_details(request, service_id, category_id):
 
 
 
+@cache_control(max_age=0,no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='user_login')
+
+def user_account(request):
+    # user_address = Address.objects.filter(users=request.user)
+    
+    # order_history = CartOrder.objects.filter(user=request.user).order_by('-id').annotate(product_name=Subquery(
+    #     ProductOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('product__product_name')[:1]
+    # ),
+    # product_image=Subquery(
+    #     ProductOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('product__productattribute__image')[:1]
+    # ))
+    # order_items = ProductOrder.objects.filter(user=request.user)
+    # for order in order_history:
+    #     print(order.product_image)
+    
+
+    # wallet, created = Wallet.objects.get_or_create(user=request.user, defaults={'balance': 0})
+    
+
+    # wallethistory = WalletHistory.objects.filter(wallet=wallet)
+    # context={
+    #     'user_address':user_address,
+    #     'user_data' :request.user,
+    #     'order_history': order_history,
+    #     'order_items':order_items,
+    #     'wallet':wallet,
+    #     'wallethistory':wallethistory,
+    # }
+    return render(request, 'user_side/user_account.html') #,context)
