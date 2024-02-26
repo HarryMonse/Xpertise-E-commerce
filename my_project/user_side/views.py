@@ -274,6 +274,100 @@ def service_details(request, service_id, category_id):
 
 
 
+
+def cart_list(request):
+    # user = request.user
+    # items = CartItem.objects.filter(user=user, is_deleted=False)
+    # coupons = Coupon.objects.all()
+    # ct = items.count()
+
+    # total_without_discount = items.aggregate(total_sum=Sum('total'))['total_sum'] or 0
+
+    # discounts = 0
+
+    # applied_coupon_id = request.session.get('applied_coupon_id')
+
+    # if request.session.get('order_placed', False):
+    #     del request.session['order_placed']
+    #     messages.success(request, 'Order placed successfully!')
+    #     return redirect('user_index')  
+
+    # if applied_coupon_id:
+    #     try:
+    #         applied_coupon = Coupon.objects.get(id=applied_coupon_id, active=True,
+    #                                             active_date__lte=timezone.now(), expiry_date__gte=timezone.now())
+    #         discounts = (total_without_discount * applied_coupon.discount) / 100
+    #     except Coupon.DoesNotExist:
+
+    #         request.session.pop('applied_coupon_id', None)
+
+    # if request.method == "POST":
+    #     if 'apply_coupon' in request.POST:
+    #         coupon_code = request.POST.get('coupon_code')
+    #         try:
+    #             coupon = Coupon.objects.get(code=coupon_code, active=True, active_date__lte=timezone.now(),
+    #                                         expiry_date__gte=timezone.now())
+
+    #             discounts = (total_without_discount * coupon.discount) / 100
+    #             items.update(coupon=coupon)
+
+    #             request.session['applied_coupon_id'] = coupon.id
+
+    #             messages.success(request, 'Coupon applied successfully!')
+    #         except Coupon.DoesNotExist:
+    #             messages.error(request, 'Invalid or expired coupon code')
+
+    #     elif 'remove_coupon' in request.POST:
+
+    #         request.session.pop('applied_coupon_id', None)
+
+    #         total_without_discount = items.aggregate(total_sum=Sum('total'))['total_sum'] or 0
+    #         discounts = 0
+
+    #         applied_coupon_id = request.session.get('applied_coupon_id')
+    #         if applied_coupon_id:
+    #             try:
+    #                 applied_coupon = Coupon.objects.get(id=applied_coupon_id, active=True,
+    #                                                     active_date__lte=timezone.now(), expiry_date__gte=timezone.now())
+    #                 discounts = (total_without_discount * applied_coupon.discount) / 100
+    #             except Coupon.DoesNotExist:
+    #                 request.session.pop('applied_coupon_id', None)
+
+    #         items.update(coupon=None)
+
+    #         total_after_discount = total_without_discount - discounts
+    #         data = {
+    #             'success': True,
+    #             'totals': total_without_discount,
+    #             'discounts': discounts,
+    #             'total': total_after_discount,
+    #         }
+
+    #         messages.success(request, 'Coupon removed successfully!')
+                    
+    # total_after_discount = total_without_discount - discounts
+
+    # context = {
+    #     'items': items,
+    #     'totals': total_without_discount,
+    #     'total': total_after_discount,
+    #     'ct': ct,
+    #     'coupons': coupons,
+    #     'discounts': discounts,
+    # }
+
+    # request.session['totals'] = total_without_discount
+    # request.session['total'] = total_after_discount
+    # request.session['discounts'] = discounts
+
+
+    return render(request, 'user_side/cart.html')#, context)
+
+
+
+
+
+
 @cache_control(max_age=0,no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='user_login')
 

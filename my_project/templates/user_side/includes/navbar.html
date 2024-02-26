@@ -111,7 +111,7 @@
                                 
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon " href="">
+                                <a class="mini-cart-icon " href="{% url 'cart'%}">
                                     <img alt="Evara" src="{% static 'assets/imgs/theme/icons/icon-cart.svg'%}">
                                     <span class="pro-count blue cart-count" data-cart-count="{{ cart_count }}">{{ cart_count }}</span>
                                     {% comment %} <span class="pro-count blue" class="cart-list">{{cart_count}}</span> {% endcomment %}
