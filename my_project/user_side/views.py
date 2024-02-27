@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import make_password
 from datetime import datetime, timedelta
 from django.contrib.auth import login,authenticate
 from django.views.decorators.cache import never_cache, cache_control
+from django.http import JsonResponse
 from django.contrib.auth import logout,login
 from django.contrib.auth.decorators import login_required
 
@@ -16,6 +17,7 @@ from django.utils import timezone
 
 
 from .models import *
+from payment.models import *
 
 # Create your views here.
 
@@ -275,6 +277,71 @@ def service_details(request, service_id, category_id):
 
 
 
+@login_required(login_url='user_login')
+def add_to_cart(request):
+    user = request.user
+    
+    if request.method == 'POST':
+        service_id = request.POST.get('item_id')
+        provider_type_name = request.POST.get('service_provider_type')
+        qty = int(request.POST.get('quantity'))  
+
+        try:
+            provider_type = ProviderType.objects.get(provider_type_name=provider_type_name)
+            service = ServiceAttribute.objects.get(service=service_id, provider_type=provider_type)
+        except (ProviderType.DoesNotExist, ServiceAttribute.DoesNotExist):
+            messages.error(request, 'Invalid service or provider_type.')
+            return JsonResponse({'status': 'error', 'message': 'Invalid service or provider_type.'}, status=400)
+        
+        print(f"Selected Service ID: {service_id}")
+        print(f"Selected ProviderType: {provider_type_name}")
+        print(f"Selected Quantity: {qty}")
+        if qty > service.stock:
+            messages.error(request, f"Insufficient stock. Only {service.stock} available.")
+            response_data = {
+            'status': 'error',
+            'message': f"Insufficient stock. Only {service.stock} available."
+            
+            }
+            return JsonResponse(response_data)
+
+        try:
+            cart_item = CartItem.objects.get(service=service, user=user, is_deleted=False)
+            available_stock = service.stock - cart_item.quantity
+            if qty > available_stock:
+                messages.error(request, f"Stock limit reached. Only {available_stock} available.")
+                response_data = {
+                    'status': 'error',
+                    'message': f"Stock limit reached. Only {available_stock} available."
+                    
+                    }
+                return JsonResponse(response_data)
+
+            cart_item.quantity += qty
+            cart_item.total = service.price * cart_item.quantity
+            cart_item.save()
+        except CartItem.DoesNotExist:
+            item, created = CartItem.objects.get_or_create(user=user, service=service, defaults={'is_deleted': False})
+            item.quantity = qty
+            item.total = service.price * qty
+            item.save()
+
+        cart_count = CartItem.objects.filter(user=request.user, is_deleted=False).count()
+
+        response_data = {
+            'status': 'success',
+            'message': 'Service added to cart successfully',
+            'cart_count': cart_count
+        }
+        return JsonResponse(response_data)
+    else:
+        print('Invalid request or not AJAX') 
+        return JsonResponse({'status': 'error', 'message': 'Invalid request or not AJAX'}, status=400)
+
+
+
+
+
 def cart_list(request):
     # user = request.user
     # items = CartItem.objects.filter(user=user, is_deleted=False)
@@ -374,15 +441,15 @@ def cart_list(request):
 def user_account(request):
     # user_address = Address.objects.filter(users=request.user)
     
-    # order_history = CartOrder.objects.filter(user=request.user).order_by('-id').annotate(product_name=Subquery(
-    #     ProductOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('product__product_name')[:1]
+    # order_history = CartOrder.objects.filter(user=request.user).order_by('-id').annotate(service_name=Subquery(
+    #     ServiceOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('service__service_name')[:1]
     # ),
-    # product_image=Subquery(
-    #     ProductOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('product__productattribute__image')[:1]
+    # service_image=Subquery(
+    #     ServiceOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('service__serviceattribute__image')[:1]
     # ))
-    # order_items = ProductOrder.objects.filter(user=request.user)
+    # order_items = ServiceOrder.objects.filter(user=request.user)
     # for order in order_history:
-    #     print(order.product_image)
+    #     print(order.service_image)
     
 
     # wallet, created = Wallet.objects.get_or_create(user=request.user, defaults={'balance': 0})
