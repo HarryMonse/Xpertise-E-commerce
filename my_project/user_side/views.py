@@ -278,7 +278,6 @@ def service_details(request, service_id, category_id):
 
 
 
-
 @login_required(login_url='user_login')
 def add_to_cart(request):
     user = request.user
