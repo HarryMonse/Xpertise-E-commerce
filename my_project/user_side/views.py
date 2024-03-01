@@ -461,7 +461,7 @@ def user_account(request):
     # wallethistory = WalletHistory.objects.filter(wallet=wallet)
     context={
          'user_address':user_address,
-    #     'user_data' :request.user,
+         'user_data' :request.user,
     #     'order_history': order_history,
     #     'order_items':order_items,
     #     'wallet':wallet,
@@ -484,3 +484,28 @@ def add_address(request):
         'form':form
     }
     return render(request, 'user_side/add_address.html',context)
+
+@login_required(login_url='user_login')
+def edit_address(request, address_id):
+    address = get_object_or_404(Address, id=address_id, users=request.user)
+    
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            form.instance.users = request.user
+            form.save()
+            return redirect('user_account')
+    else:
+        form = AddressForm(instance=address)
+    
+    return render(request, 'user_side/edit_address.html', {'form': form, 'address': address})
+
+@login_required(login_url='user_login')
+def delete_address(request, address_id):
+    address = get_object_or_404(Address, id=address_id, users=request.user)
+    
+    if request.method == 'POST':
+        address.delete()
+        return redirect('user_account')
+    
+    return render(request, 'user_side/delete_address.html', {'address': address})

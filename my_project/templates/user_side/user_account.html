@@ -177,9 +177,9 @@
                                                     <div class="col-lg-3" style="display: flex;justify-content: space-between; align-items: center;">
    
 
-                                                        <a href="" class="btn btn-sm">Edit</a>
+                                                        <a href="{% url 'edit_address' address.id %}" class="btn btn-sm">Edit</a>
                                                     
-                                                        <a href="" onclick="deleteAddress('{{ address.id }}')" class="btn btn-small">delete</a> 
+                                                        <a href="" onclick="deleteAddress('{{ address.id }}')" class="btn btn-small">Delete</a> 
                                                         </div>
                                                     
                                                 </div>
