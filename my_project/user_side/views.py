@@ -9,6 +9,8 @@ from django.views.decorators.cache import never_cache, cache_control
 from django.http import JsonResponse
 from django.contrib.auth import logout,login
 from django.contrib.auth.decorators import login_required
+from payment.forms import AddressForm
+
 
 
 
@@ -440,7 +442,7 @@ def cart_list(request):
 @login_required(login_url='user_login')
 
 def user_account(request):
-    # user_address = Address.objects.filter(users=request.user)
+    user_address = Address.objects.filter(users=request.user)
     
     # order_history = CartOrder.objects.filter(user=request.user).order_by('-id').annotate(service_name=Subquery(
     #     ServiceOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('service__service_name')[:1]
@@ -457,12 +459,28 @@ def user_account(request):
     
 
     # wallethistory = WalletHistory.objects.filter(wallet=wallet)
-    # context={
-    #     'user_address':user_address,
+    context={
+         'user_address':user_address,
     #     'user_data' :request.user,
     #     'order_history': order_history,
     #     'order_items':order_items,
     #     'wallet':wallet,
     #     'wallethistory':wallethistory,
-    # }
-    return render(request, 'user_side/user_account.html') #,context)
+     }
+    return render(request, 'user_side/user_account.html',context)
+
+
+def add_address(request):
+    if request.method=='POST':
+        form = AddressForm(request.POST,request.FILES)
+        if form.is_valid():
+            address=form.save(commit=False)
+            address.users = request.user
+            address.save()
+            return redirect('user_account')
+    else:
+        form=AddressForm()
+    context={
+        'form':form
+    }
+    return render(request, 'user_side/add_address.html',context)
