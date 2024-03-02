@@ -34,31 +34,31 @@
                             </thead>
                             <tbody>
                               
-                                {% for product in items %}
-                                <tr id="cartItem_{{ product.id }}">
+                                {% for service in items %}
+                                <tr id="cartItem_{{ service.id }}">
                                     <td class="image product-thumbnail">
-                                        <img src="{{ product.product.image.url }}" alt="{{ product.image }}">
-                                        <p><a href="{{ product.name|slugify }}/{{ product.product_id }}">{{ product.name }}</a></p>
-                                        <p><a href="/deatils/{{ product.id }}/{{ product.product_id }}">{{ product.product.product_name }}</a></p>
+                                        <img src="{{ service.service.image.url }}" alt="{{ service.image }}">
+                                        <p><a href="{{ service.name|slugify }}/{{ service.service_id }}">{{ service.name }}</a></p>
+                                        <p><a href="/deatils/{{ service.id }}/{{ service.service_id }}">{{ service.service.service_name }}</a></p>
                                     </td>
                                 
                                     <td class="product-des product-name">
-                                        <h5 class="product-name"><a href="shop-product-right.html">{{ product.product.product }}</a></h5>
-                                        <p class="font-xs">{{ product.product.color }}</p>
+                                        <h5 class="product-name"><a href="shop-product-right.html">{{ service.service.service }}</a></h5>
+                                        <p class="font-xs">{{ service.service.provider_type }}</p>
                                     </td>
                                 
                                     <td>
-                                        <span>₹{{ product.product.price }}</span>
+                                        <span>₹{{ service.service.price }}</span>
                                     </td>
                                 
                                     <td class="text-center" data-title="Stock">
-                                        <input type="number" min="1" class="form-control input-number quantity-input" data-item-id="{{ product.id }}" name="quantity_{{ product.id }}" value="{{ product.quantity }}" />
+                                        <input type="number" min="1" class="form-control input-number quantity-input" data-item-id="{{ service.id }}" name="quantity_{{ service.id }}" value="{{ service.quantity }}" />
                                     </td>
                                 
                                     <td class="text-right price-cell" data-title="Cart">
-                                        <p  data-item-id="{{ product.id }}" class="price-cell price">₹{{ product.total  }}</p>
+                                        <p  data-item-id="{{ service.id }}" class="price-cell price">₹{{ service.total  }}</p>
                                     </td>
-                                    <td class="action delete-item" data-title="Remove" data-item-id="{{ product.id }}">
+                                    <td class="action delete-item" data-title="Remove" data-item-id="{{ service.id }}">
                                         <i class="fi-rs-trash"></i>
                                     </td>
                                 </tr>
@@ -68,7 +68,7 @@
                     </div>
                     <div class="cart-action text-end">
                      
-                        <a class="btn" href="{% url 'shop'%}"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                        <a class="btn" href="{% url 'services'%}"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
                     </div>
                     <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
                     <div class="row mb-50">
@@ -154,7 +154,7 @@
                                             </tr>
                                            
                                             <tr>
-                                                <td class="cart_total_label">Coupen Descount</td>
+                                                <td class="cart_total_label">Coupen Discount</td>
                                                 <td class="cart_total_amount" id='discounts'> <i class="ti-gift mr-5"></i> ₹{{discounts}}</td>
                                               </tr>
                                             
@@ -169,7 +169,7 @@
                                     </table>
                                 </div>
                                 {% comment %} {% if totalitems %} {% endcomment %}
-                                <a href="{% url 'checkout'%}" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a>
+                                <a href="" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a>
                                 
                                 {% comment %} {% endif %} {% endcomment %}
                             </div>
@@ -244,7 +244,7 @@
             var newQuantity = $(this).val();
 
             $.ajax({
-                url: "",
+                url: "{% url 'update_qty' %}",
                 type: "GET",
                 data: {
                     item_id: itemId,
@@ -319,7 +319,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "",
+                        url: "{% url 'delete_cart_item' %}",
                         type: "GET",
                         data: {
                             item_id: cartItemId,

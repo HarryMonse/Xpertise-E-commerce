@@ -26,7 +26,7 @@
                                     <div class="product-image-slider" >
                                         <figure class="#">
                                             <img id="mainServiceImage" style="height: 550px;
-                                            width: 700px;" src="{{ service.serviceattribute_set.first.image.url }}" alt="service image">
+                                            width: 700px;" src="{{ service.serviceattribute_set.first.image.url }}" alt="product image">
                                         </figure>
 
                                     </div>
@@ -34,7 +34,7 @@
                                     <div class="slider-nav-thumbnails pl-15 pr-15">
                                         {% for image in images %}
                                             <div>
-                                                <img src="{{ image.images.url }}" alt="service image" class="thumbnail-image" data-image="{{ image.images.url }}">
+                                                <img src="{{ image.images.url }}" alt="product image" class="thumbnail-image" data-image="{{ image.images.url }}">
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -53,7 +53,7 @@
                                         {% comment %} <div class="product-price primary-color float-left"> {% endcomment %}
                                             {% if discount_offer is not None and discount_offer.active %}
                                                 <div class="product-price">
-                                                   <span style="font-size: 30px; font-weight:bold" >₹<span class="current-product-price-{{service.id}} text-success" id="service_price" class='product-price1'>{{service.serviceattribute_set.first.price}}</span></span> 
+                                                   <span style="font-size: 30px; font-weight:bold" >₹<span class="current-product-price-{{service.id}} text-success" id="product_price" class='product-price1'>{{service.serviceattribute_set.first.price}}</span></span> 
                                                     <br> <br>
                                                     ₹<span class="old-price font-md ml-15" style="text-decoration: line-through;" id="old_price1" class='old_price1' >{{service.serviceattribute_set.first.old_price}}</span>
                                                 </div>
@@ -61,13 +61,13 @@
                                                 {% for dis in discounted_offer %}
                                                     {% if dis.active and dis.category == service.category %}
                                                         <div class="product-price">
-                                                            <span style="font-size: 30px; font-weight:bold">₹<span class="current-product-price-{{service.id}} text-success" id="service_price" class='product-price1'>{{service.serviceattribute_set.first.price}}</span></span>
+                                                            <span style="font-size: 30px; font-weight:bold">₹<span class="current-product-price-{{service.id}} text-success" id="product_price" class='product-price1'>{{service.serviceattribute_set.first.price}}</span></span>
                                                             <br> <br>
                                                             ₹<span class="old-price font-md ml-15" style="text-decoration: line-through;" id="old_price1" class='old_price1'>{{service.serviceattribute_set.first.old_price}}</span>
                                                         </div>
                                                         {% else %}
                                                         <div class="product-price">
-                                                            <span style="font-size: 30px; font-weight:bold">₹<span class="current-product-price-{{service.id}} text-success" id="service_price" class='product-price1'>{{service.serviceattribute_set.first.price}}</span></span>
+                                                            <span style="font-size: 30px; font-weight:bold">₹<span class="current-product-price-{{service.id}} text-success" id="product_price" class='product-price1'>{{service.serviceattribute_set.first.price}}</span></span>
                                                             
                                                         </div>
                                                     {% endif %}
@@ -75,7 +75,7 @@
                                             {% else %}
                                                 <div>
                                                     <span style="font-size: 30px;">
-                                                        ₹<span class="current-product-price-{{service.id}} text-success" style="font-weight: bold;" id="service_price" class='product-price1'>{{service.serviceattribute_set.first.price}}</span>
+                                                        ₹<span class="current-product-price-{{service.id}} text-success" style="font-weight: bold;" id="product_price" class='product-price1'>{{service.serviceattribute_set.first.price}}</span>
                                                     </span>
                                                 </div>
                                             {% endif %}
@@ -106,7 +106,7 @@
                                         </div>
                                          {% endif %} 
                                         {% comment %} <div class="product-price primary-color float-left">
-                                            <ins>₹<span id="service_price" class='product-price1'>{{ service.serviceattribute_set.first.price }}</span></ins>
+                                            <ins>₹<span id="product_price" class='product-price1'>{{ service.serviceattribute_set.first.price }}</span></ins>
                                             
                                         </div> {% endcomment %}
                                     </div>
@@ -146,16 +146,16 @@
                                             </div>                                          
 
                                             {% comment %} <input type="text"  id="product-color"> {% endcomment %}
-                                         {% comment %} <div class="primary-color float-left">
+                                         <div class="primary-color float-left">
                                                 <span type="text" id="product-color" class='product-color1' ></span>
                                             </div> 
                                         </div>
-                                    </div> {% endcomment %}
+                                    </div>
                                     <p>Quanitity :</p>
                                     {% comment %} <div class="bt-1 border-color-1 mt-30 mb-30"></div> {% endcomment %}
                                     <div class="detail-extralink">
                                         
-                                        <input type="number" value="1" class="form-control" id="serviceQty" min="1" oninput="updateAddToCartButton()" name="quantity" />
+                                        <input type="number" value="1" class="form-control" id="productQty" min="1" oninput="updateAddToCartButton()" name="quantity" />
                                         <div class="input-group-append">
                                         <input type="hidden" class="product-image-one" value="{{service.serviceattribute_set.first.image.url}}"/>
                                         <input type="hidden" class="product-id" value="{{service.id}}"/>
@@ -223,7 +223,7 @@
                                             console.log('Image Source:', imageSrc);
 
                                             // Update the displayed price
-                                            document.getElementById('service_price').innerText = price;
+                                            document.getElementById('product_price').innerText = price;
 
                                              // Update the old price
                                             const oldPriceElement = document.getElementById('old_price1');
@@ -235,8 +235,8 @@
                                             
 
                                             // Update the displayed color
-                                            document.getElementById('service-provider_type').value = selectedColor;
-                                            $("#service-provider_type1").val(selectedColor);
+                                            document.getElementById('product-color').value = selectedColor;
+                                            $("#product-color1").val(selectedColor);
 
                                             // Update the main service image
                                             document.getElementById('mainServiceImage').src = imageSrc;
@@ -400,7 +400,7 @@
     });
 
     function updateAddToCartButton() {
-        var quantityInput = document.getElementById('serviceQty');
+        var quantityInput = document.getElementById('productQty');
         var addToCartBtn = document.getElementById('addToCartBtn');
         var quantity = parseInt(quantityInput.value, 10);
     
@@ -423,8 +423,8 @@
             event.preventDefault();
 
             var itemId = $(this).data("item-id");
-            var quantity = $("#serviceQty").val(); // Get the quantity value
-            var serviceColor = $("#service-provider_type1").val();
+            var quantity = $("#productQty").val(); // Get the quantity value
+            var serviceProviderType = $("#product-color1").val();
 
             $.ajax({
                 type: 'POST',
@@ -432,7 +432,7 @@
                 data: {
                     item_id: itemId,
                     quantity: quantity,
-                    service_provider_type: serviceColor, 
+                    service_provider_type: serviceProviderType, 
                     csrfmiddlewaretoken: "{{ csrf_token }}"
                 },
                 dataType: 'json',
@@ -490,7 +490,7 @@
     });
 
     function updateAddToCartButton() {
-        var quantityInput = document.getElementById('serviceQty');
+        var quantityInput = document.getElementById('productQty');
         var addToCartBtn = document.getElementById('addToCartBtn');
         var quantity = parseInt(quantityInput.value, 10);
     
@@ -514,8 +514,8 @@
         event.preventDefault();
     
         var itemId = $(this).data("item-id");
-        var quantity = $("#serviceQty").val(); // Get the quantity value
-        var serviceColor = $("#service-color1").val()
+        var quantity = $("#productQty").val(); // Get the quantity value
+        var productColor = $("#product-color1").val()
 
         $.ajax({
           type: 'POST', // or 'GET' depending on your server-side implementation
@@ -523,7 +523,7 @@
           data: {
             item_id: itemId,
             quantity: quantity, // Pass the quantity value
-            service_color: serviceColor, 
+            product_color: productColor, 
             csrfmiddlewaretoken: "{{ csrf_token }}"
         },
         dataType: 'json',
@@ -571,8 +571,8 @@
             event.preventDefault();
         
             var itemId = $(this).data("item-id");
-            var quantity = $("#serviceQty").val(); // Get the quantity value
-            var serviceColor = $("#service-color1").val()
+            var quantity = $("#productQty").val(); // Get the quantity value
+            var productColor = $("#product-color1").val()
 
             $.ajax({
               type: 'POST', // or 'GET' depending on your server-side implementation
@@ -580,7 +580,7 @@
               data: {
                 item_id: itemId,
                 quantity: quantity, // Pass the quantity value
-                service_color: serviceColor, 
+                product_color: productColor, 
                 csrfmiddlewaretoken: "{{ csrf_token }}"
             },
             dataType: 'json',
