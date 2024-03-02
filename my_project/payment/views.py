@@ -50,7 +50,7 @@ def checkout(request):
             CartItem.objects.filter(user=user, is_deleted=False).update(address=selected_address)
 
 
-            return render(request, 'paymenthome/payment.html', {
+            return render(request, 'payment/payment.html', {
                
                 'selected_address': selected_address,
                 'items':items,

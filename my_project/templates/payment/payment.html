@@ -10,7 +10,7 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="index.html" rel="nofollow">Home</a>
-                <span></span> Shop
+                <span></span> Services
                 <span></span> Checkout
             </div>
         </div>
@@ -89,7 +89,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th colspan="2">Product</th>
+                                        <th colspan="2">Service</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
@@ -98,7 +98,7 @@
                                         {% csrf_token %}
                                     {% for item in items%}
                                     <tr>
-                                        <td class="image product-thumbnail"><img src="{{ item.product.image.url}}"  alt="#"></td>
+                                        <td class="image product-thumbnail"><img src="{{ item.service.image.url}}"  alt="#"></td>
                                         <td>
                                             <h5><a href="shop-product-full.html">{{ item.name }}</a></h5> <span class="product-qty">x {{item.quantity}}</span>
                                         </td>
@@ -107,12 +107,12 @@
                                     {% endfor %}
                                 </form>
                                 <tr>
-                                    <td class="cart_total_label">cart</td>
+                                    <td class="cart_total_label">Cart</td>
                                     <td colspan="2" class="cart_total_amount" id='discounts'> <i class="ti-gift mr-5"></i> ₹{{totals}}</td>
                                   </tr>
 
                                 <tr>
-                                    <td class="cart_total_label">Coupen Descount</td>
+                                    <td class="cart_total_label">Coupon Discount</td>
                                     <td colspan="2" class="cart_total_amount" id='discounts'> <i class="ti-gift mr-5"></i> ₹{{discounts}}</td>
                                   </tr>
                                    
@@ -133,12 +133,12 @@
                                 <!-- Add any additional fields if needed -->
                                 
                                 <button type="submit" class="btn btn-primary" disabled>Wallet</button>
-                                <p>insufficent balance </p>
+                                <p>Insufficent Balance </p>
                             </div>
                             
                         {% else %}
                             <!-- Allow the user to use the wallet -->
-                            <form method="post" action="{% url 'wallet_place_order' %}" id="wallet-form">
+                            <form method="post" action="" id="wallet-form">
                                 {% csrf_token %}
                                 <!-- Add any additional fields if needed -->
                                 <button type="submit" class="btn btn-primary">Wallet</button>
@@ -148,7 +148,7 @@
                             
                                 {% comment %} <input type="hidden" name="total" value="{{ total }}">
                                 <input type="hidden" name="cart_id" value="{{ cart_id }}"> {% endcomment %}
-                                <a href="{% url 'place_order'%}"><button type="submit" id="cod-btn" class="btn btn-primary">Cash on delivery</button></a>
+                                <a href=""><button type="submit" id="cod-btn" class="btn btn-primary">Cash on delivery</button></a>
                         
                         </div>
                         <div class="btn_container">
@@ -206,7 +206,7 @@
        
       // Pass the `id` obtained in the response of Step 1
       order_id: "{{ razorpay_order_id }}",
-      callback_url: "{% url 'paymenthandler' %}",
+      callback_url: "",
 
       // ... other options
       notes: {
