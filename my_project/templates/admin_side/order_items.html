@@ -85,7 +85,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th width="40%">Product</th>
+                                    <th width="40%">Service</th>
                                     <th width="20%">Price</th>
                                     <th width="20%">Quantity</th>
                                     {% comment %} <th width="20%" class="text-end">Total</th> {% endcomment %}
@@ -99,10 +99,10 @@
                                             <div class="left">
                                                 <img src="{{ order_item.variations.image.url }}" width="80" height="80" class="img-xs" alt="Item">
                                             </div>
-                                            <div class="info"> {{ order_item.variations.product }} </div>
+                                            <div class="info"> {{ order_item.variations.service }} </div>
                                         </a>
                                     </td>
-                                    <td> ₹{{ order_item.product_price }} </td>
+                                    <td> ₹{{ order_item.service_price }} </td>
                                     <td>{{ order_item.quantity }}</td>
                                     {% comment %} <td class="text-end"> ${{ order_item.sub_total }} </td> {% endcomment %}
                                 </tr>
