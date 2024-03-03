@@ -148,9 +148,9 @@
                             
                                 {% comment %} <input type="hidden" name="total" value="{{ total }}">
                                 <input type="hidden" name="cart_id" value="{{ cart_id }}"> {% endcomment %}
-                                <a href=""><button type="submit" id="cod-btn" class="btn btn-primary">Cash on delivery</button></a>
+                                <a href="{% url 'place_order'%}"><button type="submit" id="cod-btn" class="btn btn-primary">Cash on delivery</button></a>
                         
-                                
+
                         </div>
                         <div class="btn_container">
                            

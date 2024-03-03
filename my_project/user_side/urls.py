@@ -23,6 +23,12 @@ urlpatterns = [
     path('add_address/', views.add_address, name='add_address'),
     path('edit-address/<int:address_id>/', views.edit_address, name='edit_address'),
     path('delete-address/<int:address_id>/', views.delete_address, name='delete_address'),
+    path('order_items/<int:order_number>/', views.order_items, name='order_items'),
+    path('cancell/<int:order_number>/',views.cancell,name='cancell'),
+    path('change_password/', views.change_password, name='change_password'),
+
+
+
 
 
 

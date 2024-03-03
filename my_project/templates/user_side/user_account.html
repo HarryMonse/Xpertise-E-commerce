@@ -79,7 +79,7 @@
                                                                         {{ order.product_image.url }}
                                                                         
                                                                         <td><p>Order Number: {{ order.order_number }}</p>
-                                                                            <p>Product Name: {{ order.product_name }}</p>
+                                                                            <p>Product Name: {{ order.service_name }}</p>
                                                                             
                                                                             {% comment %} <img src="{{ order.product_image }}" alt="Product Image" style="max-width: 50px; max-height: 50px;">{{ order.product_image }}</td> {% endcomment %}
                                                                             
@@ -221,7 +221,7 @@
                                                     </div> {% endcomment %}
                                                 </div>
                                             </form>
-                                            <a href="">Do you want to change the password ?</a>
+                                            <a href="{% url 'change_password'%}">Do you want to change the password ?</a>
                                     
 
                                         </div>

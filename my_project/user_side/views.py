@@ -5,10 +5,12 @@ from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from datetime import datetime, timedelta
 from django.contrib.auth import login,authenticate
+from django.contrib.auth import update_session_auth_hash
 from django.views.decorators.cache import never_cache, cache_control
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import logout,login
 from django.contrib.auth.decorators import login_required
+from django.db.models import OuterRef, Subquery
 from payment.forms import AddressForm
 from django.db.models import Sum
 
@@ -364,7 +366,7 @@ def cart_list(request):
     if request.session.get('order_placed', False):
         del request.session['order_placed']
         messages.success(request, 'Order placed successfully!')
-        return redirect('user_index')  
+        return redirect('index')  
 
     # if applied_coupon_id:
     #     try:
@@ -530,15 +532,15 @@ def delete_cart_item(request):
 def user_account(request):
     user_address = Address.objects.filter(users=request.user)
     
-    # order_history = CartOrder.objects.filter(user=request.user).order_by('-id').annotate(service_name=Subquery(
-    #     ServiceOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('service__service_name')[:1]
-    # ),
-    # service_image=Subquery(
-    #     ServiceOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('service__serviceattribute__image')[:1]
-    # ))
-    # order_items = ServiceOrder.objects.filter(user=request.user)
-    # for order in order_history:
-    #     print(order.service_image)
+    order_history = CartOrder.objects.filter(user=request.user).order_by('-id').annotate(service_name=Subquery(
+        ServiceOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('service__service_name')[:1]
+    ),
+    service_image=Subquery(
+        ServiceOrder.objects.filter(order=OuterRef('pk')).order_by('id').values('service__serviceattribute__image')[:1]
+    ))
+    order_items = ServiceOrder.objects.filter(user=request.user)
+    for order in order_history:
+        print(order.service_image)
     
 
     # wallet, created = Wallet.objects.get_or_create(user=request.user, defaults={'balance': 0})
@@ -548,8 +550,8 @@ def user_account(request):
     context={
          'user_address':user_address,
          'user_data' :request.user,
-    #     'order_history': order_history,
-    #     'order_items':order_items,
+         'order_history': order_history,
+         'order_items':order_items,
     #     'wallet':wallet,
     #     'wallethistory':wallethistory,
      }
@@ -595,3 +597,84 @@ def delete_address(request, address_id):
         return redirect('user_account')
     
     return render(request, 'user_side/delete_address.html', {'address': address})
+
+
+@login_required(login_url='user_login')
+def order_items(request, order_number):
+    order = get_object_or_404(CartOrder, id=order_number)
+    product_orders = ServiceOrder.objects.filter(order=order)
+    for item in product_orders:
+        item.subtotal = item.service_price * item.quantity
+    context = {
+        'order': order,
+        'product_orders': product_orders,
+        'order_total': sum(item.subtotal for item in product_orders),
+    }
+
+    return render(request, 'user_side/user_order_history.html', context)
+
+
+
+@login_required(login_url='user_login')
+def cancell(request,order_number):
+    try:
+        order = CartOrder.objects.get(id=order_number)
+        # wallet = Wallet.objects.get(user=request.user)
+
+        if order.payment.payment_method == 'Wallet' or order.payment.payment_method == 'Razorpay':
+            # wallet.balance += order.order_total
+            # wallet.save()
+            # WalletHistory.objects.create(
+            #             wallet=wallet,
+            #             type='Credited',
+            #             amount=order.order_total,
+            #             reason='Item cancelation'
+            #             )
+
+            refunded_message = f'Amount of {order.order_total} refunded successfully to your wallet.'
+            messages.success(request, refunded_message)
+    
+            for product_order in order.productorder_set.all():
+                product_attribute = product_order.variations
+                product_attribute.stock += product_order.quantity
+                product_attribute.save()
+
+        order.status = 'Cancelled'
+        order.save()
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+    except Exception as e:
+        print(e)
+       
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+
+@login_required(login_url='user_login')
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        print(f'Entered password: {current_password}')
+        print(f'Stored password: {request.user.password}')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not request.user.check_password(current_password):
+            messages.error(request, 'Incorrect current password. Please try again.')
+            return redirect('change_password')
+        
+        if new_password != confirm_password:
+            messages.error(request, 'New password and confirmation do not match. Please try again.')
+            return redirect('change_password')
+
+        request.user.set_password(new_password)
+        request.user.save()
+
+        update_session_auth_hash(request, request.user)
+
+        messages.success(request, 'Your password was successfully updated!')
+        logout(request)
+        return redirect('user_logout') 
+
+    return render(request, 'user_side/change_password.html')
