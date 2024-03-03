@@ -28,11 +28,8 @@ urlpatterns = [
     path('admin_provider_type/',views.admin_provider_type,name='admin_provider_type'), 
     path('admin_provider_type_insert/',views.admin_provider_type_insert,name='admin_provider_type_insert'),
     path('admin_provider_type_edit/<int:id>',views.admin_provider_type_edit,name='admin_provider_type_edit'),
-
-
-
-
-
+    path('order/',views.order,name='order'),
+    path('orderitems/<int:order_number>',views.orderitems,name='orderitems'),
 
 
 

@@ -8,12 +8,8 @@ from user_side.forms import *
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.forms.models import inlineformset_factory
-
-
-
-
-
-
+from payment.models import *
+from .forms import OrderForm
 
 
 
@@ -389,3 +385,125 @@ def admin_provider_type_edit(request,id):
         "obj":obj
     }
     return render(request,'admin_side/provider_type_edit.html', context)
+
+
+
+@login_required(login_url='admin_login')
+def order(request):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    
+    status='all'
+    order = CartOrder.objects.order_by('-created_at')
+    form = OrderForm(request.POST or None)
+
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            status = form.cleaned_data['status']
+            if status != 'all':
+                order = order.filter(status=status)
+
+    context = {
+        'order':order,
+        'form':form,
+        'status':status
+    }
+    return render(request, 'admin_side/order.html',context)
+
+
+@login_required(login_url='admin_login')
+def orderitems(request, order_number):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+
+    try:
+        order = CartOrder.objects.get(id=order_number)
+    except Exception as e:
+        print(e)
+
+    order_items = ServiceOrder.objects.filter(order=order)
+    address = order.selected_address
+    payment = Payments.objects.all()
+
+    if request.method == "POST":
+        form = OrderForm(request.POST, instance=order)
+        if form.is_valid():
+            if form.cleaned_data['status'] == 'Cancelled':
+                cancell_order(request, order_number)
+                return redirect('order')
+            else:
+                form.save()
+                return redirect('orderitems', order_number=order.pk)
+        else:
+            messages.error(request, "Choose a valid status")
+            return redirect('orderitems', order_number=order.pk)
+
+    form = OrderForm(instance=order)
+
+    context = {
+        'order': order,
+        'address': address,
+        'order_items': order_items,
+        'form': form,
+        'payment': payment
+    }
+    return render(request, 'admin_side/order_items.html', context)
+
+
+@login_required(login_url='admin_login')
+def cancell_order(request, order_number):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+
+    try:
+        order = CartOrder.objects.get(id=order_number)
+    except CartOrder.DoesNotExist:
+        messages.error(request, f"Order with ID {order_number} does not exist.")
+        return redirect('order')
+
+    if order.status == 'Cancelled':
+        messages.warning(request, f"Order with ID {order_number} is already cancelled.")
+    else:
+        order.status = 'Cancelled'
+        order.save()
+
+        # allowed_payment_methods = ['Razorpay', 'Wallet']
+
+        # if order.payment.payment_method in allowed_payment_methods:
+        #     with transaction.atomic():
+        #         user_wallet = order.user.wallet if hasattr(order.user, 'wallet') else None
+
+        #         if order.payment.payment_method == 'Razorpay':
+        #             if user_wallet:
+        #                 user_wallet.balance += order.order_total
+        #                 user_wallet.save()
+
+        #                 WalletHistory.objects.create(
+        #                     wallet=user_wallet,
+        #                     type='Credited',
+        #                     amount=order.order_total,
+        #                     created_at=timezone.now(),
+        #                     reason='Admin Cancellation'
+        #                 )
+        #         elif order.payment.payment_method == 'Wallet':
+        #             if user_wallet:
+        #                 user_wallet.balance += order.order_total
+        #                 user_wallet.save()
+
+        #                 WalletHistory.objects.create(
+        #                     wallet=user_wallet,
+        #                     type='Credited',
+        #                     amount=order.order_total,
+        #                     created_at=timezone.now(),
+        #                     reason='Admin Cancellation'
+        #                 )
+
+        #         for order_item in order.productorder_set.all():
+        #             product_attribute = order_item.variations
+        #             product_attribute.stock += order_item.quantity
+        #             product_attribute.save()
+
+        messages.success(request, f"Order with ID {order_number} has been cancelled successfully.")
+
+    return redirect('order')
