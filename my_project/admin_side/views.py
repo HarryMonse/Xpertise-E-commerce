@@ -468,9 +468,9 @@ def cancell_order(request, order_number):
         order.status = 'Cancelled'
         order.save()
 
-        # allowed_payment_methods = ['Razorpay', 'Wallet']
+        allowed_payment_methods = ['COD']
 
-        # if order.payment.payment_method in allowed_payment_methods:
+        if order.payment.payment_method in allowed_payment_methods:
         #     with transaction.atomic():
         #         user_wallet = order.user.wallet if hasattr(order.user, 'wallet') else None
 
@@ -499,10 +499,10 @@ def cancell_order(request, order_number):
         #                     reason='Admin Cancellation'
         #                 )
 
-        #         for order_item in order.productorder_set.all():
-        #             product_attribute = order_item.variations
-        #             product_attribute.stock += order_item.quantity
-        #             product_attribute.save()
+            for service_item in order.serviceorder_set.all():
+                service_attribute = service_item.variations
+                service_attribute.availability += service_item.quantity
+                service_attribute.save()
 
         messages.success(request, f"Order with ID {order_number} has been cancelled successfully.")
 
