@@ -28,7 +28,7 @@ def checkout(request):
     address_form = AddressForm(request.POST or None)
     totals = request.session.get('totals', 0)
     total = request.session.get('total', 0)
-    discounts = request.session.get('discounts', 0)
+    # discounts = request.session.get('discounts', 0)
 
     # wallet = Wallet.objects.filter(user=user).first()
     # wallet_balance = wallet.balance if wallet else 0
@@ -37,7 +37,7 @@ def checkout(request):
     # wallet_button_disabled = total > wallet_balance
     print(total)
     print(totals)
-    print(discounts)
+    # print(discounts)
 
     if request.session.get('order_placed', False):
         del request.session['order_placed']
@@ -59,7 +59,7 @@ def checkout(request):
                 'items':items,
                 'total':total,
                 'totals':totals,
-                'discounts': discounts,
+                # 'discounts': discounts,
                 # 'wallet_balance': wallet_balance,
                 # 'wallet_button_disabled': wallet_button_disabled,
             })
@@ -69,19 +69,19 @@ def checkout(request):
             address_instance.users = request.user
             address_instance.save()
             CartItem.objects.filter(user=user, is_deleted=False).update(address=address_instance)
-            return render(request, 'paymenthome/payment.html', {
+            return render(request, 'payment/payment.html', {
              
                 'new_address': address_instance,
                 'items':items,
                 'total':total,
                 'totals':totals,
-                'discounts': discounts,
+                # 'discounts': discounts,
                 # 'wallet_balance': wallet_balance,
                 # 'wallet_button_disabled': wallet_button_disabled,
             })
     
 
-    return render(request, 'payment/checkout.html',{'user_addresses': user_addresses,'items':items,'total':total,'totals':totals,'discounts': discounts})
+    return render(request, 'payment/checkout.html',{'user_addresses': user_addresses,'items':items,'total':total,'totals':totals}) #,'discounts': discounts})
 
 
 @never_cache

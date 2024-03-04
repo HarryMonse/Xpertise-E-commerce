@@ -357,7 +357,7 @@ def cart_list(request):
     # coupons = Coupon.objects.all()
     ct = items.count()
 
-    # total_without_discount = items.aggregate(total_sum=Sum('total'))['total_sum'] or 0
+    total_without_discount = items.aggregate(total_sum=Sum('total'))['total_sum'] or 0
 
     # discounts = 0
 
@@ -425,15 +425,15 @@ def cart_list(request):
 
     context = {
         'items': items,
-    #     'totals': total_without_discount,
-    #     'total': total_after_discount,
+        'totals': total_without_discount,
+        'total': total_without_discount,
         'ct': ct,
     #     'coupons': coupons,
     #     'discounts': discounts,
     }
 
-    # request.session['totals'] = total_without_discount
-    # request.session['total'] = total_after_discount
+    request.session['totals'] = total_without_discount
+    request.session['total'] = total_without_discount
     # request.session['discounts'] = discounts
 
 
@@ -469,14 +469,14 @@ def qty_update(request):
     #     except Coupon.DoesNotExist:
     #         request.session.pop('applied_coupon_id', None)
 
-    total_after_discount = total_without_discount - discounts
+    # total_after_discount = total_without_discount - discounts
 
     response_data = {
         'new_qty': new_quantity,
         'new_price': cart_item.total,
         'totals': total_without_discount,
         'discounts': discounts,
-        'total': total_after_discount
+        'total': total_without_discount
     }
     return JsonResponse(response_data)
 
@@ -621,23 +621,23 @@ def cancell(request,order_number):
         order = CartOrder.objects.get(id=order_number)
         # wallet = Wallet.objects.get(user=request.user)
 
-        if order.payment.payment_method == 'Wallet' or order.payment.payment_method == 'Razorpay':
-            # wallet.balance += order.order_total
-            # wallet.save()
-            # WalletHistory.objects.create(
-            #             wallet=wallet,
-            #             type='Credited',
-            #             amount=order.order_total,
-            #             reason='Item cancelation'
-            #             )
+        if order.payment.payment_method == 'COD': #or order.payment.payment_method == 'Razorpay':
+        #     # wallet.balance += order.order_total
+        #     # wallet.save()
+        #     # WalletHistory.objects.create(
+        #     #             wallet=wallet,
+        #     #             type='Credited',
+        #     #             amount=order.order_total,
+        #     #             reason='Item cancelation'
+        #     #             )
 
-            refunded_message = f'Amount of {order.order_total} refunded successfully to your wallet.'
-            messages.success(request, refunded_message)
+            # refunded_message = f'Amount of {order.order_total} refunded successfully to your wallet.'
+            # messages.success(request, refunded_message)
     
-            for product_order in order.productorder_set.all():
-                product_attribute = product_order.variations
-                product_attribute.stock += product_order.quantity
-                product_attribute.save()
+            for service_order in order.serviceorder_set.all():
+                service_attribute = service_order.variations
+                service_attribute.availability += service_order.quantity
+                service_attribute.save()
 
         order.status = 'Cancelled'
         order.save()
