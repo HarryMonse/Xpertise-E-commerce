@@ -354,87 +354,34 @@ def add_to_cart(request):
 def cart_list(request):
     user = request.user
     items = CartItem.objects.filter(user=user, is_deleted=False)
-    # coupons = Coupon.objects.all()
+    
     ct = items.count()
 
     total_without_discount = items.aggregate(total_sum=Sum('total'))['total_sum'] or 0
 
-    # discounts = 0
-
-    # applied_coupon_id = request.session.get('applied_coupon_id')
+    
 
     if request.session.get('order_placed', False):
         del request.session['order_placed']
         messages.success(request, 'Order placed successfully!')
         return redirect('index')  
 
-    # if applied_coupon_id:
-    #     try:
-    #         applied_coupon = Coupon.objects.get(id=applied_coupon_id, active=True,
-    #                                             active_date__lte=timezone.now(), expiry_date__gte=timezone.now())
-    #         discounts = (total_without_discount * applied_coupon.discount) / 100
-    #     except Coupon.DoesNotExist:
+    
 
-    #         request.session.pop('applied_coupon_id', None)
-
-    # if request.method == "POST":
-    #     if 'apply_coupon' in request.POST:
-    #         coupon_code = request.POST.get('coupon_code')
-    #         try:
-    #             coupon = Coupon.objects.get(code=coupon_code, active=True, active_date__lte=timezone.now(),
-    #                                         expiry_date__gte=timezone.now())
-
-    #             discounts = (total_without_discount * coupon.discount) / 100
-    #             items.update(coupon=coupon)
-
-    #             request.session['applied_coupon_id'] = coupon.id
-
-    #             messages.success(request, 'Coupon applied successfully!')
-    #         except Coupon.DoesNotExist:
-    #             messages.error(request, 'Invalid or expired coupon code')
-
-    #     elif 'remove_coupon' in request.POST:
-
-    #         request.session.pop('applied_coupon_id', None)
-
-    #         total_without_discount = items.aggregate(total_sum=Sum('total'))['total_sum'] or 0
-    #         discounts = 0
-
-    #         applied_coupon_id = request.session.get('applied_coupon_id')
-    #         if applied_coupon_id:
-    #             try:
-    #                 applied_coupon = Coupon.objects.get(id=applied_coupon_id, active=True,
-    #                                                     active_date__lte=timezone.now(), expiry_date__gte=timezone.now())
-    #                 discounts = (total_without_discount * applied_coupon.discount) / 100
-    #             except Coupon.DoesNotExist:
-    #                 request.session.pop('applied_coupon_id', None)
-
-    #         items.update(coupon=None)
-
-    #         total_after_discount = total_without_discount - discounts
-    #         data = {
-    #             'success': True,
-    #             'totals': total_without_discount,
-    #             'discounts': discounts,
-    #             'total': total_after_discount,
-    #         }
-
-    #         messages.success(request, 'Coupon removed successfully!')
-                    
-    # total_after_discount = total_without_discount - discounts
 
     context = {
         'items': items,
         'totals': total_without_discount,
         'total': total_without_discount,
         'ct': ct,
-    #     'coupons': coupons,
-    #     'discounts': discounts,
+    
+    
     }
 
     request.session['totals'] = total_without_discount
     request.session['total'] = total_without_discount
-    # request.session['discounts'] = discounts
+    
+
 
 
     return render(request, 'user_side/cart.html', context)
@@ -448,7 +395,7 @@ def qty_update(request):
     new_quantity = int(request.GET.get('new_quantity'))
 
     cart_item = get_object_or_404(CartItem, id=item_id)
-    # now = timezone.now()
+    
 
     if new_quantity > cart_item.service.availability:
         return JsonResponse({'error': 'Insufficient availability.', 'success': False}, status=400)
@@ -460,16 +407,7 @@ def qty_update(request):
     total_without_discount = CartItem.objects.filter(user=user, is_deleted=False).aggregate(total_sum=Sum('total'))['total_sum'] or 0
 
     discounts = 0
-    # applied_coupon_id = request.session.get('applied_coupon_id')
-    # if applied_coupon_id:
-    #     try:
-    #         applied_coupon = Coupon.objects.get(id=applied_coupon_id, active=True,
-    #                                             active_date__lte=timezone.now(), expiry_date__gte=timezone.now())
-    #         discounts = (total_without_discount * applied_coupon.discount) / 100
-    #     except Coupon.DoesNotExist:
-    #         request.session.pop('applied_coupon_id', None)
-
-    # total_after_discount = total_without_discount - discounts
+    
 
     response_data = {
         'new_qty': new_quantity,
@@ -494,15 +432,9 @@ def delete_cart_item(request):
         cart_items = CartItem.objects.filter(user=user, is_deleted=False)
         totals = cart_items.aggregate(total_sum=Sum('total'))['total_sum'] or 0
 
-        # applied_coupon_id = request.session.get('applied_coupon_id')
+        
         discounts = 0
-        # if applied_coupon_id:
-        #     try:
-        #         applied_coupon = Coupon.objects.get(id=applied_coupon_id, active=True,
-        #                                             active_date__lte=timezone.now(), expiry_date__gte=timezone.now())
-        #         discounts = (totals * applied_coupon.discount) / 100
-        #     except Coupon.DoesNotExist:
-        #         request.session.pop('applied_coupon_id', None)
+       
 
         cart_total = totals - discounts
 
@@ -543,17 +475,13 @@ def user_account(request):
         print(order.service_image)
     
 
-    # wallet, created = Wallet.objects.get_or_create(user=request.user, defaults={'balance': 0})
     
-
-    # wallethistory = WalletHistory.objects.filter(wallet=wallet)
     context={
          'user_address':user_address,
          'user_data' :request.user,
          'order_history': order_history,
          'order_items':order_items,
-    #     'wallet':wallet,
-    #     'wallethistory':wallethistory,
+    
      }
     return render(request, 'user_side/user_account.html',context)
 
@@ -619,20 +547,11 @@ def order_items(request, order_number):
 def cancell(request,order_number):
     try:
         order = CartOrder.objects.get(id=order_number)
-        # wallet = Wallet.objects.get(user=request.user)
+        
 
-        if order.payment.payment_method == 'COD': #or order.payment.payment_method == 'Razorpay':
-        #     # wallet.balance += order.order_total
-        #     # wallet.save()
-        #     # WalletHistory.objects.create(
-        #     #             wallet=wallet,
-        #     #             type='Credited',
-        #     #             amount=order.order_total,
-        #     #             reason='Item cancelation'
-        #     #             )
+        if order.payment.payment_method == 'COD': 
 
-            # refunded_message = f'Amount of {order.order_total} refunded successfully to your wallet.'
-            # messages.success(request, refunded_message)
+        
     
             for service_order in order.serviceorder_set.all():
                 service_attribute = service_order.variations
