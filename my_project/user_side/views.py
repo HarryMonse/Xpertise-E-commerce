@@ -481,7 +481,8 @@ def user_account(request):
          'user_data' :request.user,
          'order_history': order_history,
          'order_items':order_items,
-    
+    #     'wallet':wallet,
+    #     'wallethistory':wallethistory,
      }
     return render(request, 'user_side/user_account.html',context)
 
