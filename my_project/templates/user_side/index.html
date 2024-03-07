@@ -1,0 +1,277 @@
+{% extends 'user_side/base.html'%}
+{% load static %}
+{% block content %}
+    <!-- Quick view -->
+    <main class="main">  
+             
+        <section class="home-slider position-relative pt-50">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {{message}}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="hero-slider-1 dot-style-1 dot-style-1-position-1 ">
+                
+                {% comment %} {% for banner in banners %}
+                <div class="single-hero-slider single-animation-wrap">
+                    <div class="container">
+                        <div class="row align-items-center slider-animated-1">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="hero-slider-content-2">
+                                    <h4 class="animated">{{banner.title}}</h4>
+                                    <h2 class="animated fw-900">{{banner.description1}}</h2>
+                                    <h1 class="animated fw-900 text-type">{{banner.description2}}</h1>
+                                    
+                                    <a class="animated btn btn-brush btn-brush-3" href="{% url 'shop'%}"> Shop Now </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-6">
+                                <div class="single-slider-img single-slider-img-1">
+                                    <img class="animated slider-1-1" src="{{banner.image.url}}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+                 <div class="single-hero-slider single-animation-wrap">
+                    <div class="container">
+                        <div class="row align-items-center slider-animated-1">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="hero-slider-content-2">
+                                    <h4 class="animated">Need it done?</h4>
+                                    <h2 class="animated fw-900">We're here.</h2>
+                                    <h1 class="animated fw-900 text-7">Xpertise</h1>
+                                    <p class="animated">Expert Services, Delivered at Ease.</p>
+                                    
+                                    <a class="animated btn btn-brush btn-brush-2" href=""> Discover Now </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-6">
+                                <div class="single-slider-img single-slider-img-1">
+                                    <img class="animated slider-1-2" src="{% static 'assets/imgs/slider/img200.jpg'%}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                 <div class="single-hero-slider single-animation-wrap">
+                    <div class="container">
+                        <div class="row align-items-center slider-animated-1">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="hero-slider-content-2">
+                                    <h4 class="animated">You're in the right hands.</h4>
+                                    <h2 class="animated fw-900">Welcome to </h2>
+                                    <h1 class="animated fw-900 text-8">Xpertise</h1>
+                                    <p class="animated">Your trusted partner for premium doorstep services.</p>
+                                    <a class="animated btn btn-brush btn-brush-1" href=""> Discover Now </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-6">
+                                <div class="single-slider-img single-slider-img-1">
+                                    <img class="animated slider-1-3" src="{% static 'assets/imgs/slider/img700.jpg'%}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                {% comment %} {% endfor %} {% endcomment %}
+            </div>
+            <div class="slider-arrow hero-slider-1-arrow"></div>
+        </section>
+        <section class="banners mb-15 mt-15">
+            <div class="container">
+                <div class="row">    
+                </div>
+            </div>
+        </section>
+        <section class="product-tabs section-padding position-relative wow fadeIn animated">
+            <div class="bg-square"></div>
+            <div class="container">
+                <div class="tab-header">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Explore!!</button>
+                        </li>
+                        {% comment %} <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
+                        </li> {% endcomment %}
+                    </ul>
+                     <a href="services" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a> 
+                </div> 
+                <!--End nav-tabs-->
+                <div class="tab-content wow fadeIn animated" id="myTabContent">
+                    <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                        <div class="row product-grid-4">
+                            {% for service in services %}
+                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                <div class="product-cart-wrap mb-30">
+                                    <div class="product-img-action-wrap">
+                                        <div class="product-img product-img-zoom">
+                                            <a href="{% url 'service_details' category_id=service.category.id service_id=service.id  %}">
+                                                <img class="default-img" src="{{ service.serviceattribute_set.first.image.url }}" alt="service image">
+                                                {% comment %} <img class="hover-img" src="{{ service.service_image1.url }}" alt=""> {% endcomment %}
+                                            </a>
+                                        
+                                        </div>
+                                        <div class="product-action-1">
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="{% url 'add_wishlist' service.id %}"><i class="fi-rs-heart"></i></a> 
+                                        </div> 
+                                        {% if discount_offer is not None and discount_offer.active %}
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">-{{ discount_offer.discount_percentage|floatformat:0 }}%</span>
+                                        </div>
+                                        {% elif discounted_offer %}
+                                        {% for dis in discounted_offer %}
+                                            {% if dis.active and dis.category == service.category %}
+                                            <div class="product-badges product-badges-position product-badges-mrg">
+                                                <span class="hot">-{{ dis.discount_percentage|floatformat:0 }}%</span>
+                                            </div>
+                                                {% else %}
+                                                <div class="product-badges product-badges-position product-badges-mrg">
+                                                    <span class="hot">Hot</span>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">Hot</span>
+                                        </div>
+                                    {% endif %}
+                                    </div>
+                                    <div class="product-content-wrap">
+                                        <div class="product-category">
+                                            <a href="shop-grid-right.html">{{ service.category }}</a>
+                                        </div>
+                                        <h2><a href="{% url 'services_by_category' category_id=service.category.id %}">{{ service.service_name }}</a></h2>
+                                        <div >
+                                            {% comment %} <span>
+                                                <span>90%</span>
+                                            </span> {% endcomment %}
+                                        </div>
+                                        {% if discount_offer is not None and discount_offer.active %}
+                                                <div class="product-price">
+                                                    <span class="current-product-price-{{service.id}}">₹{{service.serviceattribute_set.first.price}}</span>
+                                                    <span class="old-price">₹{{service.serviceattribute_set.first.old_price}}</span>
+                                                </div>
+                                            {% elif discounted_offer %}
+                                                {% for dis in discounted_offer %}
+                                                    {% if dis.active and dis.category == service.category %}
+                                                        <div class="product-price">
+                                                            <span>₹ <span class="current-product-price-{{service.id}}">{{service.serviceattribute_set.first.price}}</span></span>
+                                                            ₹<span class="old-price">{{service.serviceattribute_set.first.old_price}}</span>
+                                                        </div>
+                                                        {% else %}
+                                                        <div class="product-price">
+                                                            <span>₹ <span class="current-product-price-{{service.id}}">{{service.serviceattribute_set.first.price}}</span></span>
+                                                            
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                <div>
+                                                    <span style="font-size: large;">
+                                                        ₹<span class="current-product-price-{{service.id}} text-success" style="font-weight: bold;">{{service.serviceattribute_set.first.price}}</span>
+                                                    </span>
+                                                </div>
+                                            {% endif %}
+                                        {% comment %} <div class="product-price">
+                                            <span class="product-price1">₹{{ service.serviceattribute_set.first.price}}</span>
+                                            <span class="old-price">{{service.offer_price}}</span>
+                                        </div> {% endcomment %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <!--End product-grid-4-->
+                    </div>
+                    <!--En tab one (Featured)-->
+                    
+        <section class="deals section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 deal-co">
+                        <div class="deal wow fadeIn animated mb-md-4 mb-sm-4 mb-lg-0" style="background-image: url('{% static 'assets/imgs/banner/banner200.jpg'%}');">
+                             <div class="deal-top">
+                                <h2 ></h2>
+                                <h5></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 deal-co">
+                        <div class="deal wow fadeIn animated" style="background-image: url('{% static 'assets/imgs/banner/banner400.jpg'%}');">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+       {% comment %} <section class="section-padding">
+            <div class="container">
+                <h3 class="section-title mb-20 wow fadeIn animated"><span>Featured</span> Types</h3>
+                <div class="carausel-6-columns-cover position-relative wow fadeIn animated">
+                    <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-3-arrows"></div>
+                    <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
+                        <div class="type-logo">
+                            <img class="img-grey-hover" src="{% static 'assets/imgs/banner/type-1.png'%}" alt="">
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+        </section>  {% endcomment %}
+       
+        <section id="about-section" class="mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="banner-bg wow fadeIn animated" style="background-image: url('{% static 'assets/imgs/banner/banner-80.jpg'%}')">
+                            <div class="banner-content">
+                                <h4 class="text-grey-4 mb-15">ABOUT Xpertise</h4>
+                                <h6 class="fw-600">
+                                    Welcome to Xpertise, your premier destination for doorstep services! At Xpertise, we're more than just a service provider; we're your trusted partner in simplifying your life and enhancing your experience. From home maintenance to beauty treatments and professional consultations, our mission is to deliver expert solutions directly to your doorstep, ensuring unparalleled convenience and quality.
+        
+                                    <br><br>
+        
+                                    <strong>Our Philosophy:</strong>
+                                    <br>
+                                    At Xpertise, we believe in the power of expertise and convenience. Each service we offer is meticulously curated to meet your unique needs and surpass your expectations. Our dedicated team of professionals is trained to deliver nothing but the best, ensuring that every service experience is of the highest standard.
+        
+                                    <br><br>
+        
+                                    <strong>Quality and Convenience:</strong>
+                                    <br>
+                                    Excellence is at the heart of everything we do. From selecting top-tier professionals to providing flexible scheduling options, we prioritize quality and convenience in every aspect of our service delivery. With Xpertise, you can trust that your needs will be met with precision, efficiency, and utmost care.
+        
+                                    <br><br>
+        
+                                    <strong>Your Convenience, Our Priority:</strong>
+                                    <br>
+                                    Life can be busy, but with Xpertise, accessing premium services has never been easier. Our seamless booking process and flexible scheduling options allow you to enjoy expert solutions at a time and place that works best for you. Experience hassle-free living with Xpertise at your doorstep.
+        
+                                    <br><br>
+        
+                                    <strong>Join the Xpertise Experience:</strong>
+                                    <br>
+                                    Explore our wide range of services and discover the convenience of expert solutions brought directly to you. Thank you for choosing Xpertise – where expertise meets convenience, and your satisfaction is our top priority.
+        
+                                    <br><br>
+        
+                                    Xpertise – Expert Service, Delivered at Ease.
+        
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
