@@ -678,3 +678,4 @@ def change_password(request):
         return redirect('user_logout') 
 
     return render(request, 'user_side/change_password.html')
+
