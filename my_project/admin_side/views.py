@@ -471,8 +471,33 @@ def cancell_order(request, order_number):
         allowed_payment_methods = ['COD']
 
         if order.payment.payment_method in allowed_payment_methods:
-          
+        #     with transaction.atomic():
+        #         user_wallet = order.user.wallet if hasattr(order.user, 'wallet') else None
 
+        #         if order.payment.payment_method == 'Razorpay':
+        #             if user_wallet:
+        #                 user_wallet.balance += order.order_total
+        #                 user_wallet.save()
+
+        #                 WalletHistory.objects.create(
+        #                     wallet=user_wallet,
+        #                     type='Credited',
+        #                     amount=order.order_total,
+        #                     created_at=timezone.now(),
+        #                     reason='Admin Cancellation'
+        #                 )
+        #         elif order.payment.payment_method == 'Wallet':
+        #             if user_wallet:
+        #                 user_wallet.balance += order.order_total
+        #                 user_wallet.save()
+
+        #                 WalletHistory.objects.create(
+        #                     wallet=user_wallet,
+        #                     type='Credited',
+        #                     amount=order.order_total,
+        #                     created_at=timezone.now(),
+        #                     reason='Admin Cancellation'
+        #                 )
 
             for service_item in order.serviceorder_set.all():
                 service_attribute = service_item.variations

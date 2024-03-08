@@ -1,17 +1,24 @@
 import random
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import never_cache, cache_control
+from django.views.decorators.cache import never_cache
 from .forms import AddressForm
 from datetime import datetime
+
+
 from .models import *
+
+
+
+
+
 
 
 # Create your views here.
 
 
 @never_cache
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='user_login')
 def checkout(request):
     user=request.user 
@@ -21,9 +28,17 @@ def checkout(request):
     address_form = AddressForm(request.POST or None)
     totals = request.session.get('totals', 0)
     total = request.session.get('total', 0)
+    # discounts = request.session.get('discounts', 0)
+
+    # wallet = Wallet.objects.filter(user=user).first()
+    # wallet_balance = wallet.balance if wallet else 0
+    # print('Wallet balance:', wallet_balance)
+
+    # wallet_button_disabled = total > wallet_balance
     print(total)
     print(totals)
-    
+    # print(discounts)
+
     if request.session.get('order_placed', False):
         del request.session['order_placed']
         return redirect('user_index')  
@@ -44,8 +59,9 @@ def checkout(request):
                 'items':items,
                 'total':total,
                 'totals':totals,
-                
-
+                # 'discounts': discounts,
+                # 'wallet_balance': wallet_balance,
+                # 'wallet_button_disabled': wallet_button_disabled,
             })
         
         elif address_form.is_valid():
@@ -59,8 +75,9 @@ def checkout(request):
                 'items':items,
                 'total':total,
                 'totals':totals,
-                
-
+                # 'discounts': discounts,
+                # 'wallet_balance': wallet_balance,
+                # 'wallet_button_disabled': wallet_button_disabled,
             })
     
 
@@ -68,7 +85,7 @@ def checkout(request):
 
 
 @never_cache
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='user_login')
 def payment(request):
     print("Entering payment")
@@ -88,9 +105,15 @@ def payment(request):
         amount = request.POST.get('total', 0)
         amount = int(amount)
     
-        
-
-
+        # currency = 'INR'
+        # amount_in_paise = amount  * 100
+ 
+        # razorpay_order = razorpay_client.order.create(dict(amount=amount_in_paise,
+        #                                                    currency=currency,
+        #                                                    payment_capture='0'))
+ 
+        # razorpay_order_id = razorpay_order['id']
+        # callback_url = 'paymenthandler/'
  
         context = {
             'total': total,
@@ -99,9 +122,11 @@ def payment(request):
             'discounts': discounts,
             'user_addresses': user_addresses,
         }
-        
-
-
+        # context['razorpay_order_id'] = razorpay_order_id
+        # context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+        # context['razorpay_amount'] = amount_in_paise
+        # context['currency'] = currency
+        # context['callback_url'] = callback_url
  
         return render(request, 'payment/payment.html', context=context)
     
@@ -110,7 +135,7 @@ def payment(request):
 def place_order(request):
     user = request.user 
     items = CartItem.objects.filter(user=user, is_deleted=False)
-
+    # request.session.get('applied_coupon_id', None)  
     request.session.get('totals', 0)
     total = request.session.get('total', 0)
     request.session.get('discounts', 0)
@@ -133,16 +158,22 @@ def place_order(request):
     current_date = d.strftime("%Y%m%d")
     short_id = str(random.randint(1000, 9999))
     order_numbers = current_date + short_id 
-    
+    # coupons = []
 
+    # for item in items:
+    #     coupon = item.coupon
+    #     coupons.append(coupon)
 
+    # if coupons:
+    #     coupon = coupons[0]
+    # else:
+    #     coupon = None
 
     var=CartOrder.objects.create(
         user=request.user,
         order_number=order_numbers,
         order_total= total,
-        
-
+        # coupen=coupon,
         selected_address=user_addresses,
         ip=request.META.get('REMOTE_ADDR')    
     )
@@ -176,16 +207,18 @@ def place_order(request):
         orderedservice.ordered=True
         orderedservice.save()
         item.delete()  
-   
-
-
+    # if 'applied_coupon_id' in request.session:
+    #     request.session.pop('applied_coupon_id')     
+    # request.session.pop('totals')
+    # total = request.session.pop('total')
+    # request.session.pop('discounts')
         
     return redirect('order_success')
 
 
 
 
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)    
+# @cache_control(no_cache=True, must_revalidate=True, no_store=True)    
 @login_required(login_url='user_login')
 def order_success(request):
     order = CartOrder.objects.filter(user=request.user).order_by('-id').first()
