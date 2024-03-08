@@ -432,7 +432,7 @@ def delete_cart_item(request):
         cart_items = CartItem.objects.filter(user=user, is_deleted=False)
         totals = cart_items.aggregate(total_sum=Sum('total'))['total_sum'] or 0
 
-        
+        # applied_coupon_id = request.session.get('applied_coupon_id')
         discounts = 0
         # if applied_coupon_id:
         #     try:
