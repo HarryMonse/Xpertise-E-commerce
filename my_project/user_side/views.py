@@ -434,7 +434,13 @@ def delete_cart_item(request):
 
         
         discounts = 0
-       
+        # if applied_coupon_id:
+        #     try:
+        #         applied_coupon = Coupon.objects.get(id=applied_coupon_id, active=True,
+        #                                             active_date__lte=timezone.now(), expiry_date__gte=timezone.now())
+        #         discounts = (totals * applied_coupon.discount) / 100
+        #     except Coupon.DoesNotExist:
+        #         request.session.pop('applied_coupon_id', None)
 
         cart_total = totals - discounts
 
