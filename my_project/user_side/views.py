@@ -407,7 +407,16 @@ def qty_update(request):
     total_without_discount = CartItem.objects.filter(user=user, is_deleted=False).aggregate(total_sum=Sum('total'))['total_sum'] or 0
 
     discounts = 0
-    
+    # applied_coupon_id = request.session.get('applied_coupon_id')
+    # if applied_coupon_id:
+    #     try:
+    #         applied_coupon = Coupon.objects.get(id=applied_coupon_id, active=True,
+    #                                             active_date__lte=timezone.now(), expiry_date__gte=timezone.now())
+    #         discounts = (total_without_discount * applied_coupon.discount) / 100
+    #     except Coupon.DoesNotExist:
+    #         request.session.pop('applied_coupon_id', None)
+
+    # total_after_discount = total_without_discount - discounts
 
     response_data = {
         'new_qty': new_quantity,
