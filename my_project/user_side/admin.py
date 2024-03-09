@@ -19,10 +19,12 @@ class ServiceAttributeAdmin(admin.ModelAdmin):
 
 # Register your models here.
 
-admin.site.register(CustomUser  )
+admin.site.register(CustomUser)
 admin.site.register(category,CategoryAdmin)
 admin.site.register(Service,ServiceAdmin)
 admin.site.register(Type,TypeAdmin)
 admin.site.register(ProviderType)
 admin.site.register(ServiceAttribute,ServiceAttributeAdmin)
+admin.site.register(WishlistItem)
+
 

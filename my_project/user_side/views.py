@@ -681,3 +681,39 @@ def change_password(request):
 
 
 
+
+def add_wishlist(request, service_id):
+    if not request.user.is_authenticated:
+        messages.info(request, 'Login to access wishlist')
+        return redirect('signin')
+    else:
+        try:
+            wishlist_item = WishlistItem.objects.get(user=request.user, service_id=service_id)
+            messages.info(request, 'Product is already in your wishlist')
+        except WishlistItem.DoesNotExist:
+            WishlistItem.objects.create(user=request.user, service_id=service_id)
+            messages.success(request, 'Product added to your wishlist successfully')
+        
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def wishlist(request):
+    if not request.user.is_authenticated:
+        messages.info(request, 'Login to access wishlist')
+        return redirect('user_login')
+    else:
+        context = {}
+        try:
+            wishlist_items = WishlistItem.objects.filter(user=request.user)
+            context = {
+                'wishlist_items': wishlist_items
+            }
+        except WishlistItem.DoesNotExist:
+            pass
+    return render(request, 'user_side/wishlist.html', context)
+
+def delete_wishlist(request, wishlist_item_id):
+    wishlist_item = get_object_or_404(WishlistItem, id=wishlist_item_id, user=request.user)
+    wishlist_item.delete()
+    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

@@ -153,6 +153,10 @@ class ServiceAttribute(models.Model):
         return mark_safe('<img src="%s" width="50" height="50" />' % self.image.url)
     
 
+class WishlistItem(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+
 
 
 
