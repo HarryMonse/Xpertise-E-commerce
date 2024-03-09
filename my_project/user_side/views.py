@@ -543,17 +543,17 @@ def user_account(request):
         print(order.service_image)
     
 
-    # wallet, created = Wallet.objects.get_or_create(user=request.user, defaults={'balance': 0})
+    wallet, created = Wallet.objects.get_or_create(user=request.user, defaults={'balance': 0})
     
 
-    # wallethistory = WalletHistory.objects.filter(wallet=wallet)
+    wallethistory = WalletHistory.objects.filter(wallet=wallet)
     context={
          'user_address':user_address,
          'user_data' :request.user,
          'order_history': order_history,
          'order_items':order_items,
-    #     'wallet':wallet,
-    #     'wallethistory':wallethistory,
+         'wallet':wallet,
+         'wallethistory':wallethistory,
      }
     return render(request, 'user_side/user_account.html',context)
 

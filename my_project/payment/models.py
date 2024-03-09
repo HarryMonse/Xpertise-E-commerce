@@ -40,6 +40,17 @@ class CartItem(models.Model):
         
 
 
+class Wallet(models.Model):
+    user=models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    balance=models.IntegerField(default=0)
+    
+class WalletHistory(models.Model):
+    wallet=models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    type=models.CharField(null=True, blank=True, max_length=20)
+    created_at=models.DateField(auto_now_add=True)
+    amount=models.IntegerField()
+    reason = models.CharField(max_length=255,blank=True,null=True)
+
         
 
 class Payments(models.Model):
