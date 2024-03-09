@@ -679,3 +679,5 @@ def change_password(request):
 
     return render(request, 'user_side/change_password.html')
 
+
+
