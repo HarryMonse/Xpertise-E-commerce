@@ -1,9 +1,12 @@
 import random
+from django.http import HttpResponseRedirect
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import never_cache
+from django.views.decorators.cache import never_cache, cache_control
 from .forms import AddressForm
 from datetime import datetime
+from django.contrib import messages
+
 
 
 from .models import *
@@ -18,7 +21,7 @@ from .models import *
 
 
 @never_cache
-# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='user_login')
 def checkout(request):
     user=request.user 
@@ -85,7 +88,7 @@ def checkout(request):
 
 
 @never_cache
-# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='user_login')
 def payment(request):
     print("Entering payment")
@@ -217,8 +220,110 @@ def place_order(request):
 
 
 
+def wallet_place_order(request):
+    try:
+        user = request.user
+        items = CartItem.objects.filter(user=user, is_deleted=False)
+        request.session.get('applied_coupon_id', None)  
+        request.session.get('totals', 0)
+        total = request.session.get('total', 0)
+        request.session.get('discounts', 0)
 
-# @cache_control(no_cache=True, must_revalidate=True, no_store=True)    
+        user_addresses =items.first().address
+        coupons = []
+
+        for item in items:
+            coupon = item.coupon
+            coupons.append(coupon)
+        if coupons:
+            coupon = coupons[0]
+        else:
+            coupon = None
+
+        try:
+            wallet = Wallet.objects.get(user=request.user)
+            if total <= wallet.balance:
+                short_id = str(random.randint(1000, 9999))
+                yr = datetime.now().year
+                dt = int(datetime.today().strftime('%d'))
+                mt = int(datetime.today().strftime('%m'))
+                d = datetime(yr, mt, dt).date()
+                current_date = d.strftime("%Y%m%d")
+                short_id = str(random.randint(1000, 9999))
+                order_numbers = current_date + short_id
+
+                var = CartOrder.objects.create(
+                    user=request.user,
+                    order_number=order_numbers,
+                    order_total=total,
+                    coupen=coupon,
+                    selected_address=user_addresses,
+                    ip=request.META.get('REMOTE_ADDR')
+                )
+                var.save()
+
+                payment_instance = Payments.objects.create(
+                    user=request.user,
+                    payment_id=f"PAYMENT-{timezone.now().strftime('%Y%m%d%H%M%S')}",
+                    payment_method='Wallet', 
+                    amount_paid=total,
+                    status='paid',
+                )
+
+                var.payment = payment_instance
+                var.save()
+
+                cart = CartItem.objects.filter(user=request.user)
+
+                for item in cart:
+                    orderedservice = ServiceOrder()
+                    item.service.availability -= item.quantity
+                    item.service.save()
+                    orderedservice.order = var
+                    orderedservice.payment = payment_instance
+                    orderedservice.user = request.user
+                    orderedservice.service = item.service.service
+                    orderedservice.quantity = item.quantity
+                    orderedservice.service_price = item.service.price
+                    service_attribute = ServiceAttribute.objects.get(service=item.service.service, color=item.service.provider_type)
+                    orderedservice.variations = service_attribute
+                    orderedservice.ordered = True
+                    orderedservice.save()
+                    item.delete()
+
+                wallet.balance -= total
+                wallet.save()
+
+                WalletHistory.objects.create(
+                    wallet=wallet,
+                    type='Debit',
+                    amount=total,
+                    reason='Order Placement'
+                )
+                request.session.pop('applied_coupon_id',None)   
+                request.session.pop('totals', 0)
+                total = request.session.pop('total', 0)
+                request.session.pop('discounts', 0)
+
+                return redirect('order_success')
+
+            else:
+                messages.error(request, 'Wallet balance is less than the total amount')
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+            
+        except Wallet.DoesNotExist:
+            print("except in the try")
+            messages.error(request, 'Wallet not found for the user')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)    
 @login_required(login_url='user_login')
 def order_success(request):
     order = CartOrder.objects.filter(user=request.user).order_by('-id').first()

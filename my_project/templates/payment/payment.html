@@ -138,7 +138,7 @@
                             
                         {% else %}
                             <!-- Allow the user to use the wallet -->
-                            <form method="post" action="" id="wallet-form">
+                            <form method="post" action="{% url 'wallet_place_order' %}" id="wallet-form">
                                 {% csrf_token %}
                                 <!-- Add any additional fields if needed -->
                                 <button type="submit" class="btn btn-primary">Wallet</button>
@@ -203,7 +203,7 @@
       currency: "INR",
        
       // Your/store name.
-      name: "CRONICO", 
+      name: "Xpertise", 
        
       // Pass the `id` obtained in the response of Step 1
       order_id: "{{ razorpay_order_id }}",
