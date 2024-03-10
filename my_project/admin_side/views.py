@@ -8,8 +8,11 @@ from user_side.forms import *
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.forms.models import inlineformset_factory
+from django.utils.timezone import make_aware
+from datetime import datetime
 from payment.models import *
-from .forms import OrderForm
+from .models import *
+from .forms import *
 
 
 
@@ -507,3 +510,117 @@ def cancell_order(request, order_number):
         messages.success(request, f"Order with ID {order_number} has been cancelled successfully.")
 
     return redirect('order')
+
+
+@login_required(login_url='admin_login')
+def service_offers(request):
+    offers=ServiceOffer.objects.all()
+    try:
+        service_offer = ServiceOffer.objects.get(active=True)
+        print(service_offer)
+    except ServiceOffer.DoesNotExist:
+        service_offer = None
+    services = ServiceAttribute.objects.all()
+    for p in services:
+        if service_offer:
+            discounted_price = p.old_price - (p.old_price * service_offer.discount_percentage / 100)
+            p.price = max(discounted_price, Decimal('0.00'))  
+        else:          
+            p.price = p.old_price
+        p.save()
+    context={
+        'offers':offers
+    }
+    return render(request, 'admin_side/service_offers.html',context)
+
+@login_required(login_url='admin_login')
+def create_service_offer(request):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    if request.method == 'POST':
+        form = ServiceOfferForm(request.POST)
+        if form.is_valid():
+            discount_percentage = form.cleaned_data['discount_percentage']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            active = form.cleaned_data['active']
+            
+            if end_date and start_date and end_date < start_date:
+                messages.error(request, 'Expiry date must not be less than the start date.')
+            else:
+                current_date = timezone.now()
+                if start_date and end_date and (current_date < start_date or current_date > end_date):
+                    active = False
+                    messages.error(request, 'Offer cannot be activated now. Check the start date.')
+
+                if active:
+                    ServiceOffer.objects.update(active=False)
+
+                if discount_percentage or start_date or end_date or active:
+                    form.save()
+            
+            return redirect('service-offers')  
+    else:
+        form = ServiceOfferForm()
+
+    return render(request, 'admin_side/create-service-offers.html', {'form': form})
+
+
+@login_required(login_url='admin_login')
+def edit_service_offers(request, id):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    
+    offer_discount = get_object_or_404(ServiceOffer, id=id)
+    print(f'Active Date: {offer_discount.start_date}')
+
+    if request.method == 'POST':
+        discount = request.POST['discount']
+        active = request.POST.get('active') == 'on'
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        
+        if end_date and start_date and end_date < start_date:
+            messages.error(request, 'Expiry date must not be less than the start date.')
+        else:
+            start_date = make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+            end_date = make_aware(datetime.strptime(end_date, '%Y-%m-%d'))
+
+            current_date = timezone.now()
+            if start_date and end_date and (current_date < start_date or current_date > end_date):
+                active = False
+                messages.error(request, 'Offer cannot be activated now. Check the start date.')
+           
+            active_category_offer = CategoryOffer.objects.filter(active=True).first()
+
+            if active_category_offer:
+               
+                messages.error(request, 'Cannot create/update service offer when a category offer is active.')
+                return redirect('service-offers')
+
+            if active:
+                ServiceOffer.objects.exclude(id=offer_discount.id).update(active=False)
+
+            offer_discount.discount_percentage = discount or None
+            offer_discount.start_date = start_date or None
+            offer_discount.end_date = end_date or None
+            offer_discount.active = active
+            offer_discount.save()
+
+            messages.success(request, 'Offer Updated successfully')
+            return redirect('service-offers')
+    
+    return render(request, 'admin_side/edit_service_offers.html', {'offer_discount': offer_discount})
+
+
+@login_required(login_url='admin_login')
+def delete_service_offer(request,id):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    try:
+        offer= get_object_or_404(ServiceOffer, id=id)
+    except ValueError:
+        return redirect('service-offers')
+    offer.delete()
+    messages.warning(request,"Offer has been deleted successfully")
+    return redirect('service-offers')

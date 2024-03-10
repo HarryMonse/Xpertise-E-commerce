@@ -31,6 +31,15 @@ urlpatterns = [
     path('order/',views.order,name='order'),
     path('orderitems/<int:order_number>',views.orderitems,name='orderitems'),
 
+    path('service-offers/',views.service_offers, name='service-offers'),
+    path('create-service-offer/',views.create_service_offer, name='create-service-offer'),
+    path('edit-service-offers/<int:id>',views.edit_service_offers, name='edit-service-offers'),
+    path('delete-service-offer/<int:id>/',views.delete_service_offer, name='delete-service-offer'),
+
+
+
+
+
 
 
 
