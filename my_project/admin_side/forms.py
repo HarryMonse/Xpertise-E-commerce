@@ -68,3 +68,6 @@ class CategoryOfferForm(forms.ModelForm):
             raise ValidationError('A Service offer is already active. Deactivate it before activating a category offer.')
 
         return active
+    
+class CouponForm(forms.Form):
+    code = forms.CharField(max_length=50)

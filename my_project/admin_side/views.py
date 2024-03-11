@@ -9,6 +9,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.forms.models import inlineformset_factory
 from django.utils.timezone import make_aware
+from django.views.decorators.cache import cache_control
 from datetime import datetime
 from payment.models import *
 from .models import *
@@ -747,3 +748,87 @@ def delete_category_offer(request,id):
     messages.warning(request,"Offer has been deleted successfully")
 
     return redirect('category-offers')
+
+
+
+@login_required(login_url='admin_login')
+def admin_coupon(request):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    coupon = Coupon.objects.all()
+    return render(request, 'admin_side/admin_coupon.html',{'coupon':coupon})
+
+@login_required(login_url='admin_login')
+def create_coupon(request):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    if request.method == 'POST':
+        code = request.POST['code']
+        discount = request.POST['discount']
+        active = request.POST.get('active') == 'on'
+        active_date = request.POST['active_date']
+        expiry_date = request.POST['expiry_date']
+
+        if active_date > expiry_date:
+            messages.error(request, 'Active date should not be greater than expiry date')
+            return render(request, 'admin_side/create_coupon.html')
+
+        if Coupon.objects.filter(code=code).exists():
+            messages.error(request, f'Coupon with code {code} already exists')
+            return render(request, 'admin_side/create_coupon.html')
+
+        coupon = Coupon(
+            code=code,
+            discount=discount,
+            active=active,
+            active_date=active_date,
+            expiry_date=expiry_date
+        )
+        coupon.save()
+        messages.success(request, 'Coupon created successfully')
+        return redirect('admin_coupon')
+
+    return render(request, 'admin_side/create_coupon.html')
+
+@login_required(login_url='admin_login')
+def edit_coupon(request,id):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    
+    coupon_code = get_object_or_404(Coupon, id=id)
+    print(f'Active Date: {coupon_code.active_date}')
+    if request.method == 'POST':
+        code = request.POST['code']
+        discount = request.POST['discount']
+        active = request.POST.get('active') == 'on'
+        active_date = request.POST['active_date']
+        expiry_date = request.POST['expiry_date']
+        
+        if active_date > expiry_date:
+            messages.error(request, 'Active date should not be greater than expiry date')
+            return render(request, 'admin_side/create_coupon.html')
+        
+        coupon_code.code=code
+        coupon_code.discount=discount
+        coupon_code.active_date=active_date
+        coupon_code.expiry_date=expiry_date
+        coupon_code.active=active
+        coupon_code.save()
+        messages.success(request, 'Coupon Updated successfully')
+        return redirect('admin_coupon')
+    return render (request, 'admin_side/update_coupon.html',{'coupon_code':coupon_code})
+
+@login_required(login_url='admin_login')        
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def delete_coupon(request,id):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    
+    try:
+        coupon= get_object_or_404(Coupon, id=id)
+    except ValueError:
+        return redirect('admin_coupon')
+    coupon.delete()
+    messages.warning(request,"Coupon has been deleted successfully")
+
+    return redirect('admin_coupon')  
