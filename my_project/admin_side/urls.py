@@ -35,6 +35,14 @@ urlpatterns = [
     path('create-service-offer/',views.create_service_offer, name='create-service-offer'),
     path('edit-service-offers/<int:id>',views.edit_service_offers, name='edit-service-offers'),
     path('delete-service-offer/<int:id>/',views.delete_service_offer, name='delete-service-offer'),
+    path('category-offers/',views.category_offers, name='category-offers'),
+    path('create-category-offer/',views.create_category_offer, name='create-category-offer'),
+    path('edit-category-offers/<int:id>',views.edit_category_offers, name='edit-category-offers'), 
+    path('delete-category-offer/<int:id>/',views.delete_category_offer, name='delete-category-offer'),
+
+
+
+
 
 
 

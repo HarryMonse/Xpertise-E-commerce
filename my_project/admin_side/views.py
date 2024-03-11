@@ -624,3 +624,126 @@ def delete_service_offer(request,id):
     offer.delete()
     messages.warning(request,"Offer has been deleted successfully")
     return redirect('service-offers')
+
+@login_required(login_url='admin_login')
+def category_offers(request):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    offers = CategoryOffer.objects.all()
+    categories = category.objects.all()
+
+    for cate in categories:
+        try:
+            category_offer = CategoryOffer.objects.filter(category=cate, active=True)
+            print(category_offer)
+        except CategoryOffer.DoesNotExist:
+            category_offer = None
+        services = ServiceAttribute.objects.filter(service__category=cate, is_available=True)
+        print(services)
+        
+        for service in services:
+            if category_offer:
+                for cat in category_offer:
+                    discounted_price = service.old_price - (service.old_price * cat.discount_percentage / 100)
+                    service.price = max(discounted_price, Decimal('0.00'))  
+            else:
+                service.price=service.old_price
+            service.save()
+    context = {
+        'offers': offers
+    }
+    return render(request, 'admin_side/category_offers.html', context)
+
+
+@login_required(login_url='admin_login')
+def create_category_offer(request):
+    if request.method == 'POST':
+        form = CategoryOfferForm(request.POST)
+        if form.is_valid():
+            category = form.cleaned_data['category']
+            discount_percentage = form.cleaned_data['discount_percentage']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            active = form.cleaned_data['active']
+
+            if end_date and start_date and end_date < start_date:
+                messages.error(request, 'Expiry date must not be less than the start date.')
+            else:
+               
+                if active and CategoryOffer.objects.filter(category=category, active=True).exists():
+                    messages.error(request, 'An active offer already exists for this category.')
+                   
+                else:
+                    current_date = timezone.now()
+                    if start_date and end_date and (current_date < start_date or current_date > end_date):
+                        active = False
+                        messages.error(request, 'Offer cannot be activated now. Check on start date')   
+                    if active:
+                        CategoryOffer.objects.update(active=False)
+                    if discount_percentage or start_date or end_date or active:
+                        form.save()
+                    return redirect('category-offers')  
+    else:
+        form = CategoryOfferForm()
+    return render(request, 'admin_side/create_category_offer.html', {'form': form})
+
+
+@login_required(login_url='admin_login')
+def edit_category_offers(request, id):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+
+    offer_discount = get_object_or_404(CategoryOffer, id=id)
+    print(f'Active Date: {offer_discount.start_date}')
+
+    if request.method == 'POST':
+        discount = request.POST.get('discount')
+        active = request.POST.get('active') == 'on'
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+
+        if end_date and start_date:
+            end_date = make_aware(datetime.strptime(end_date, '%Y-%m-%d'))
+            start_date = make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+
+            if end_date < start_date:
+                messages.error(request, 'Expiry date must not be less than the start date.')
+                return redirect('edit-category-offers', id=id)
+   
+            current_date = timezone.now()
+            if start_date and end_date and (current_date < start_date or current_date > end_date):
+                active = False
+                messages.error(request, 'Offer cannot be activated now. Check the start date.')
+
+        active_service_offer = ServiceOffer.objects.filter(active=True).first()
+
+        if active_service_offer:
+            
+            messages.error(request, 'Cannot activate category offer when a service offer is active.')
+            return redirect('category-offers')
+        
+        if active:
+            CategoryOffer.objects.exclude(id=offer_discount.id).update(active=False)
+
+        offer_discount.discount_percentage = discount or None
+        offer_discount.start_date = start_date or None
+        offer_discount.end_date = end_date or None
+        offer_discount.active = active
+        offer_discount.save()
+
+        messages.success(request, 'Offer updated successfully')
+        return redirect('category-offers')
+    return render(request,'admin_side/edit_category_offers.html', {'offer_discount': offer_discount})
+
+@login_required(login_url='admin_login')
+def delete_category_offer(request,id):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    try:
+        offer= get_object_or_404(CategoryOffer, id=id)
+    except ValueError:
+        return redirect('category-offers')
+    offer.delete()
+    messages.warning(request,"Offer has been deleted successfully")
+
+    return redirect('category-offers')
