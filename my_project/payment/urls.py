@@ -9,7 +9,4 @@ urlpatterns = [
     path('wallet_place_order', views.wallet_place_order, name='wallet_place_order'),
 
 
-
-
-
 ]

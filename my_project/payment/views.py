@@ -31,16 +31,16 @@ def checkout(request):
     address_form = AddressForm(request.POST or None)
     totals = request.session.get('totals', 0)
     total = request.session.get('total', 0)
-    # discounts = request.session.get('discounts', 0)
+    discounts = request.session.get('discounts', 0)
 
-    # wallet = Wallet.objects.filter(user=user).first()
-    # wallet_balance = wallet.balance if wallet else 0
-    # print('Wallet balance:', wallet_balance)
+    wallet = Wallet.objects.filter(user=user).first()
+    wallet_balance = wallet.balance if wallet else 0
+    print('Wallet balance:', wallet_balance)
 
-    # wallet_button_disabled = total > wallet_balance
+    wallet_button_disabled = total > wallet_balance
     print(total)
     print(totals)
-    # print(discounts)
+    print(discounts)
 
     if request.session.get('order_placed', False):
         del request.session['order_placed']
@@ -62,9 +62,9 @@ def checkout(request):
                 'items':items,
                 'total':total,
                 'totals':totals,
-                # 'discounts': discounts,
-                # 'wallet_balance': wallet_balance,
-                # 'wallet_button_disabled': wallet_button_disabled,
+                'discounts': discounts,
+                'wallet_balance': wallet_balance,
+                'wallet_button_disabled': wallet_button_disabled,
             })
         
         elif address_form.is_valid():
@@ -78,13 +78,13 @@ def checkout(request):
                 'items':items,
                 'total':total,
                 'totals':totals,
-                # 'discounts': discounts,
-                # 'wallet_balance': wallet_balance,
-                # 'wallet_button_disabled': wallet_button_disabled,
+                'discounts': discounts,
+                'wallet_balance': wallet_balance,
+                'wallet_button_disabled': wallet_button_disabled,
             })
     
 
-    return render(request, 'payment/checkout.html',{'user_addresses': user_addresses,'items':items,'total':total,'totals':totals}) #,'discounts': discounts})
+    return render(request, 'payment/checkout.html',{'user_addresses': user_addresses,'items':items,'total':total,'totals':totals,'discounts': discounts})
 
 
 @never_cache
@@ -138,7 +138,7 @@ def payment(request):
 def place_order(request):
     user = request.user 
     items = CartItem.objects.filter(user=user, is_deleted=False)
-    # request.session.get('applied_coupon_id', None)  
+    request.session.get('applied_coupon_id', None)  
     request.session.get('totals', 0)
     total = request.session.get('total', 0)
     request.session.get('discounts', 0)
@@ -161,22 +161,22 @@ def place_order(request):
     current_date = d.strftime("%Y%m%d")
     short_id = str(random.randint(1000, 9999))
     order_numbers = current_date + short_id 
-    # coupons = []
+    coupons = []
 
-    # for item in items:
-    #     coupon = item.coupon
-    #     coupons.append(coupon)
+    for item in items:
+        coupon = item.coupon
+        coupons.append(coupon)
 
-    # if coupons:
-    #     coupon = coupons[0]
-    # else:
-    #     coupon = None
+    if coupons:
+        coupon = coupons[0]
+    else:
+        coupon = None
 
     var=CartOrder.objects.create(
         user=request.user,
         order_number=order_numbers,
         order_total= total,
-        # coupen=coupon,
+        coupen=coupon,
         selected_address=user_addresses,
         ip=request.META.get('REMOTE_ADDR')    
     )
@@ -210,11 +210,11 @@ def place_order(request):
         orderedservice.ordered=True
         orderedservice.save()
         item.delete()  
-    # if 'applied_coupon_id' in request.session:
-    #     request.session.pop('applied_coupon_id')     
-    # request.session.pop('totals')
-    # total = request.session.pop('total')
-    # request.session.pop('discounts')
+    if 'applied_coupon_id' in request.session:
+        request.session.pop('applied_coupon_id')     
+    request.session.pop('totals')
+    total = request.session.pop('total')
+    request.session.pop('discounts')
         
     return redirect('order_success')
 

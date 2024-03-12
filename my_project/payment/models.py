@@ -1,6 +1,6 @@
 from django.db import models
 from user_side.models import *
-from user_side.models import *
+from admin_side.models import *
 
 # Create your models here.
 
@@ -24,7 +24,7 @@ class CartItem(models.Model):
     total=models.BigIntegerField(null=True)
     timestamp = models.DateTimeField(default=timezone.now,null=True)
     address = models.ForeignKey(Address, null=True, blank=True, on_delete=models.SET_NULL)
-    # coupon=models.ForeignKey(Coupon, on_delete=models.CASCADE, null=True, blank=True)
+    coupon=models.ForeignKey(Coupon, on_delete=models.CASCADE, null=True, blank=True)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
