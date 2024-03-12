@@ -151,3 +151,9 @@ EMAIL_USE_TLS=True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_SSL = False
 
+
+
+RAZOR_KEY_ID = 'rzp_test_mtwDTV8lKTuGkP'
+RAZOR_KEY_SECRET = 'FxeouZp1CU61v1bbwYcTFAMb'
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"

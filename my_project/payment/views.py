@@ -6,15 +6,17 @@ from django.views.decorators.cache import never_cache, cache_control
 from .forms import AddressForm
 from datetime import datetime
 from django.contrib import messages
-
-
-
+from django.conf import settings
+import razorpay
 from .models import *
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Sum
+from django.http import HttpResponseBadRequest
 
 
 
-
-
+razorpay_client = razorpay.Client(
+    auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 
 # Create your views here.
@@ -108,15 +110,15 @@ def payment(request):
         amount = request.POST.get('total', 0)
         amount = int(amount)
     
-        # currency = 'INR'
-        # amount_in_paise = amount  * 100
+        currency = 'INR'
+        amount_in_paise = amount  * 100
  
-        # razorpay_order = razorpay_client.order.create(dict(amount=amount_in_paise,
-        #                                                    currency=currency,
-        #                                                    payment_capture='0'))
+        razorpay_order = razorpay_client.order.create(dict(amount=amount_in_paise,
+                                                           currency=currency,
+                                                           payment_capture='0'))
  
-        # razorpay_order_id = razorpay_order['id']
-        # callback_url = 'paymenthandler/'
+        razorpay_order_id = razorpay_order['id']
+        callback_url = 'paymenthandler/'
  
         context = {
             'total': total,
@@ -125,13 +127,135 @@ def payment(request):
             'discounts': discounts,
             'user_addresses': user_addresses,
         }
-        # context['razorpay_order_id'] = razorpay_order_id
-        # context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-        # context['razorpay_amount'] = amount_in_paise
-        # context['currency'] = currency
-        # context['callback_url'] = callback_url
+        context['razorpay_order_id'] = razorpay_order_id
+        context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+        context['razorpay_amount'] = amount_in_paise
+        context['currency'] = currency
+        context['callback_url'] = callback_url
  
         return render(request, 'payment/payment.html', context=context)
+    
+
+@csrf_exempt
+def paymenthandler(request):
+    print("Wnt to join")
+    user = request.user 
+    items = CartItem.objects.filter(user=user, is_deleted=False)
+    user_addresses = Address.objects.filter(users=request.user)
+    total = items.aggregate(total_sum=Sum('total'))['total_sum']
+
+    print(total,"totallllllllllll")
+
+    if request.method == "POST":
+        print(request.POST.dict())
+        amount = request.POST.get('total')
+        print(amount, "amount")
+
+        try:
+
+            payment_id = request.POST.get('razorpay_payment_id', '')
+            print(payment_id,"paymentid")
+            razorpay_order_id = request.POST.get('razorpay_order_id', '')
+            print(razorpay_order_id,"razorpayid")
+            signature = request.POST.get('razorpay_signature', '')
+            print(signature,"signaturessss")
+
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': payment_id,
+                'razorpay_signature': signature,
+
+            }
+
+            if payment_id:
+                print("Redirecting to order_success page")
+                return redirect(online_place_order)
+            else:
+                return render(request, 'payment/payment_failed.html')
+        except Exception as e:
+            print("Error in paymenthandler:", str(e))
+            return render(request, 'payment/payment_failed.html')
+    else:
+        return HttpResponseBadRequest()
+    
+
+def online_place_order(request):
+    user = request.user 
+    items = CartItem.objects.filter(user=user, is_deleted=False)
+    request.session.get('applied_coupon_id', None)  
+    request.session.get('totals', 0)
+    total = request.session.get('total', 0)
+    request.session.get('discounts', 0)
+
+    
+    user_addresses = items.first().address
+   
+    coupons = []
+
+    for item in items:
+        coupon = item.coupon
+        coupons.append(coupon)
+
+    if coupons:
+        coupon = coupons[0]
+    else:
+        coupon = None
+    
+        
+    short_id = str(random.randint(1000, 9999))
+    yr = datetime.now().year
+    dt = int(datetime.today().strftime('%d'))
+    mt = int(datetime.today().strftime('%m'))
+    d = datetime(yr, mt, dt).date()
+    payment_id = f"PAYMENT-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+
+    current_date = d.strftime("%Y%m%d")
+    short_id = str(random.randint(1000, 9999))
+    order_numbers = current_date + short_id 
+
+    var=CartOrder.objects.create(
+        user=request.user,
+        order_number=order_numbers,
+        coupen=coupon,
+        order_total= total,
+        selected_address=user_addresses,
+        ip=request.META.get('REMOTE_ADDR')    
+        )
+    var.save()
+    payment_instance=Payments.objects.create(
+        user=request.user,
+        payment_id=payment_id,
+        payment_method='Razorpay',
+        amount_paid= total,
+        status='paid',
+                
+        )
+        
+    var.payment=payment_instance
+    var.save()
+    cart=CartItem.objects.filter(user=request.user)
+            
+    for item in cart:
+        orderedservice=ServiceOrder()
+        item.service.stock-=item.quantity
+        item.service.save()
+        orderedservice.order=var
+        orderedservice.payment=payment_instance
+        orderedservice.user=request.user
+        orderedservice.service=item.service.service
+        orderedservice.quantity=item.quantity
+        orderedservice.service_price=item.service.price
+        service_attribute = ServiceAttribute.objects.get(service=item.service.service, provider_type=item.service.provider_type)
+        orderedservice.variations = service_attribute
+        orderedservice.ordered=True
+        orderedservice.save()
+        item.delete() 
+    request.session.pop('applied_coupon_id', None)    
+    request.session.pop('totals', 0)
+    total = request.session.pop('total', 0)
+    request.session.pop('discounts', 0) 
+
+    return redirect('order_success')
     
 
 
@@ -221,7 +345,9 @@ def place_order(request):
 
 
 def wallet_place_order(request):
+    print("enteredddddddddd")
     try:
+        print("start")
         user = request.user
         items = CartItem.objects.filter(user=user, is_deleted=False)
         request.session.get('applied_coupon_id', None)  
@@ -241,8 +367,10 @@ def wallet_place_order(request):
             coupon = None
 
         try:
+            print("start11")
             wallet = Wallet.objects.get(user=request.user)
             if total <= wallet.balance:
+                print("total not")
                 short_id = str(random.randint(1000, 9999))
                 yr = datetime.now().year
                 dt = int(datetime.today().strftime('%d'))
@@ -256,7 +384,7 @@ def wallet_place_order(request):
                     user=request.user,
                     order_number=order_numbers,
                     order_total=total,
-                    coupen=coupon,
+                    coupon=coupon,
                     selected_address=user_addresses,
                     ip=request.META.get('REMOTE_ADDR')
                 )
@@ -276,6 +404,7 @@ def wallet_place_order(request):
                 cart = CartItem.objects.filter(user=request.user)
 
                 for item in cart:
+                    print("is it enterdddd")
                     orderedservice = ServiceOrder()
                     item.service.availability -= item.quantity
                     item.service.save()
@@ -285,7 +414,7 @@ def wallet_place_order(request):
                     orderedservice.service = item.service.service
                     orderedservice.quantity = item.quantity
                     orderedservice.service_price = item.service.price
-                    service_attribute = ServiceAttribute.objects.get(service=item.service.service, color=item.service.provider_type)
+                    service_attribute = ServiceAttribute.objects.get(service=item.service.service, provider_type=item.service.provider_type)
                     orderedservice.variations = service_attribute
                     orderedservice.ordered = True
                     orderedservice.save()
