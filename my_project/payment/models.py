@@ -91,7 +91,7 @@ class CartOrder(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=True)
     updated_at=models.DateTimeField(auto_now=True)
     selected_address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
-    # coupon=models.ForeignKey(Coupon, on_delete=models.CASCADE, null=True, blank=True)
+    coupon=models.ForeignKey(Coupon, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Cart Order"

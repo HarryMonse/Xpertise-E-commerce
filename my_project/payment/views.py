@@ -176,7 +176,7 @@ def place_order(request):
         user=request.user,
         order_number=order_numbers,
         order_total= total,
-        coupen=coupon,
+        coupon=coupon,
         selected_address=user_addresses,
         ip=request.META.get('REMOTE_ADDR')    
     )
