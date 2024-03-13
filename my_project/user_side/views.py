@@ -10,13 +10,11 @@ from django.views.decorators.cache import never_cache, cache_control
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import logout,login
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
 from django.db.models import OuterRef, Subquery
 from admin_side.models import *
 from payment.forms import AddressForm
 from django.db.models import Sum
-
-
-
 
 
 from django.contrib import messages
@@ -800,3 +798,38 @@ def delete_wishlist(request, wishlist_item_id):
     wishlist_item.delete()
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+
+def filter_service(request):    
+    try:
+        min_price= request.GET['min_price']
+        max_price= request.GET['max_price'] 
+
+        services = Service.objects.filter(is_available=True,category__is_deleted=False,category__is_blocked=False, serviceattribute__is_deleted=False).order_by('-id').distinct()
+        try:
+            discount_offer = ServiceOffer.objects.get(active=True)
+        except ServiceOffer.DoesNotExist:
+            discount_offer = None
+            
+        try:
+            
+            discounted_offer = CategoryOffer.objects.filter(active=True)
+        except ServiceOffer.DoesNotExist:
+            discounted_offer = None
+        if discounted_offer:
+            for dis in discounted_offer:
+                services_with_discount = Service.objects.filter(category=dis.category, is_available=True)
+                current_date = timezone.now()
+                if current_date > dis.end_date:
+                    dis.active = False
+                    dis.save()
+        
+        services = services.filter(serviceattribute__price__gte=min_price)
+        services = services.filter(serviceattribute__price__lte=max_price)
+
+        data = render_to_string('user_side/service_list.html', {"services": services,'discount_offer':discount_offer, "discounted_offer":discounted_offer})
+       
+        return JsonResponse({"data": data})
+    except Exception as e:
+        return JsonResponse({"error": str(e)})
