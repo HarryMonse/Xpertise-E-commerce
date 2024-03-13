@@ -468,3 +468,4 @@ def order_success(request):
         'service_orders': service_orders,
     }
     return render(request,'payment/orderdetail.html',context)
+
