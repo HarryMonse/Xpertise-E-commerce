@@ -217,7 +217,7 @@ def online_place_order(request):
     var=CartOrder.objects.create(
         user=request.user,
         order_number=order_numbers,
-        coupen=coupon,
+        coupon=coupon,
         order_total= total,
         selected_address=user_addresses,
         ip=request.META.get('REMOTE_ADDR')    

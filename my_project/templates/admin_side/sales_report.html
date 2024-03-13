@@ -58,10 +58,10 @@
                 <td>{{order.created_at}}</td>
                 <td>{{order.order_number}}</td>
                 <td>{{order.user.username}}</td>
-                {%if order.coupen != None%}
-                <td>{{order.coupen}}</td>
+                {%if order.coupeon != None%}
+                <td>{{order.coupon}}</td>
                 {% else %}
-                <td>{{order.coupen}}</td>
+                <td>{{order.coupon}}</td>
                 {% endif %}
                 <td>{{order.order_total}}</td>
                 <td>{{order.payment.payment_method}}</td>

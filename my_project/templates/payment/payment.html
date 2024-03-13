@@ -193,7 +193,7 @@
     var options = {
        
       // Enter the Key ID generated from the Dashboard
-      key: "rzp_test_TFXJczUeSyoF49", 
+      key: "rzp_test_mtwDTV8lKTuGkP", 
        
       // Amount is in currency subunits.
       // Default currency is INR. Hence, 
@@ -207,7 +207,7 @@
        
       // Pass the `id` obtained in the response of Step 1
       order_id: "{{ razorpay_order_id }}",
-      callback_url: "",
+      callback_url: "{% url 'paymenthandler' %}",
 
       // ... other options
       notes: {
