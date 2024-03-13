@@ -6,6 +6,7 @@ from django.views.decorators.cache import never_cache, cache_control
 from .forms import AddressForm
 from datetime import datetime
 from django.contrib import messages
+from django.urls import reverse
 from django.conf import settings
 import razorpay
 from .models import *
@@ -237,7 +238,7 @@ def online_place_order(request):
             
     for item in cart:
         orderedservice=ServiceOrder()
-        item.service.stock-=item.quantity
+        item.service.availability-=item.quantity
         item.service.save()
         orderedservice.order=var
         orderedservice.payment=payment_instance
