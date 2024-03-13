@@ -1,0 +1,144 @@
+{% extends 'user_side/base.html'%}
+{% load static %}
+{% block content %}
+    <!-- Quick view -->
+    
+                <!--End nav-tabs-->
+                <section class="mt-50 mb-50">
+                    <div class="container">
+                
+                <div class="tab-content wow fadeIn animated" id="myTabContent">
+                    <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                        <div class="row product-grid-4">
+                            <h3>Search for result {{request.GET.q}}
+                            </h3>
+                            <br><br><br>
+                            {% for service in data %}
+                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                <div class="product-cart-wrap mb-30">
+                                    <div class="product-img-action-wrap">
+                                        <div class="product-img product-img-zoom">
+                                            
+                                            {% comment %} <a href="{% url 'product_details' product_name=product.product_name id=product.id %}"> {% endcomment %}
+                                            <a href="{% url 'service_details' category_id=service.category.id service_id=service.id %}"> 
+                                                <img class="default-img" src="{{ service.serviceattribute_set.first.image.url }}" alt="product image">
+                                                {% comment %} <img class="hover-img" src="{{ product.product_image1.url }}" alt=""> {% endcomment %}
+                                            </a>
+                                            {% if discount_offer is not None and discount_offer.active %}
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <span class="hot">-{{ discount_offer.discount_percentage|floatformat:0 }}%</span>
+                                    </div>
+                                    {% elif discounted_offer %}
+                                    {% for dis in discounted_offer %}
+                                        {% if dis.active and dis.category == service.category %}
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">-{{ dis.discount_percentage|floatformat:0 }}%</span>
+                                        </div>
+                                            {% else %}
+                                            <div class="product-badges product-badges-position product-badges-mrg">
+                                                <span class="hot">Best Deal</span>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <span class="hot">Best Deal</span>
+                                    </div>
+                                {% endif %}
+                                        </div>
+                                        <div class="product-action-1">
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="{% url 'add_wishlist' service.id%}">
+                                                <i class="fi-rs-heart"></i>
+                                            </a>
+                                        </div>
+                                        {% comment %} <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">Hot</span>
+                                        </div>{% endcomment %}
+                                    </div>
+                                    <div class="product-content-wrap">
+                                        <div class="product-category">
+                                            <a href="shop-grid-right.html">{{ service.category }}</a>
+                                        </div>
+                                        <h2><a href="">{{ service.service_name }}</a></h2>
+                                        <div >
+                                            {% comment %} <span>
+                                                <span>90%</span>
+                                            </span> {% endcomment %}
+                                        </div>
+                                        {% if discount_offer is not None and discount_offer.active %}
+                                                <div class="product-price">
+                                                    <span class="current-product-price-{{service.id}}">₹{{service.serviceattribute_set.first.price}}</span>
+                                                    <span class="old-price">₹{{service.serviceattribute_set.first.old_price}}</span>
+                                                </div>
+                                            {% elif discounted_offer %}
+                                                {% for dis in discounted_offer %}
+                                                    {% if dis.active and dis.category == service.category %}
+                                                        <div class="product-price">
+                                                            <span>₹ <span class="current-product-price-{{service.id}}">{{service.serviceattribute_set.first.price}}</span></span>
+                                                            <br>₹<span class="old-price">{{service.serviceattribute_set.first.old_price}}</span>
+                                                        </div>
+                                                        {% else %}
+                                                        <div class="product-price">
+                                                            <span>₹ <span class="current-product-price-{{service.id}}">{{service.serviceattribute_set.first.price}}</span></span>
+                                                            
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                <div>
+                                                    <span style="font-size: large;">
+                                                        ₹<span class="current-product-price-{{service.id}} text-success" style="font-weight: bold;">{{service.serviceattribute_set.first.price}}</span>
+                                                    </span>
+                                                </div>
+                                            {% endif %}
+                                        {% comment %} <div class="product-action-1 show">
+                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a>
+                                        </div> {% endcomment %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                            
+                        </div>
+                        <!--End product-grid-4-->
+                    </div>
+                    <!--En tab one (Featured)-->
+                    
+        <section class="deals section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 deal-co">
+                        <div class="deal wow fadeIn animated mb-md-4 mb-sm-4 mb-lg-0" style="background-image: url('{% static 'assets/imgs/banner/banner200.jpg'%}');">
+                             <div class="deal-top">
+                                <h2 class="text-brand"></h2>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 deal-co">
+                        <div class="deal wow fadeIn animated" style="background-image: url('{% static 'assets/imgs/banner/banner400.jpg'%}');">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+       
+       
+        <section class="mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="banner-bg wow fadeIn animated" style="background-image: url('{% static 'assets/imgs/banner/banner-80.jpg'%}')">
+                            <div class="banner-content">
+                                <h4 class="text-grey-4 mb-15">ABOUT Xpertise</h4>
+                                <h6class="fw-600">Welcome to Xpertise, your premier destination for doorstep services! At Xpertise, we're more than just a service provider; we're your trusted partner in simplifying your life and enhancing your experience. From home maintenance to beauty treatments and professional consultations, our mission is to deliver expert solutions directly to your doorstep, ensuring unparalleled convenience and quality.</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> 
+        
+    </main>
+{% endblock %}

@@ -12,13 +12,11 @@ urlpatterns = [
     path('resend_otp/',views.resend_otp,name='resend_otp'),
     path('services/', views.services, name='services'),
     path('service/<int:category_id>/<int:service_id>', views.service_details, name='service_details'),
+    path('search/',views.search,name='search'),
     path('add_to_cart/',views.add_to_cart, name='add_to_cart'),
     path('cart/', views.cart_list, name='cart'),
     path('update_qty',views.qty_update,name='update_qty'),
     path('delete_cart_item/', views.delete_cart_item, name='delete_cart_item'),
-
-
-
     path('user_account/', views.user_account, name='user_account'),
     path('add_address/', views.add_address, name='add_address'),
     path('edit-address/<int:address_id>/', views.edit_address, name='edit_address'),

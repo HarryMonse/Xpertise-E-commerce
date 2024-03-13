@@ -55,7 +55,6 @@ def checkout(request):
         if 'use_existing_address' in request.POST:
             selected_address_id = request.POST.get('existing_address')
             selected_address = get_object_or_404(Address, id=selected_address_id)
-            # Update the address for all CartItems in the user's cart
             CartItem.objects.filter(user=user, is_deleted=False).update(address=selected_address)
 
 

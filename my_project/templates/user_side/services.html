@@ -141,7 +141,7 @@
                                         </div>
                                             {% else %}
                                             <div class="product-badges product-badges-position product-badges-mrg">
-                                                <span class="hot">Hot</span>
+                                                <span class="hot">Best Deal</span>
                                             </div>
                                         {% endif %}
                                     {% endfor %}
@@ -154,9 +154,9 @@
                                 </div>
                                 <div class="product-content-wrap">
                                     <div class="product-category">
-                                        <a href="">{{ service.category }}</a>
+                                        <a href="{% url 'service_details' category_id=service.category.id service_id=service.id %}">{{ service.category }}</a>
                                     </div>
-                                    <h2><a href="">{{ service.service_name }}</a></h2>
+                                    <h2><a href="{% url 'service_details' category_id=service.category.id service_id=service.id %}">{{ service.service_name }}</a></h2>
                                     <div>
                                         {% comment %} <span>
                                             <span>90%</span>
@@ -172,7 +172,7 @@
                                                     {% if dis.active and dis.category == service.category %}
                                                         <div class="product-price">
                                                             <span>₹ <span class="current-product-price-{{service.id}}">{{service.serviceattribute_set.first.price}}</span></span>
-                                                            ₹<span class="old-price">{{service.serviceattribute_set.first.old_price}}</span>
+                                                            <br>₹<span class="old-price">{{service.serviceattribute_set.first.old_price}}</span>
                                                         </div>
                                                         {% else %}
                                                         <div class="product-price">

@@ -28,8 +28,44 @@ from payment.models import *
 
 # Create your views here.
 
+@cache_control(max_age=0,no_cache=True, must_revalidate=True, no_store=True)
+@never_cache
 def index(request):
-    return render(request, "user_side/index.html")
+    services = Service.objects.filter(featured=True,category__is_deleted=False,category__is_blocked=False).order_by('-id').distinct()
+    # banners =Banner.objects.filter(is_active=True)
+    if request.session.get('order_placed', False):
+        del request.session['order_placed']
+        messages.success(request, 'Order placed successfully!')
+        return redirect('index') 
+    
+    try:
+        discount_offer = ServiceOffer.objects.get(active=True)
+    except ServiceOffer.DoesNotExist:
+        discount_offer = None
+    if discount_offer:
+        current_date = timezone.now()
+        if current_date > discount_offer.end_date or current_date < discount_offer.start_date:
+            discount_offer.active = False
+            discount_offer.save()
+    try:
+        
+        discounted_offer = CategoryOffer.objects.filter(active=True)
+    except ServiceOffer.DoesNotExist:
+        discounted_offer = None
+    if discounted_offer:
+        for dis in discounted_offer:
+            services_with_discount = Service.objects.filter(category=dis.category, is_available=True)
+            current_date = timezone.now()
+            if current_date > dis.end_date or current_date < dis.start_date:
+                dis.active = False
+                dis.save()
+    context = {
+        'services': services,  
+        "discount_offer":discount_offer,
+        "discounted_offer":discounted_offer,
+        # 'banners':banners,
+    }
+    return render(request, 'user_side/index.html',context)
 
 def user_login(request):
     return render(request, "user_side/user_login.html")
@@ -45,7 +81,7 @@ def generate_otp():
 
 def user_signup(request):
     if request.user.is_authenticated:
-        return redirect('user_index')
+        return redirect('index')
 
     if request.method == 'POST':
         username=request.POST.get('username')
@@ -188,6 +224,34 @@ def signin(request):
 
 
 
+def search(request):
+    q=request.GET['q']
+    try:
+        discount_offer = ServiceOffer.objects.get(active=True)
+    except ServiceOffer.DoesNotExist:
+        discount_offer = None
+    if discount_offer:
+        current_date = timezone.now()
+        if current_date > discount_offer.end_date or current_date < discount_offer.start_date:
+            discount_offer.active = False
+            discount_offer.save()
+    try:
+        
+        discounted_offer = CategoryOffer.objects.filter(active=True)
+    except ServiceOffer.DoesNotExist:
+        discounted_offer = None
+    if discounted_offer:
+        for dis in discounted_offer:
+            services_with_discount = Service.objects.filter(category=dis.category, is_available=True)
+            current_date = timezone.now()
+            if current_date > dis.end_date or current_date < dis.start_date:
+                dis.active = False
+                dis.save()
+    data = Service.objects.filter(service_name__icontains=q).order_by('-id')
+    return render(request,'user_side/search.html',{'data':data,"discount_offer":discount_offer,"discounted_offer":discounted_offer,})
+
+
+
 
 def services(request, category_id=None,type_id=None):
     all_categories = category.objects.filter(is_deleted=False,is_blocked=False)
@@ -196,6 +260,24 @@ def services(request, category_id=None,type_id=None):
     services = None
     service_count = None
     types = Type.objects.filter(is_active=True)
+
+    try:
+        discount_offer = ServiceOffer.objects.get(active=True)
+    except ServiceOffer.DoesNotExist:
+        discount_offer = None
+        
+    try:
+        
+        discounted_offer = CategoryOffer.objects.filter(active=True)
+    except ServiceOffer.DoesNotExist:
+        discounted_offer = None
+    if discounted_offer:
+        for dis in discounted_offer:
+            services_with_discount = Service.objects.filter(category=dis.category, is_available=True)
+            current_date = timezone.now()
+            if current_date > dis.end_date:
+                dis.active = False
+                dis.save()
     
 
 
@@ -237,8 +319,8 @@ def services(request, category_id=None,type_id=None):
         'service_count': service_count,
         'all_categories': all_categories,
         'selected_category': selected_category,
-        # 'discount_offer':discount_offer,
-        # "discounted_offer":discounted_offer,
+        'discount_offer':discount_offer,
+        "discounted_offer":discounted_offer,
         'selected_type': selected_type,
         'types': types,
         

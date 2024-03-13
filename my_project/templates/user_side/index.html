@@ -90,12 +90,12 @@
             </div>
         </section>
         <section class="product-tabs section-padding position-relative wow fadeIn animated">
-            <div class="bg-square"></div>
+            
             <div class="container">
                 <div class="tab-header">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Explore!!</button>
+                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
                         </li>
                         {% comment %} <li class="nav-item" role="presentation">
                             <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
@@ -136,21 +136,21 @@
                                             </div>
                                                 {% else %}
                                                 <div class="product-badges product-badges-position product-badges-mrg">
-                                                    <span class="hot">Hot</span>
+                                                    <span class="hot">Best Deal</span>
                                                 </div>
                                             {% endif %}
                                         {% endfor %}
                                     {% else %}
                                         <div class="product-badges product-badges-position product-badges-mrg">
-                                            <span class="hot">Hot</span>
+                                            <span class="hot">Best Deal</span>
                                         </div>
                                     {% endif %}
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <a href="shop-grid-right.html">{{ service.category }}</a>
+                                            <a href="{% url 'service_details' category_id=service.category.id service_id=service.id  %}">{{ service.category }}</a>
                                         </div>
-                                        <h2><a href="{% url 'services_by_category' category_id=service.category.id %}">{{ service.service_name }}</a></h2>
+                                        <h2><a href="{% url 'service_details' category_id=service.category.id service_id=service.id  %}">{{ service.service_name }}</a></h2>
                                         <div >
                                             {% comment %} <span>
                                                 <span>90%</span>
