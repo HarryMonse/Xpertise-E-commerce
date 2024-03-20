@@ -30,7 +30,7 @@ from payment.models import *
 @never_cache
 def index(request):
     services = Service.objects.filter(featured=True,category__is_deleted=False,category__is_blocked=False).order_by('-id').distinct()
-    # banners =Banner.objects.filter(is_active=True)
+    banners =Banner.objects.filter(is_active=True)
     if request.session.get('order_placed', False):
         del request.session['order_placed']
         messages.success(request, 'Order placed successfully!')
@@ -61,7 +61,7 @@ def index(request):
         'services': services,  
         "discount_offer":discount_offer,
         "discounted_offer":discounted_offer,
-        # 'banners':banners,
+        'banners':banners,
     }
     return render(request, 'user_side/index.html',context)
 
@@ -834,4 +834,3 @@ def filter_service(request):
     except Exception as e:
         return JsonResponse({"error": str(e)})
 
-        
