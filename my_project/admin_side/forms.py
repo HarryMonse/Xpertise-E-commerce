@@ -71,3 +71,19 @@ class CategoryOfferForm(forms.ModelForm):
     
 class CouponForm(forms.Form):
     code = forms.CharField(max_length=50)
+
+
+class BannerForm(forms.ModelForm):
+    class Meta:
+        model = Banner
+        fields = ['title','image','description1','description2','description3','start_date','end_date','is_active']
+        widgets ={
+            'title' : forms.TextInput(attrs={'class':'form-control'}),
+            'description1' : forms.Textarea(attrs={'class':'form-control','row':4}),
+            'description2' : forms.Textarea(attrs={'class':'form-control','row':4}),
+            'description3' : forms.Textarea(attrs={'class':'form-control','row':4}),
+            'is_active' : forms.CheckboxInput(attrs={'class':'form-check-input'}),
+            'start_date' : forms.DateInput(attrs={'class':'form-control'}),
+            'end_date' : forms.DateInput(attrs={'class':'form-control'}),
+
+        }

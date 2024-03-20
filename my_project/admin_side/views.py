@@ -952,3 +952,63 @@ def sales_report(request):
     }
 
     return render(request,'admin_side/sales_report.html',context)
+
+
+@login_required(login_url='admin_login')
+def admin_banner(request):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    today = timezone.now().date()
+    banners = Banner.objects.all()
+    for banner in banners:
+        banner.is_active=banner.update_status()
+        banner.save()
+
+    return render(request, 'admin_side/admin_banner.html',{'banners':banners})
+
+@login_required(login_url='admin_login')
+def create_banner(request):
+    if not request.user.is_superadmin:
+        redirect('admin_login')
+    if request.method == 'POST':
+        form = BannerForm(request.POST, request.FILES)
+        if form.is_valid:
+            form.save()
+            return redirect('admin_banner')
+    else:
+        form = BannerForm()
+
+    return render(request,'admin_side/banner_create.html',{'form':form})
+
+
+@login_required(login_url='admin_login')
+def update_banner(request, id):
+    if not request.user.is_superadmin:
+        return redirect('admin_login')
+    
+    banner = get_object_or_404(Banner,id=id)
+    if request.method == 'POST':
+        form = BannerForm(request.POST, request.FILES , instance=banner)
+        if form.is_valid:
+            form.save()
+            return redirect('admin_banner')
+    else:
+        form = BannerForm(instance=banner)
+    context={
+        'form':form,
+        'banner':banner
+    }
+    return render(request, 'admin_side/banner_update.html',context)
+
+@login_required(login_url='admin_login')
+def delete_banner(request, id):
+    if not request.user.is_superadmin:
+        redirect('admin_login')
+    
+    try:
+        banner = get_object_or_404(Banner,id=id)
+    except ValueError:
+        return redirect('admin_banner')
+    banner.delete()
+    messages.warning(request,"Banner deleted successfully")
+    return redirect('admin_banner')

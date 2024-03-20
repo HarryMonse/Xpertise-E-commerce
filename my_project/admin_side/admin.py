@@ -10,4 +10,5 @@ class CouponAdmin(admin.ModelAdmin):
 
 admin.site.register(ServiceOffer)
 admin.site.register(CategoryOffer)
+admin.site.register(Banner)
 admin.site.register(Coupon,CouponAdmin)

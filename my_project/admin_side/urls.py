@@ -43,6 +43,14 @@ urlpatterns = [
     path('create_coupon/',views.create_coupon, name='create_coupon'),
     path('edit_coupon/<int:id>',views.edit_coupon,name='edit_coupon'),
     path('delete_coupon/<int:id>',views.delete_coupon,name='delete_coupon'),
+    path('admin_banner/',views.admin_banner,name='admin_banner'),
+    path('create_banner/',views.create_banner, name='create_banner'),
+    path('update_banner/<int:id>',views.update_banner,name='update_banner'),
+    path('delete_banner/<int:id>',views.delete_banner,name='delete_banner'),
+
+
+
+
 
 
 
