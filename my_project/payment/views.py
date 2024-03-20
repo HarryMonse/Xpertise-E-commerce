@@ -469,3 +469,25 @@ def order_success(request):
     }
     return render(request,'payment/orderdetail.html',context)
 
+
+def invoice(request,order_id,total=0):
+    try:
+        order=CartOrder.objects.get(id=order_id)
+        orders=ServiceOrder.objects.filter(order=order)
+
+    except:
+        pass
+    coupon = order.coupon
+    grand_total = order.order_total
+    for item in orders:
+        item.subtotal=item.quantity * item.service_price
+        total += item.subtotal
+    context={
+        'order':order,
+        'orders':orders,
+        'grand_total':grand_total,
+        'coupon':coupon,
+    }
+
+    return render(request,'payment/invoice.html',context) 
+
