@@ -7,7 +7,6 @@ def get_filter(request):
     provider_types=ServiceAttribute.objects.distinct().values('provider_type__provider_type_name','provider_type__id','provider_type__provider_type_code')
     min_max_price = ServiceAttribute.objects.aggregate(Min("price"),Max('price'))
 
-    # Get cart and wishlist counts
     cart_count = 0
     wishlist_count = 0
 
