@@ -337,6 +337,23 @@ def service_details(request, service_id, category_id):
     related_service=Service.objects.filter(category=service.category).exclude(id=service_id)[:4]
     provider_types = ServiceAttribute.objects.filter(service=service).distinct()
 
+    try:   
+        discount_offer = ServiceOffer.objects.get(active=True)
+    except ServiceOffer.DoesNotExist:
+        discount_offer = None
+                        
+    try:
+        discounted_offer = CategoryOffer.objects.filter(active=True)
+    except ServiceOffer.DoesNotExist:
+        discounted_offer = None
+    if discounted_offer:
+        for dis in discounted_offer:
+            products_with_discount = Service.objects.filter(category=dis.category, is_available=True)
+            current_date = timezone.now()
+            if current_date > dis.end_date:
+                dis.active = False
+                dis.save()
+
 
     if request.method=="POST":
         if user.is_authenticated:
@@ -356,6 +373,8 @@ def service_details(request, service_id, category_id):
         'related_service': related_service,
         'provider_types' :provider_types,
         'images':images,
+        "discount_offer":discount_offer,
+        "discounted_offer":discounted_offer,
     }
     
 
@@ -397,10 +416,10 @@ def add_to_cart(request):
             cart_item = CartItem.objects.get(service=service, user=user, is_deleted=False)
             available_availability = service.availability - cart_item.quantity
             if qty > available_availability:
-                messages.error(request, f"Stock limit reached. Only {available_availability} available.")
+                messages.error(request, f"Insufficient availability. Only {available_availability} available.")
                 response_data = {
                     'status': 'error',
-                    'message': f"Stock limit reached. Only {available_availability} available."
+                    'message': f"Insufficient availability. Only {available_availability} available."
                     
                     }
                 return JsonResponse(response_data)

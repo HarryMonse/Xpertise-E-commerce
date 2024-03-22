@@ -47,7 +47,7 @@
             <div class="row text-center">
                 <div class="col-12">
                     <div class="mb-4">
-                        <h2 class="display-4 caption">Order Successfully Placed</h2>
+                        <h2 class="display-8 caption">Order Successfully Placed</h2>
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                                     <tr>
                                         <th>Image</th>
                                         <th>Name</th>
-                                        <th>Color</th>
+                                        <th>Provider Type</th>
                                         <th>Price</th>
                                         <th>Quantity</th>
                                     </tr>
@@ -102,7 +102,7 @@
                                     <tr>
                                         <td class="image product-thumbnail"><img src="{{ item.variations.image.url }}" alt="{{ item.service.service_name }}"></td>
                                         <td>{{ item.service.service_name }}</td>
-                                        <td>{{ item.variations.color }}</td>
+                                        <td>{{ item.variations.provider_type }}</td>
                                         <td>₹{{ item.service_price }}</td>
                                         <td>{{ item.quantity }}</td>
                                     </tr>

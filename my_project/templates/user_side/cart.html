@@ -93,7 +93,7 @@
                                             {% csrf_token %}
                                             <div class="form-row row justify-content-center">
                                                 <div class="form-group col-lg-6">
-                                                    <input class="font-medium" name="coupon_code" placeholder="Enter Your Coupon">
+                                                    <input class="font-medium" name="coupon_code" placeholder="Enter Your Coupon Code">
                                                 </div>
                                                 <div class="form-group col-lg-6">
                                                     <button type="submit" name="apply_coupon" class="btn btn-sm"><i class="fi-rs-label mr-10"></i>Apply</button>
@@ -130,7 +130,7 @@
                                                 <h5 class="card-title coupon-code text-primary">{{ coupon.code }}</h5>
                                                 <p class="card-text">Discount: {{ coupon.discount }}%</p>
                                                 <p class="card-text">Expires: {{ coupon.expiry_date }}</p>
-                                                <button class="btn btn-primary copy-coupon-button">Copy</button>
+                                                <button class="btn btn-primary copy-coupon-button">{{ coupon.code }}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -178,7 +178,7 @@
                         <!-- Display a message and a button to continue shopping -->
                         <div class="mb-200 mt-200">
                             <div class="text-center">
-                                <h4>Your cart is empty!</h4>
+                                <h4>Your cart is empty !!!</h4>
                             </div>
                             <div class="text-center mb-10">
                                 <a href="{% url 'services' %}" class="btn">Continue Shopping</a>
