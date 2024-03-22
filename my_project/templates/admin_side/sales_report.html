@@ -3,11 +3,11 @@
 {% block content %}
 <div style="padding: 30px;">
     <div class="text-center" >
-    <button type="button" class="btn btn-secondary btn_print m-3 h-auto" onclick="exportToPDF()" value="Export to PDF">
+    <button type="button" class="btn btn-primary btn_print m-3 h-auto" onclick="exportToPDF()" value="Export to PDF">
         <i class="fas fa-file-pdf"></i> Download as PDF
       </button>
 
-      <button type="button" class="btn btn-secondary btn_print m-3 h-auto" onclick="export_data()" value="Export to excel"><i
+      <button type="button" class="btn btn-primary btn_print m-3 h-auto" onclick="export_data()" value="Export to excel"><i
           class="fas fa-file-excel"></i> Download as Excel</button>
     </div>
     <div class="sidebar__filter" style = 'width: max-content;'>
@@ -27,7 +27,7 @@
                     <label for="end_date">Ending Date:</label>
                     <input type="date" name="end_date" id="end_date" class="form-control" value="{{ end_date_value }}" required>
 
-                    <button type="submit" class="btn btn-dark h-auto">Filter</button>
+                    <button type="submit" class="btn btn-primary h-auto">Filter</button>
                 </div>
             </form>
         </div>

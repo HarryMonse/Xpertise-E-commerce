@@ -27,9 +27,9 @@
                             
                                     </div>
                                     {% if order.status == 'Cancelled' %}
-                                    <span>{{order.order_id}} is cancelled</span>
+                                    <span>{{order.order_id}} Cancelled</span>
                                     {% elif order.status == 'Return' %}
-                                    <span>{{order.order_id}} is Returned</span>
+                                    <span>{{order.order_id}} Returned</span>
                                     {% else %}
                                     <div class="col-md-2">
                                         <button type="submit" class="btn btn-primary">Save</button>
