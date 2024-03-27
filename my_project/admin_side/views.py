@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from user_side.forms import *
 from django.db import IntegrityError
+from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models.functions import TruncDate,TruncMonth, TruncYear
 from django.db.models import Count
@@ -559,36 +560,36 @@ def cancell_order(request, order_number):
         order.status = 'Cancelled'
         order.save()
 
-        allowed_payment_methods = ['COD']
+        allowed_payment_methods = ['Razorpay', 'Wallet']
 
         if order.payment.payment_method in allowed_payment_methods:
-        #     with transaction.atomic():
-        #         user_wallet = order.user.wallet if hasattr(order.user, 'wallet') else None
+            with transaction.atomic():
+                user_wallet = order.user.wallet if hasattr(order.user, 'wallet') else None
 
-        #         if order.payment.payment_method == 'Razorpay':
-        #             if user_wallet:
-        #                 user_wallet.balance += order.order_total
-        #                 user_wallet.save()
+                if order.payment.payment_method == 'Razorpay':
+                    if user_wallet:
+                        user_wallet.balance += order.order_total
+                        user_wallet.save()
 
-        #                 WalletHistory.objects.create(
-        #                     wallet=user_wallet,
-        #                     type='Credited',
-        #                     amount=order.order_total,
-        #                     created_at=timezone.now(),
-        #                     reason='Admin Cancellation'
-        #                 )
-        #         elif order.payment.payment_method == 'Wallet':
-        #             if user_wallet:
-        #                 user_wallet.balance += order.order_total
-        #                 user_wallet.save()
+                        WalletHistory.objects.create(
+                            wallet=user_wallet,
+                            type='Credited',
+                            amount=order.order_total,
+                            created_at=timezone.now(),
+                            reason='Admin Cancellation'
+                        )
+                elif order.payment.payment_method == 'Wallet':
+                    if user_wallet:
+                        user_wallet.balance += order.order_total
+                        user_wallet.save()
 
-        #                 WalletHistory.objects.create(
-        #                     wallet=user_wallet,
-        #                     type='Credited',
-        #                     amount=order.order_total,
-        #                     created_at=timezone.now(),
-        #                     reason='Admin Cancellation'
-        #                 )
+                        WalletHistory.objects.create(
+                            wallet=user_wallet,
+                            type='Credited',
+                            amount=order.order_total,
+                            created_at=timezone.now(),
+                            reason='Admin Cancellation'
+                        )
 
             for service_item in order.serviceorder_set.all():
                 service_attribute = service_item.variations
