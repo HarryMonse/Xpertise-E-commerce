@@ -853,6 +853,3 @@ def filter_service(request):
     except Exception as e:
         return JsonResponse({"error": str(e)})
     
-
-
-    
