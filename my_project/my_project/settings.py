@@ -150,8 +150,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT='587'
-EMAIL_HOST_USER=config('EMAIL_HOST_USER'),
-EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD'),
+EMAIL_HOST_USER=config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS=True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -159,7 +159,7 @@ EMAIL_USE_SSL = False
 
 
 
-RAZOR_KEY_ID = config('RAZOR_KEY_ID'),
-RAZOR_KEY_SECRET = config('RAZOR_KEY_SECRET'),
+RAZOR_KEY_ID = config('RAZOR_KEY_ID')
+RAZOR_KEY_SECRET = config('RAZOR_KEY_SECRET')
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
