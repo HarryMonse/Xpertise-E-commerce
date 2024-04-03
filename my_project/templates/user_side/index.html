@@ -98,14 +98,14 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
                         </li>
-                        {% comment %} <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
-                        </li>
                         <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="{% url 'services' %}" role="tab" aria-controls="tab-two" aria-selected="false">All Services</a>
+                        </li>
+                        {% comment %} <li class="nav-item" role="presentation">
                             <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
                         </li> {% endcomment %}
                     </ul>
-                     <a href="services" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a> 
+                     {% comment %} <a href="services" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>  {% endcomment %}
                 </div> 
                 <!--End nav-tabs-->
                 <div class="tab-content wow fadeIn animated" id="myTabContent">
