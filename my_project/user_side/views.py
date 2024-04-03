@@ -386,6 +386,10 @@ def service_details(request, service_id, category_id):
 
 @login_required(login_url='user_login')
 def add_to_cart(request):
+    if not request.user.is_authenticated:
+        messages.info(request, 'Login to access cart')
+        return redirect('user_login')
+
     user = request.user
     
     if request.method == 'POST':
@@ -785,7 +789,7 @@ def change_password(request):
 def add_wishlist(request, service_id):
     if not request.user.is_authenticated:
         messages.info(request, 'Login to access wishlist')
-        return redirect('signin')
+        return redirect('user_login')
     else:
         try:
             wishlist_item = WishlistItem.objects.get(user=request.user, service_id=service_id)
