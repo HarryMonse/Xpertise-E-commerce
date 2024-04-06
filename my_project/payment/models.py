@@ -74,12 +74,12 @@ class CartOrder(models.Model):
     STATUS =(
         ('New','New'),
         ('Paid','Paid'),
-        ('Shipped','Shipped'),
-        ('Conformed','Conformed'),
+        ('Processed','Processed'),
+        ('Confirmed','Confirmed'),
         ('Pending','Pending'),
         ('Delivered','Delivered'),
         ('Cancelled','Cancelled'),
-        ('Return','Return')
+        ('Refund','Refund')
     )
     user=models.ForeignKey(CustomUser,on_delete=models.SET_NULL,null=True)
     payment=models.ForeignKey(Payments,on_delete=models.SET_NULL,blank=True,null=True)

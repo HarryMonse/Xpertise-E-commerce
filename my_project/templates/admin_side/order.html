@@ -19,11 +19,11 @@
                         <select name="status" class="form-control">
                             <option value="all" {% if status == 'all' %} selected {% endif %}>All</option>
                             <option value="New" {% if status == 'New' %} selected {% endif %}>New</option>
-                            <option value="Conformed" {% if status == 'Conformed' %} selected {% endif %}>Confirmed</option>
-                            <option value="Shipped" {% if status == 'Shipped' %} selected {% endif %}>Shipped</option>
+                            <option value="Conformed" {% if status == 'Confirmed' %} selected {% endif %}>Confirmed</option>
+                            <option value="Shipped" {% if status == 'Processed' %} selected {% endif %}>Processed</option>
                             <option value="Delivered" {% if status == 'Delivered' %} selected {% endif %}>Delivered</option>
                             <option value="Cancelled" {% if status == 'Cancelled' %} selected {% endif %}>Cancelled</option>
-                            <option value="Return" {% if status == 'Return' %} selected {% endif %}>Return</option>
+                            <option value="Return" {% if status == 'Refund' %} selected {% endif %}>Refund</option>
                         </select> 
                     </div>
                     <div class="col-lg-2 col-6 col-md-3">
