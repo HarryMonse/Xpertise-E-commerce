@@ -19,8 +19,6 @@ from .models import *
 from .forms import *
 
 
-
-
 # Create your views here.
 
 def admin_login(request):
@@ -38,13 +36,10 @@ def admin_login(request):
     return render(request, 'admin_side/admin_login.html')
 
 
-
 def admin_logout(request):
     logout(request)
     messages.success(request, 'Successfully logged out.')
     return redirect(admin_login)
-
-
 
 
 @never_cache
@@ -137,8 +132,6 @@ def admin_index(request):
     return render(request, 'admin_side/admin_index.html', context)
 
 
-
-
 @login_required(login_url='admin_login')
 def admin_service(request):
     item = Service.objects.filter(is_deleted=False)
@@ -146,8 +139,6 @@ def admin_service(request):
         "item":item
     }
     return render(request,'admin_side/service.html',context)
-
-
 
 
 @login_required(login_url='admin_login')
@@ -223,9 +214,6 @@ def admin_service_delete(request, id):
     return render(request, 'admin_side/service_delete.html', context)
 
 
-
-
-
 @login_required(login_url='admin_login')
 def customers(request):
     user = CustomUser.objects.all()
@@ -248,7 +236,6 @@ def block_user(request, user_id):
         messages.warning(request, 'You cannot block/unblock the Superadmin.')
 
     return redirect('customers')
-
 
 
 @login_required(login_url='admin_login')
@@ -275,7 +262,6 @@ def admin_category_insert(request):
             return redirect('admin_category')
 
     return render(request, 'admin_side/category.html')
-
 
 
 @login_required(login_url='admin_login')
@@ -307,7 +293,6 @@ def block_unblock_category(request, id):
     return redirect('admin_category')
 
 
-
 @login_required(login_url='admin_login')
 def admin_type(request):
     data=Type.objects.all()
@@ -330,6 +315,7 @@ def admin_type_insert(request):
         return redirect('admin_type')
     
     return render(request, 'admin_side/type.html')
+
 
 @login_required(login_url='admin_login')
 def admin_type_edit(request,id):
@@ -429,9 +415,6 @@ def admin_varient_delete(request, id):
     return render(request, 'admin_side/service_delete.html', context)
 
 
-
-
-
 @login_required(login_url='admin_login')
 def admin_provider_type(request):
     data=ProviderType.objects.all()
@@ -477,7 +460,6 @@ def admin_provider_type_edit(request,id):
         "obj":obj
     }
     return render(request,'admin_side/provider_type_edit.html', context)
-
 
 
 @login_required(login_url='admin_login')
@@ -714,6 +696,7 @@ def delete_service_offer(request,id):
     messages.warning(request,"Offer has been deleted successfully")
     return redirect('service-offers')
 
+
 @login_required(login_url='admin_login')
 def category_offers(request):
     if not request.user.is_superadmin:
@@ -824,6 +807,7 @@ def edit_category_offers(request, id):
         return redirect('category-offers')
     return render(request,'admin_side/edit_category_offers.html', {'offer_discount': offer_discount})
 
+
 @login_required(login_url='admin_login')
 def delete_category_offer(request,id):
     if not request.user.is_superadmin:
@@ -838,13 +822,13 @@ def delete_category_offer(request,id):
     return redirect('category-offers')
 
 
-
 @login_required(login_url='admin_login')
 def admin_coupon(request):
     if not request.user.is_superadmin:
         return redirect('admin_login')
     coupon = Coupon.objects.all()
     return render(request, 'admin_side/admin_coupon.html',{'coupon':coupon})
+
 
 @login_required(login_url='admin_login')
 def create_coupon(request):
@@ -878,6 +862,7 @@ def create_coupon(request):
 
     return render(request, 'admin_side/create_coupon.html')
 
+
 @login_required(login_url='admin_login')
 def edit_coupon(request,id):
     if not request.user.is_superadmin:
@@ -905,6 +890,7 @@ def edit_coupon(request,id):
         messages.success(request, 'Coupon Updated successfully')
         return redirect('admin_coupon')
     return render (request, 'admin_side/update_coupon.html',{'coupon_code':coupon_code})
+
 
 @login_required(login_url='admin_login')        
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -967,6 +953,7 @@ def admin_banner(request):
 
     return render(request, 'admin_side/admin_banner.html',{'banners':banners})
 
+
 @login_required(login_url='admin_login')
 def create_banner(request):
     if not request.user.is_superadmin:
@@ -1000,6 +987,7 @@ def update_banner(request, id):
         'banner':banner
     }
     return render(request, 'admin_side/banner_update.html',context)
+
 
 @login_required(login_url='admin_login')
 def delete_banner(request, id):
