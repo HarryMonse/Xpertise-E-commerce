@@ -15,7 +15,6 @@ from django.db.models import Sum
 from django.http import HttpResponseBadRequest
 
 
-
 razorpay_client = razorpay.Client(
     auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
@@ -49,14 +48,12 @@ def checkout(request):
         del request.session['order_placed']
         return redirect('user_index')  
 
-
     if request.method == 'POST':
         print("entered")
         if 'use_existing_address' in request.POST:
             selected_address_id = request.POST.get('existing_address')
             selected_address = get_object_or_404(Address, id=selected_address_id)
             CartItem.objects.filter(user=user, is_deleted=False).update(address=selected_address)
-
 
             return render(request, 'payment/payment.html', {
                
@@ -85,7 +82,6 @@ def checkout(request):
                 'wallet_button_disabled': wallet_button_disabled,
             })
     
-
     return render(request, 'payment/checkout.html',{'user_addresses': user_addresses,'items':items,'total':total,'totals':totals,'discounts': discounts})
 
 
