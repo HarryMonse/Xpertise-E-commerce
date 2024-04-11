@@ -101,6 +101,13 @@ def payment(request):
         del request.session['order_placed']
         return redirect('user_index')  
 
+    context = {
+        'total': total,
+        'items': items,
+        'totals': totals,
+        'discounts': discounts,
+        'user_addresses': user_addresses,
+    }
 
     if request.method == "POST":
         amount = request.POST.get('total', 0)
@@ -131,6 +138,8 @@ def payment(request):
  
         return render(request, 'payment/payment.html', context=context)
     
+    return render(request, 'payment/payment.html', context=context)
+
 
 @csrf_exempt
 def paymenthandler(request):

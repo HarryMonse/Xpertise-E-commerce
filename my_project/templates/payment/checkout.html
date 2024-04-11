@@ -115,9 +115,16 @@
                             </select>
                         </div>
     
-                        <div class="form-group mb-30">
-                            <button href={% url 'payment' %} class="btn btn-fill-out btn-block mt-30">Use Existing Address</button>
-                        </div>
+                        {% if user.address_set.exists %}
+                            <div class="form-group mb-30">
+                                <a href="{% url 'payment' %}" class="btn btn-fill-out btn-block mt-30">Use Existing Address</a>
+                            </div>
+                        {% else %}
+                            <div class="form-group mb-30">
+                                <button class="btn btn-fill-out btn-block mt-30" disabled>No Existing Address</button>
+                                <p>Please add an address before proceeding</p>
+                            </div>
+                        {% endif %}
                 </div>
                 
                 
