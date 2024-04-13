@@ -192,7 +192,6 @@ def online_place_order(request):
     total = request.session.get('total', 0)
     request.session.get('discounts', 0)
 
-    
     user_addresses = items.first().address
    
     coupons = []
@@ -205,8 +204,7 @@ def online_place_order(request):
         coupon = coupons[0]
     else:
         coupon = None
-    
-        
+       
     short_id = str(random.randint(1000, 9999))
     yr = datetime.now().year
     dt = int(datetime.today().strftime('%d'))
@@ -263,7 +261,6 @@ def online_place_order(request):
     return redirect('order_success')
     
 
-
 def place_order(request):
     user = request.user 
     items = CartItem.objects.filter(user=user, is_deleted=False)
@@ -271,14 +268,11 @@ def place_order(request):
     request.session.get('totals', 0)
     total = request.session.get('total', 0)
     request.session.get('discounts', 0)
-   
-
      
     if items.exists():
         user_addresses = items.first().address
     else:
         user_addresses = None
-
 
     short_id = str(random.randint(1000, 9999))
     yr = datetime.now().year
@@ -346,7 +340,6 @@ def place_order(request):
     request.session.pop('discounts')
         
     return redirect('order_success')
-
 
 
 def wallet_place_order(request):
@@ -455,15 +448,12 @@ def wallet_place_order(request):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
-
-
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)    
 @login_required(login_url='user_login')
 def order_success(request):
     order = CartOrder.objects.filter(user=request.user).order_by('-id').first()
     print(order) 
     service_orders = ServiceOrder.objects.filter(order=order)
-    
     
     request.session['order_placed'] = True
     context = {
@@ -479,7 +469,6 @@ def invoice(request,order_id,total=0):
     try:
         order=CartOrder.objects.get(id=order_id)
         orders=ServiceOrder.objects.filter(order=order)
-
     except:
         pass
     coupon = order.coupon
