@@ -784,8 +784,6 @@ def change_password(request):
     return render(request, 'user_side/change_password.html')
 
 
-
-
 def add_wishlist(request, service_id):
     if not request.user.is_authenticated:
         messages.info(request, 'Login to access wishlist')
@@ -856,4 +854,3 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
-    
