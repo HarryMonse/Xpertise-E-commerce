@@ -754,7 +754,6 @@ def cancell(request,order_number):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
-
 @login_required(login_url='user_login')
 def change_password(request):
     if request.method == 'POST':
@@ -854,3 +853,4 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
+    
