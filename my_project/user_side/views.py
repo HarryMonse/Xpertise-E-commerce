@@ -813,12 +813,12 @@ def wishlist(request):
             pass
     return render(request, 'user_side/wishlist.html', context)
 
+
 def delete_wishlist(request, wishlist_item_id):
     wishlist_item = get_object_or_404(WishlistItem, id=wishlist_item_id, user=request.user)
     wishlist_item.delete()
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
 
 
 def filter_service(request):    
@@ -853,4 +853,3 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
-    
