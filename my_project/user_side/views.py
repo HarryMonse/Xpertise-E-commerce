@@ -249,8 +249,6 @@ def search(request):
     return render(request,'user_side/search.html',{'data':data,"discount_offer":discount_offer,"discounted_offer":discounted_offer,})
 
 
-
-
 def services(request, category_id=None,type_id=None):
     all_categories = category.objects.filter(is_deleted=False,is_blocked=False)
     selected_category = None
@@ -326,8 +324,6 @@ def services(request, category_id=None,type_id=None):
     }
 
     return render(request, 'user_side/services.html', context)
-
-
 
 
 def service_details(request, service_id, category_id):
@@ -853,3 +849,5 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
+    
+    
