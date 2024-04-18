@@ -688,6 +688,7 @@ def edit_address(request, address_id):
     
     return render(request, 'user_side/edit_address.html', {'form': form, 'address': address})
 
+
 @login_required(login_url='user_login')
 def delete_address(request, address_id):
     address = get_object_or_404(Address, id=address_id, users=request.user)
@@ -712,7 +713,6 @@ def order_items(request, order_number):
     }
 
     return render(request, 'user_side/user_order_history.html', context)
-
 
 
 @login_required(login_url='user_login')
@@ -849,5 +849,3 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
-    
-    
