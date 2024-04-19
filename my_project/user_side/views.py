@@ -15,16 +15,14 @@ from django.db.models import OuterRef, Subquery
 from admin_side.models import *
 from payment.forms import AddressForm
 from django.db.models import Sum
-
-
 from django.contrib import messages
 from django.utils import timezone
-
-
 from .models import *
 from payment.models import *
 
+
 # Create your views here.
+
 
 @cache_control(max_age=0,no_cache=True, must_revalidate=True, no_store=True)
 @never_cache
