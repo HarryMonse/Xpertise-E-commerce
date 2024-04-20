@@ -671,6 +671,7 @@ def add_address(request):
     }
     return render(request, 'user_side/add_address.html',context)
 
+
 @login_required(login_url='user_login')
 def edit_address(request, address_id):
     address = get_object_or_404(Address, id=address_id, users=request.user)
@@ -847,3 +848,5 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
+    
+    
