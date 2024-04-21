@@ -317,8 +317,7 @@ def services(request, category_id=None,type_id=None):
         "discounted_offer":discounted_offer,
         'selected_type': selected_type,
         'types': types,
-        
-        
+             
     }
 
     return render(request, 'user_side/services.html', context)
@@ -348,7 +347,6 @@ def service_details(request, service_id, category_id):
                 dis.active = False
                 dis.save()
 
-
     if request.method=="POST":
         if user.is_authenticated:
             print("request entered ")
@@ -360,8 +358,7 @@ def service_details(request, service_id, category_id):
             print("Related Services:", related_service)
         else:
             return redirect('user_login')
-
-    
+  
     context={
         'service': service,
         'related_service': related_service,
@@ -371,11 +368,7 @@ def service_details(request, service_id, category_id):
         "discounted_offer":discounted_offer,
     }
     
-
     return render(request, 'user_side/service_details.html', context)
-
-
-
 
 
 @login_required(login_url='user_login')
@@ -442,7 +435,6 @@ def add_to_cart(request):
     else:
         print('Invalid request or not AJAX') 
         return JsonResponse({'status': 'error', 'message': 'Invalid request or not AJAX'}, status=400)
-
 
 
 @login_required(login_url='user_login')  
@@ -534,9 +526,7 @@ def cart_list(request):
     request.session['total'] = total_after_discount
     request.session['discounts'] = discounts
 
-
     return render(request, 'user_side/cart.html', context)
-
 
 
 @login_required(login_url='user_login')
@@ -577,7 +567,6 @@ def qty_update(request):
         'total': total_without_discount
     }
     return JsonResponse(response_data)
-
 
 
 @login_required(login_url='user_login')
@@ -643,7 +632,6 @@ def user_account(request):
 
     wallet, created = Wallet.objects.get_or_create(user=request.user, defaults={'balance': 0})
     
-
     wallethistory = WalletHistory.objects.filter(wallet=wallet)
     context={
          'user_address':user_address,
@@ -848,3 +836,4 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
+    
