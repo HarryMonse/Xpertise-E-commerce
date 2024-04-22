@@ -272,10 +272,6 @@ def services(request, category_id=None,type_id=None):
             if current_date > dis.end_date:
                 dis.active = False
                 dis.save()
-    
-
-
-
                 
     if 'category_id' in request.GET:
         category_id = request.GET['category_id']
@@ -836,4 +832,3 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
-    
