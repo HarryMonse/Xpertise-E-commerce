@@ -219,7 +219,6 @@ def signin(request):
     return render(request, 'user_side/user_login.html')
 
 
-
 def search(request):
     q=request.GET['q']
     try:
@@ -303,7 +302,6 @@ def services(request, category_id=None,type_id=None):
         services = Service.objects.filter(is_available=True, is_deleted=False, type__is_active=True ,category__is_deleted=False,category__is_blocked=False)
         service_count = services.count()
 
-   
     context = {
         'services': services,
         'service_count': service_count,
@@ -604,9 +602,6 @@ def delete_cart_item(request):
         return JsonResponse({'error': 'Item not found in the cart'})
     except Exception as e:
         return JsonResponse({'error': str(e)})
-
-
-
 
 
 @cache_control(max_age=0,no_cache=True, must_revalidate=True, no_store=True)
