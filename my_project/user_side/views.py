@@ -163,7 +163,6 @@ def enter_otp(request):
     return render(request, 'user_side/otp.html',{'remaining_minutes': remaining_minutes, 'remaining_seconds': remaining_seconds})
 
 
-
 def resend_otp(request):
     if 'signup_details' in request.session:
         otp, timestamp = generate_otp()
@@ -827,3 +826,4 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
+    
