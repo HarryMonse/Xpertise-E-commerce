@@ -191,7 +191,6 @@ def user_logout(request):
     return redirect('user_login')
     
 
-
 @cache_control(max_age=0, no_cache=True, must_revalidate=True, no_store=True)
 @never_cache  
 def signin(request):
@@ -826,4 +825,3 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
-    
