@@ -67,12 +67,10 @@ def user_login(request):
     return render(request, "user_side/user_login.html")
 
 
-
 def generate_otp():
     otp = str(random.randint(100000,999999))
     timestamp = str(timezone.now())
     return otp, timestamp
-
 
 
 def user_signup(request):
@@ -122,7 +120,6 @@ def user_signup(request):
     return render(request, "user_side/user_signup.html")
 
 
-
 def enter_otp(request):
     if request.method == 'POST':
         entered_otp=request.POST.get('otp')
@@ -136,7 +133,6 @@ def enter_otp(request):
             messages.error(request, 'OTP has expired. Please request a new one.')
             return render(request, 'user_side/otp.html')
         
-
         if entered_otp == stored_otp:
             new_user=CustomUser(
                 username=request.session['signup_details']['username'],
