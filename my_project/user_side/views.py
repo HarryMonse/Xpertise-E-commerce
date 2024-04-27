@@ -614,7 +614,6 @@ def user_account(request):
     for order in order_history:
         print(order.service_image)
     
-
     wallet, created = Wallet.objects.get_or_create(user=request.user, defaults={'balance': 0})
     
     wallethistory = WalletHistory.objects.filter(wallet=wallet)
@@ -821,3 +820,5 @@ def filter_service(request):
         return JsonResponse({"data": data})
     except Exception as e:
         return JsonResponse({"error": str(e)})
+    
+    
