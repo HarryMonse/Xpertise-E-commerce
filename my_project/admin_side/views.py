@@ -1001,4 +1001,3 @@ def delete_banner(request, id):
     banner.delete()
     messages.warning(request,"Banner deleted successfully")
     return redirect('admin_banner')
-
