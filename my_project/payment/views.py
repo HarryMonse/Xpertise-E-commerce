@@ -484,3 +484,4 @@ def invoice(request,order_id,total=0):
     }
 
     return render(request,'payment/invoice.html',context)
+
